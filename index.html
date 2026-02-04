@@ -21,14 +21,14 @@ body{
   background: url("./wp13418322-sweet-4k-wallpapers.png") no-repeat center/cover;
 }
 
-/* ✅ remove purple underline/visited junk */
+/* ✅ stop purple lines / visited underline */
 a, a:link, a:visited, a:hover, a:active{
   color: inherit;
   text-decoration: none !important;
 }
 
 /* layers */
-.rain, .sparkles{
+.rain, .sparkles, .stars{
   position:fixed;
   inset:0;
   pointer-events:none;
@@ -58,6 +58,45 @@ a, a:link, a:visited, a:hover, a:active{
 @keyframes float{
   from{ transform: translateY(120vh) scale(0.5); opacity:0; }
   to{ transform: translateY(-20vh) scale(1); opacity:1; }
+}
+
+/* ⭐ shooting star */
+.shooting-star{
+  position: absolute;
+  top: 18vh;
+  left: -30vw;
+  width: 220px;
+  height: 2px;
+  opacity: 0;
+  transform: rotate(-12deg);
+  transform-origin: left center;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.55));
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0.95),
+    rgba(255,255,255,0)
+  );
+  animation: shoot 8.5s ease-in-out infinite;
+}
+.shooting-star::after{
+  content:"";
+  position:absolute;
+  right: 18px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%) rotate(45deg);
+  background: rgba(255,255,255,0.95);
+  border-radius: 2px;
+  box-shadow: 0 0 14px rgba(255,255,255,0.7);
+}
+@keyframes shoot{
+  0%   { opacity: 0; transform: translate(0,0) rotate(-12deg); }
+  10%  { opacity: 0; }
+  18%  { opacity: 1; }
+  28%  { opacity: 1; transform: translate(160vw, 22vh) rotate(-12deg); }
+  33%  { opacity: 0; }
+  100% { opacity: 0; transform: translate(160vw, 22vh) rotate(-12deg); }
 }
 
 /* 🌸 card */
@@ -110,7 +149,7 @@ a, a:link, a:visited, a:hover, a:active{
   display:flex;
   justify-content:center;
   gap: 30px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .icons a{
@@ -123,12 +162,10 @@ a, a:link, a:visited, a:hover, a:active{
   border: 1px solid rgba(255,255,255,0.25);
   transition: transform .3s ease, background .3s ease;
 }
-
 .icons a i{
   color:#fff;
   font-size: 22px;
 }
-
 .icons a:hover{
   transform: scale(1.15);
   background: rgba(255,255,255,0.28);
@@ -140,7 +177,7 @@ a, a:link, a:visited, a:hover, a:active{
   justify-content:center;
   gap: 6px;
   margin-top: 10px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 .bar{
   width: 6px;
@@ -158,7 +195,7 @@ a, a:link, a:visited, a:hover, a:active{
   50%{ height: 26px; opacity:1; }
 }
 
-/* 🎵 music bar (like your screenshot) */
+/* 🎵 music bar */
 .player{
   width: min(860px, 92vw);
   position: fixed;
@@ -166,7 +203,6 @@ a, a:link, a:visited, a:hover, a:active{
   bottom: 22px;
   transform: translateX(-50%);
   z-index: 5;
-
   padding: 14px 16px;
   border-radius: 18px;
   background: rgba(255, 220, 230, 0.35);
@@ -189,6 +225,7 @@ a, a:link, a:visited, a:hover, a:active{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 45vw;
 }
 
 .timeRow{
@@ -239,7 +276,6 @@ a, a:link, a:visited, a:hover, a:active{
   border-radius: 999px;
 }
 
-/* small helper text */
 .tapHint{
   margin-top: 8px;
   color: rgba(255,255,255,0.65);
@@ -255,6 +291,10 @@ a, a:link, a:visited, a:hover, a:active{
 
 <div class="rain" id="rain"></div>
 <div class="sparkles" id="sparkles"></div>
+
+<div class="stars">
+  <div class="shooting-star"></div>
+</div>
 
 <div class="card">
   <img src="./profile.png" class="profile-pic" alt="profile" onerror="this.style.display='none';">
@@ -279,15 +319,13 @@ a, a:link, a:visited, a:hover, a:active{
   </div>
 </div>
 
-<!-- audio -->
 <audio id="music" preload="metadata" loop>
   <source src="./music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 🎵 music bar -->
 <div class="player" id="player">
   <div class="playerTop">
-    <div class="trackTitle" id="trackTitle">into the doldrums</div>
+    <div class="trackTitle" id="trackTitle">u seemed so perfect</div>
 
     <div class="timeRow">
       <span id="curTime">0:00</span>
@@ -351,42 +389,35 @@ function fmt(t){
   const s = Math.floor(t%60).toString().padStart(2,"0");
   return `${m}:${s}`;
 }
-
 function setPlayUI(isPlaying){
   playIcon.className = isPlaying ? "fa-solid fa-pause" : "fa-solid fa-play";
 }
-
 async function tryPlay(){
   try{
     await music.play();
     setPlayUI(true);
     tapHint.classList.remove("show");
   }catch(e){
-    // browser blocked it until user click — show hint
     tapHint.classList.add("show");
   }
 }
 
-playBtn.addEventListener("click", async () => {
-  if(music.paused){
-    await tryPlay();
-  }else{
-    music.pause();
-    setPlayUI(false);
-  }
+playBtn.addEventListener("click", async (e) => {
+  e.stopPropagation();
+  if(music.paused) await tryPlay();
+  else { music.pause(); setPlayUI(false); }
 });
 
 music.addEventListener("loadedmetadata", () => {
   durTime.textContent = fmt(music.duration);
 });
-
 music.addEventListener("timeupdate", () => {
   curTime.textContent = fmt(music.currentTime);
   const pct = (music.currentTime / (music.duration || 1)) * 100;
   progressFill.style.width = pct + "%";
 });
 
-/* click to seek */
+/* seek */
 progressWrap.addEventListener("click", (e) => {
   const rect = progressWrap.getBoundingClientRect();
   const x = e.clientX - rect.left;
@@ -394,14 +425,11 @@ progressWrap.addEventListener("click", (e) => {
   music.currentTime = pct * (music.duration || 0);
 });
 
-/* make it feel nicer: if user clicks anywhere on player, try play once */
-document.getElementById("player").addEventListener("click", (e) => {
-  // don't double-trigger when clicking progress (already handled)
-  if(e.target === progressWrap || progressWrap.contains(e.target)) return;
+/* click anywhere on player to start (helps mobile) */
+document.getElementById("player").addEventListener("click", () => {
   if(music.paused) tryPlay();
 }, { passive:true });
 
-/* start with correct icon */
 setPlayUI(false);
 </script>
 
