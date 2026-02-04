@@ -1,167 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>pawslyy</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
 :root { --scale: 1.3; }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+
+body{
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: url("./wp13418322-sweet-4k-wallpapers.png") no-repeat center/cover;
 }
 
-body {
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url("wp13418322-sweet-4k-wallpapers.png") no-repeat center/cover;
+/* ✅ remove purple underline/visited junk */
+a, a:link, a:visited, a:hover, a:active{
+  color: inherit;
+  text-decoration: none !important;
 }
 
-/* 🌧️ Rain */
-.rain, .sparkles {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
+/* layers */
+.rain, .sparkles{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
 }
 
-.drop {
-  position: absolute;
-  top: -10vh;
+/* 🌧️ rain */
+.drop{
+  position:absolute;
+  top:-12vh;
   width: 6px;
   height: 12px;
-  border-radius: 999px;
+  border-radius:999px;
   background: rgba(255,255,255,0.35);
   animation: fall linear infinite;
 }
+@keyframes fall{ to{ transform: translateY(130vh); } }
 
-@keyframes fall {
-  to { transform: translateY(130vh); }
-}
-
-/* ✨ Sparkles */
-.sparkle {
-  position: absolute;
-  color: rgba(255,255,255,0.8);
+/* ✨ sparkles */
+.sparkle{
+  position:absolute;
+  color: rgba(255,255,255,0.85);
   font-size: 12px;
-  animation: float 8s linear infinite;
+  animation: float 9s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(255,200,220,0.35));
+}
+@keyframes float{
+  from{ transform: translateY(120vh) scale(0.5); opacity:0; }
+  to{ transform: translateY(-20vh) scale(1); opacity:1; }
 }
 
-@keyframes float {
-  from { transform: translateY(120vh) scale(0.5); opacity: 0; }
-  to   { transform: translateY(-20vh) scale(1); opacity: 1; }
-}
-
-/* 🌸 Card */
-.card {
-  z-index: 2;
+/* 🌸 card */
+.card{
+  z-index:2;
   width: calc(520px * var(--scale));
   padding: calc(36px * var(--scale));
   border-radius: 26px;
-  text-align: center;
-
+  text-align:center;
   background: rgba(255, 220, 230, 0.6);
   backdrop-filter: blur(16px);
-  box-shadow: 0 0 35px rgba(255,180,200,0.5);
   animation: glow 4s ease-in-out infinite;
 }
-
-/* 💗 Glow pulse */
-@keyframes glow {
-  0%,100% { box-shadow: 0 0 35px rgba(255,180,200,0.4); }
-  50% { box-shadow: 0 0 55px rgba(255,200,220,0.8); }
+@keyframes glow{
+  0%,100%{ box-shadow: 0 0 35px rgba(255,180,200,0.40); }
+  50%{ box-shadow: 0 0 60px rgba(255,200,220,0.85); }
 }
 
-/* 👤 Profile photo */
-.profile-pic {
+/* 👤 profile pic */
+.profile-pic{
+  display:block;
+  margin: 0 auto 18px auto;
   width: 140px;
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 18px;
-  border: 3px solid rgba(255,255,255,0.6);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-  transition: 0.4s ease;
+  border: 3px solid rgba(255,255,255,0.65);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+  transition: transform .4s ease, box-shadow .4s ease;
 }
-
-.profile-pic:hover {
+.profile-pic:hover{
   transform: scale(1.08) rotate(1deg);
-  box-shadow: 0 0 40px rgba(255,200,220,0.9);
+  box-shadow: 0 0 45px rgba(255,200,220,0.9), 0 18px 35px rgba(0,0,0,0.30);
 }
 
-.name {
+.name{
   font-size: 34px;
-  color: white;
+  color:#fff;
+  font-weight: 500;
   margin-bottom: 12px;
 }
-
-.spark {
-  color: white;
+.spark{
+  color:#fff;
   letter-spacing: 8px;
-  margin-bottom: 26px;
+  margin-bottom: 22px;
 }
 
-/* 🔗 Icons */
-.icons {
-  display: flex;
-  justify-content: center;
+/* icons */
+.icons{
+  display:flex;
+  justify-content:center;
   gap: 30px;
+  margin-bottom: 16px;
 }
 
-.icons a {
+.icons a{
   width: 52px;
   height: 52px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
+  display:grid;
+  place-items:center;
+  border-radius: 999px;
   background: rgba(255,255,255,0.15);
   border: 1px solid rgba(255,255,255,0.25);
-  transition: 0.3s ease;
+  transition: transform .3s ease, background .3s ease;
 }
 
-.icons a i {
-  color: white;
+.icons a i{
+  color:#fff;
   font-size: 22px;
 }
 
-.icons a:hover {
+.icons a:hover{
   transform: scale(1.15);
-  background: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.28);
 }
 
-/* 🎧 Visualizer */
-.visualizer {
-  display: flex;
-  justify-content: center;
+/* 🎧 visualizer */
+.visualizer{
+  display:flex;
+  justify-content:center;
   gap: 6px;
-  margin-top: 18px;
+  margin-top: 10px;
+  margin-bottom: 18px;
 }
-
-.bar {
+.bar{
   width: 6px;
   height: 18px;
-  background: rgba(255,255,255,0.7);
-  border-radius: 6px;
+  background: rgba(255,255,255,0.75);
+  border-radius: 999px;
   animation: beat 1s infinite ease-in-out;
+  opacity: .75;
+}
+.bar:nth-child(2){ animation-delay: .2s; }
+.bar:nth-child(3){ animation-delay: .4s; }
+.bar:nth-child(4){ animation-delay: .6s; }
+@keyframes beat{
+  0%,100%{ height: 10px; opacity:.55; }
+  50%{ height: 26px; opacity:1; }
 }
 
-.bar:nth-child(2) { animation-delay: .2s }
-.bar:nth-child(3) { animation-delay: .4s }
-.bar:nth-child(4) { animation-delay: .6s }
+/* 🎵 music bar (like your screenshot) */
+.player{
+  width: min(860px, 92vw);
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 5;
 
-@keyframes beat {
-  0%,100% { height: 10px; }
-  50% { height: 26px; }
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 220, 230, 0.35);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.18);
 }
+
+.playerTop{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.trackTitle{
+  color: rgba(255,255,255,0.95);
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.timeRow{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  color: rgba(255,255,255,0.9);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+
+.playBtn{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.12);
+  color: white;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  transition: transform .2s ease, background .2s ease;
+}
+.playBtn:hover{
+  transform: scale(1.06);
+  background: rgba(255,255,255,0.18);
+}
+
+.progressWrap{
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.16);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.progressFill{
+  height: 100%;
+  width: 0%;
+  background: rgba(255,255,255,0.75);
+  border-radius: 999px;
+}
+
+/* small helper text */
+.tapHint{
+  margin-top: 8px;
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+  text-align:center;
+  display:none;
+}
+.tapHint.show{ display:block; }
 </style>
 </head>
 
@@ -171,48 +257,152 @@ body {
 <div class="sparkles" id="sparkles"></div>
 
 <div class="card">
-  <img src="profile.png" class="profile-pic">
+  <img src="./profile.png" class="profile-pic" alt="profile" onerror="this.style.display='none';">
+
   <div class="name">pawslyy</div>
   <div class="spark">✦ ✧ ✦</div>
 
   <div class="icons">
-    <a href="https://www.tiktok.com/@emmaviea" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-    <a href="https://x.com/pawslyy" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-    <a href="https://t.me/pawslyy" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+    <a href="https://www.tiktok.com/@emmaviea" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+      <i class="fa-brands fa-tiktok"></i>
+    </a>
+    <a href="https://x.com/pawslyy" target="_blank" rel="noopener noreferrer" aria-label="X">
+      <i class="fa-brands fa-x-twitter"></i>
+    </a>
+    <a href="https://t.me/pawslyy" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+      <i class="fa-brands fa-telegram"></i>
+    </a>
   </div>
 
-  <div class="visualizer">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
+  <div class="visualizer" aria-hidden="true">
+    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
   </div>
 </div>
 
-<audio id="music" src="music.mp3" autoplay loop></audio>
+<!-- audio -->
+<audio id="music" preload="metadata" loop>
+  <source src="./music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🎵 music bar -->
+<div class="player" id="player">
+  <div class="playerTop">
+    <div class="trackTitle" id="trackTitle">into the doldrums</div>
+
+    <div class="timeRow">
+      <span id="curTime">0:00</span>
+      <span style="opacity:.7;">—</span>
+      <span id="durTime">0:00</span>
+    </div>
+
+    <div class="controls">
+      <button class="playBtn" id="playBtn" aria-label="Play/Pause">
+        <i class="fa-solid fa-play" id="playIcon"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="progressWrap" id="progressWrap" aria-label="Seek">
+    <div class="progressFill" id="progressFill"></div>
+  </div>
+
+  <div class="tapHint" id="tapHint">tap play to start music</div>
+</div>
 
 <script>
-/* Rain */
+/* 🌧️ rain */
 const rain = document.getElementById("rain");
-for (let i = 0; i < 100; i++) {
-  const d = document.createElement("div");
-  d.className = "drop";
-  d.style.left = Math.random() * 100 + "vw";
-  d.style.animationDuration = (2 + Math.random() * 3) + "s";
-  d.style.opacity = Math.random();
+for(let i=0;i<110;i++){
+  const d=document.createElement("div");
+  d.className="drop";
+  d.style.left = Math.random()*100 + "vw";
+  d.style.animationDuration = (1.8 + Math.random()*2.8) + "s";
+  d.style.animationDelay = (-Math.random()*3) + "s";
+  d.style.opacity = (0.15 + Math.random()*0.5);
   rain.appendChild(d);
 }
 
-/* Sparkles */
+/* ✨ sparkles */
 const sparkles = document.getElementById("sparkles");
-for (let i = 0; i < 40; i++) {
-  const s = document.createElement("div");
-  s.className = "sparkle";
-  s.innerText = "✦";
-  s.style.left = Math.random() * 100 + "vw";
-  s.style.animationDelay = Math.random() * 8 + "s";
+for(let i=0;i<40;i++){
+  const s=document.createElement("div");
+  s.className="sparkle";
+  s.textContent = Math.random() > 0.5 ? "✦" : "✧";
+  s.style.left = Math.random()*100 + "vw";
+  s.style.animationDelay = (Math.random()*9) + "s";
+  s.style.fontSize = (10 + Math.random()*8) + "px";
+  s.style.opacity = (0.25 + Math.random()*0.65);
   sparkles.appendChild(s);
 }
+
+/* 🎵 player logic */
+const music = document.getElementById("music");
+const playBtn = document.getElementById("playBtn");
+const playIcon = document.getElementById("playIcon");
+const curTime = document.getElementById("curTime");
+const durTime = document.getElementById("durTime");
+const progressFill = document.getElementById("progressFill");
+const progressWrap = document.getElementById("progressWrap");
+const tapHint = document.getElementById("tapHint");
+
+function fmt(t){
+  if(!isFinite(t)) return "0:00";
+  const m = Math.floor(t/60);
+  const s = Math.floor(t%60).toString().padStart(2,"0");
+  return `${m}:${s}`;
+}
+
+function setPlayUI(isPlaying){
+  playIcon.className = isPlaying ? "fa-solid fa-pause" : "fa-solid fa-play";
+}
+
+async function tryPlay(){
+  try{
+    await music.play();
+    setPlayUI(true);
+    tapHint.classList.remove("show");
+  }catch(e){
+    // browser blocked it until user click — show hint
+    tapHint.classList.add("show");
+  }
+}
+
+playBtn.addEventListener("click", async () => {
+  if(music.paused){
+    await tryPlay();
+  }else{
+    music.pause();
+    setPlayUI(false);
+  }
+});
+
+music.addEventListener("loadedmetadata", () => {
+  durTime.textContent = fmt(music.duration);
+});
+
+music.addEventListener("timeupdate", () => {
+  curTime.textContent = fmt(music.currentTime);
+  const pct = (music.currentTime / (music.duration || 1)) * 100;
+  progressFill.style.width = pct + "%";
+});
+
+/* click to seek */
+progressWrap.addEventListener("click", (e) => {
+  const rect = progressWrap.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const pct = Math.min(Math.max(x / rect.width, 0), 1);
+  music.currentTime = pct * (music.duration || 0);
+});
+
+/* make it feel nicer: if user clicks anywhere on player, try play once */
+document.getElementById("player").addEventListener("click", (e) => {
+  // don't double-trigger when clicking progress (already handled)
+  if(e.target === progressWrap || progressWrap.contains(e.target)) return;
+  if(music.paused) tryPlay();
+}, { passive:true });
+
+/* start with correct icon */
+setPlayUI(false);
 </script>
 
 </body>
