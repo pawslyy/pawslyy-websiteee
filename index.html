@@ -18,130 +18,113 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background: url("./wp13418322-sweet-4k-wallpapers.png") no-repeat center/cover;
+
+  /* ✅ new background */
+  background: url("./R3CF5u0-silent-hill-wallpaper.jpg") no-repeat center/cover;
 }
 
-/* ✅ stop purple lines / visited underline */
+/* ✅ stop purple underline/visited */
 a, a:link, a:visited, a:hover, a:active{
   color: inherit;
   text-decoration: none !important;
 }
 
 /* layers */
-.rain, .sparkles, .stars{
+.rain, .mist{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:1;
 }
 
-/* 🌧️ rain */
+/* 🌧️ rain (soft white) */
+.rain{ z-index:1; }
+
 .drop{
   position:absolute;
   top:-12vh;
   width: 6px;
   height: 12px;
   border-radius:999px;
-  background: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.28);
   animation: fall linear infinite;
+  filter: blur(0.2px);
 }
 @keyframes fall{ to{ transform: translateY(130vh); } }
 
-/* ✨ sparkles */
-.sparkle{
-  position:absolute;
-  color: rgba(255,255,255,0.85);
-  font-size: 12px;
-  animation: float 9s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(255,200,220,0.35));
-}
-@keyframes float{
-  from{ transform: translateY(120vh) scale(0.5); opacity:0; }
-  to{ transform: translateY(-20vh) scale(1); opacity:1; }
+/* 🌫️ mist/fog overlay (cute + pink tint) */
+.mist{
+  z-index:2;
+  /* a soft tinted veil */
+  background: radial-gradient(circle at 30% 30%, rgba(255,180,210,0.10), rgba(0,0,0,0.10) 55%),
+              radial-gradient(circle at 70% 60%, rgba(255,210,230,0.10), rgba(0,0,0,0.12) 60%);
+  backdrop-filter: blur(1.5px);
 }
 
-/* ⭐ shooting star */
-.shooting-star{
-  position: absolute;
-  top: 18vh;
-  left: -30vw;
-  width: 220px;
-  height: 2px;
-  opacity: 0;
-  transform: rotate(-12deg);
-  transform-origin: left center;
-  filter: drop-shadow(0 0 10px rgba(255,255,255,0.55));
-  background: linear-gradient(90deg,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0.95),
-    rgba(255,255,255,0)
-  );
-  animation: shoot 8.5s ease-in-out infinite;
-}
-.shooting-star::after{
+.mist::before,
+.mist::after{
   content:"";
   position:absolute;
-  right: 18px;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  transform: translateY(-50%) rotate(45deg);
-  background: rgba(255,255,255,0.95);
-  border-radius: 2px;
-  box-shadow: 0 0 14px rgba(255,255,255,0.7);
+  inset:-30%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10), transparent 55%),
+    radial-gradient(circle at 60% 40%, rgba(255,180,210,0.10), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08), transparent 55%);
+  filter: blur(18px);
+  opacity: 0.85;
+  animation: drift 16s ease-in-out infinite;
 }
-@keyframes shoot{
-  0%   { opacity: 0; transform: translate(0,0) rotate(-12deg); }
-  10%  { opacity: 0; }
-  18%  { opacity: 1; }
-  28%  { opacity: 1; transform: translate(160vw, 22vh) rotate(-12deg); }
-  33%  { opacity: 0; }
-  100% { opacity: 0; transform: translate(160vw, 22vh) rotate(-12deg); }
+
+.mist::after{
+  opacity: 0.55;
+  filter: blur(26px);
+  animation-duration: 22s;
+}
+
+@keyframes drift{
+  0%   { transform: translate3d(-2%, -1%, 0) scale(1.02); }
+  50%  { transform: translate3d(2%, 1%, 0) scale(1.05); }
+  100% { transform: translate3d(-2%, -1%, 0) scale(1.02); }
 }
 
 /* 🌸 card */
 .card{
-  z-index:2;
+  z-index:3;
   width: calc(520px * var(--scale));
   padding: calc(36px * var(--scale));
   border-radius: 26px;
   text-align:center;
-  background: rgba(255, 220, 230, 0.6);
-  backdrop-filter: blur(16px);
-  animation: glow 4s ease-in-out infinite;
+
+  /* more moody but still pink */
+  background: rgba(255, 200, 220, 0.28);
+  backdrop-filter: blur(18px);
+
+  /* pink glow accents */
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 0 50px rgba(255,170,205,0.22),
+    0 22px 60px rgba(0,0,0,0.35);
+
+  animation: glow 5s ease-in-out infinite;
 }
+
 @keyframes glow{
-  0%,100%{ box-shadow: 0 0 35px rgba(255,180,200,0.40); }
-  50%{ box-shadow: 0 0 60px rgba(255,200,220,0.85); }
+  0%,100%{ box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 0 45px rgba(255,170,205,0.18),
+    0 22px 60px rgba(0,0,0,0.35); }
+  50%{ box-shadow:
+    0 0 0 1px rgba(255,255,255,0.10),
+    0 0 65px rgba(255,190,220,0.28),
+    0 22px 65px rgba(0,0,0,0.38); }
 }
 
-/* 👤 profile pic */
-.profile-pic{
-  display:block;
-  margin: 0 auto 18px auto;
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid rgba(255,255,255,0.65);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.28);
-  transition: transform .4s ease, box-shadow .4s ease;
-}
-.profile-pic:hover{
-  transform: scale(1.08) rotate(1deg);
-  box-shadow: 0 0 45px rgba(255,200,220,0.9), 0 18px 35px rgba(0,0,0,0.30);
-}
-
+/* name */
 .name{
   font-size: 34px;
   color:#fff;
   font-weight: 500;
-  margin-bottom: 12px;
-}
-.spark{
-  color:#fff;
-  letter-spacing: 8px;
-  margin-bottom: 22px;
+  margin-bottom: 18px; /* ✅ no spark row under it */
+  text-shadow: 0 8px 24px rgba(0,0,0,0.25);
 }
 
 /* icons */
@@ -149,7 +132,7 @@ a, a:link, a:visited, a:hover, a:active{
   display:flex;
   justify-content:center;
   gap: 30px;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .icons a{
@@ -158,38 +141,45 @@ a, a:link, a:visited, a:hover, a:active{
   display:grid;
   place-items:center;
   border-radius: 999px;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  transition: transform .3s ease, background .3s ease;
+
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,170,205,0.25);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
 }
+
 .icons a i{
   color:#fff;
   font-size: 22px;
 }
+
 .icons a:hover{
-  transform: scale(1.15);
-  background: rgba(255,255,255,0.28);
+  transform: scale(1.12);
+  background: rgba(255,255,255,0.16);
+  box-shadow: 0 0 28px rgba(255,170,205,0.22), 0 16px 35px rgba(0,0,0,0.22);
 }
 
-/* 🎧 visualizer */
+/* 🎧 visualizer (tiny cute bars) */
 .visualizer{
   display:flex;
   justify-content:center;
   gap: 6px;
-  margin-top: 10px;
-  margin-bottom: 12px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  opacity: 0.9;
 }
+
 .bar{
   width: 6px;
   height: 18px;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.70);
   border-radius: 999px;
   animation: beat 1s infinite ease-in-out;
-  opacity: .75;
 }
 .bar:nth-child(2){ animation-delay: .2s; }
 .bar:nth-child(3){ animation-delay: .4s; }
 .bar:nth-child(4){ animation-delay: .6s; }
+
 @keyframes beat{
   0%,100%{ height: 10px; opacity:.55; }
   50%{ height: 26px; opacity:1; }
@@ -202,13 +192,14 @@ a, a:link, a:visited, a:hover, a:active{
   left: 50%;
   bottom: 22px;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 6;
+
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 220, 230, 0.35);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 18px 45px rgba(0,0,0,0.22);
-  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255, 200, 220, 0.22);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,170,205,0.18);
 }
 
 .playerTop{
@@ -232,23 +223,17 @@ a, a:link, a:visited, a:hover, a:active{
   display:flex;
   align-items:center;
   gap: 10px;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255,255,255,0.88);
   font-size: 14px;
   white-space: nowrap;
-}
-
-.controls{
-  display:flex;
-  align-items:center;
-  gap: 10px;
 }
 
 .playBtn{
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,170,205,0.20);
+  background: rgba(255,255,255,0.10);
   color: white;
   cursor:pointer;
   display:grid;
@@ -257,14 +242,14 @@ a, a:link, a:visited, a:hover, a:active{
 }
 .playBtn:hover{
   transform: scale(1.06);
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.16);
 }
 
 .progressWrap{
   width: 100%;
   height: 10px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.14);
   overflow: hidden;
   cursor: pointer;
 }
@@ -272,13 +257,13 @@ a, a:link, a:visited, a:hover, a:active{
 .progressFill{
   height: 100%;
   width: 0%;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.72);
   border-radius: 999px;
 }
 
 .tapHint{
   margin-top: 8px;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,200,220,0.70);
   font-size: 12px;
   text-align:center;
   display:none;
@@ -290,17 +275,12 @@ a, a:link, a:visited, a:hover, a:active{
 <body>
 
 <div class="rain" id="rain"></div>
-<div class="sparkles" id="sparkles"></div>
-
-<div class="stars">
-  <div class="shooting-star"></div>
-</div>
+<div class="mist"></div>
 
 <div class="card">
-  <img src="./profile.png" class="profile-pic" alt="profile" onerror="this.style.display='none';">
-
   <div class="name">pawslyy</div>
-  <div class="spark">✦ ✧ ✦</div>
+
+  <!-- ✅ removed the ✦ ✧ ✦ row completely -->
 
   <div class="icons">
     <a href="https://www.tiktok.com/@emmaviea" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
@@ -329,15 +309,13 @@ a, a:link, a:visited, a:hover, a:active{
 
     <div class="timeRow">
       <span id="curTime">0:00</span>
-      <span style="opacity:.7;">—</span>
+      <span style="opacity:.6;">—</span>
       <span id="durTime">0:00</span>
     </div>
 
-    <div class="controls">
-      <button class="playBtn" id="playBtn" aria-label="Play/Pause">
-        <i class="fa-solid fa-play" id="playIcon"></i>
-      </button>
-    </div>
+    <button class="playBtn" id="playBtn" aria-label="Play/Pause">
+      <i class="fa-solid fa-play" id="playIcon"></i>
+    </button>
   </div>
 
   <div class="progressWrap" id="progressWrap" aria-label="Seek">
@@ -354,26 +332,13 @@ for(let i=0;i<110;i++){
   const d=document.createElement("div");
   d.className="drop";
   d.style.left = Math.random()*100 + "vw";
-  d.style.animationDuration = (1.8 + Math.random()*2.8) + "s";
+  d.style.animationDuration = (2.1 + Math.random()*3.1) + "s";
   d.style.animationDelay = (-Math.random()*3) + "s";
-  d.style.opacity = (0.15 + Math.random()*0.5);
+  d.style.opacity = (0.12 + Math.random()*0.45);
   rain.appendChild(d);
 }
 
-/* ✨ sparkles */
-const sparkles = document.getElementById("sparkles");
-for(let i=0;i<40;i++){
-  const s=document.createElement("div");
-  s.className="sparkle";
-  s.textContent = Math.random() > 0.5 ? "✦" : "✧";
-  s.style.left = Math.random()*100 + "vw";
-  s.style.animationDelay = (Math.random()*9) + "s";
-  s.style.fontSize = (10 + Math.random()*8) + "px";
-  s.style.opacity = (0.25 + Math.random()*0.65);
-  sparkles.appendChild(s);
-}
-
-/* 🎵 player logic */
+/* 🎵 player */
 const music = document.getElementById("music");
 const playBtn = document.getElementById("playBtn");
 const playIcon = document.getElementById("playIcon");
@@ -425,7 +390,7 @@ progressWrap.addEventListener("click", (e) => {
   music.currentTime = pct * (music.duration || 0);
 });
 
-/* click anywhere on player to start (helps mobile) */
+/* tap anywhere on the bar to start (mobile friendly) */
 document.getElementById("player").addEventListener("click", () => {
   if(music.paused) tryPlay();
 }, { passive:true });
