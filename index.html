@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
-:root { --scale: 1.3; }
+:root { --scale: 1.25; }
 
 * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
 
@@ -19,7 +19,7 @@ body{
   justify-content:center;
   align-items:center;
 
-  /* ✅ new background */
+  /* ✅ your wallpaper */
   background: url("./R3CF5u0-silent-hill-wallpaper.jpg") no-repeat center/cover;
 }
 
@@ -36,27 +36,27 @@ a, a:link, a:visited, a:hover, a:active{
   pointer-events:none;
 }
 
-/* 🌧️ rain (soft white) */
+/* 🌧️ rain */
 .rain{ z-index:1; }
 
 .drop{
   position:absolute;
   top:-12vh;
   width: 6px;
-  height: 12px;
+  height: 14px;
   border-radius:999px;
-  background: rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.22);
   animation: fall linear infinite;
-  filter: blur(0.2px);
+  filter: blur(0.3px);
 }
 @keyframes fall{ to{ transform: translateY(130vh); } }
 
-/* 🌫️ mist/fog overlay (cute + pink tint) */
+/* 🌫️ mist (cute + pink tint) */
 .mist{
   z-index:2;
-  /* a soft tinted veil */
-  background: radial-gradient(circle at 30% 30%, rgba(255,180,210,0.10), rgba(0,0,0,0.10) 55%),
-              radial-gradient(circle at 70% 60%, rgba(255,210,230,0.10), rgba(0,0,0,0.12) 60%);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,170,205,0.10), rgba(0,0,0,0.14) 55%),
+    radial-gradient(circle at 70% 60%, rgba(255,210,230,0.10), rgba(0,0,0,0.16) 60%);
   backdrop-filter: blur(1.5px);
 }
 
@@ -67,7 +67,7 @@ a, a:link, a:visited, a:hover, a:active{
   inset:-30%;
   background:
     radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10), transparent 55%),
-    radial-gradient(circle at 60% 40%, rgba(255,180,210,0.10), transparent 60%),
+    radial-gradient(circle at 60% 40%, rgba(255,170,205,0.10), transparent 60%),
     radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08), transparent 55%);
   filter: blur(18px);
   opacity: 0.85;
@@ -90,19 +90,17 @@ a, a:link, a:visited, a:hover, a:active{
 .card{
   z-index:3;
   width: calc(520px * var(--scale));
-  padding: calc(36px * var(--scale));
+  padding: calc(34px * var(--scale));
   border-radius: 26px;
   text-align:center;
 
-  /* more moody but still pink */
-  background: rgba(255, 200, 220, 0.28);
+  background: rgba(255, 200, 220, 0.22);
   backdrop-filter: blur(18px);
 
-  /* pink glow accents */
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.08),
-    0 0 50px rgba(255,170,205,0.22),
-    0 22px 60px rgba(0,0,0,0.35);
+    0 0 55px rgba(255,170,205,0.20),
+    0 22px 70px rgba(0,0,0,0.42);
 
   animation: glow 5s ease-in-out infinite;
 }
@@ -110,21 +108,20 @@ a, a:link, a:visited, a:hover, a:active{
 @keyframes glow{
   0%,100%{ box-shadow:
     0 0 0 1px rgba(255,255,255,0.08),
-    0 0 45px rgba(255,170,205,0.18),
-    0 22px 60px rgba(0,0,0,0.35); }
+    0 0 50px rgba(255,170,205,0.18),
+    0 22px 70px rgba(0,0,0,0.42); }
   50%{ box-shadow:
     0 0 0 1px rgba(255,255,255,0.10),
-    0 0 65px rgba(255,190,220,0.28),
-    0 22px 65px rgba(0,0,0,0.38); }
+    0 0 70px rgba(255,190,220,0.28),
+    0 22px 78px rgba(0,0,0,0.45); }
 }
 
-/* name */
 .name{
   font-size: 34px;
   color:#fff;
   font-weight: 500;
-  margin-bottom: 18px; /* ✅ no spark row under it */
-  text-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  margin-bottom: 18px;
+  text-shadow: 0 8px 24px rgba(0,0,0,0.28);
 }
 
 /* icons */
@@ -143,8 +140,8 @@ a, a:link, a:visited, a:hover, a:active{
   border-radius: 999px;
 
   background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,170,205,0.25);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,170,205,0.22);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.20);
   transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
 }
 
@@ -156,19 +153,17 @@ a, a:link, a:visited, a:hover, a:active{
 .icons a:hover{
   transform: scale(1.12);
   background: rgba(255,255,255,0.16);
-  box-shadow: 0 0 28px rgba(255,170,205,0.22), 0 16px 35px rgba(0,0,0,0.22);
+  box-shadow: 0 0 28px rgba(255,170,205,0.22), 0 16px 35px rgba(0,0,0,0.26);
 }
 
-/* 🎧 visualizer (tiny cute bars) */
+/* 🎧 tiny bars */
 .visualizer{
   display:flex;
   justify-content:center;
   gap: 6px;
   margin-top: 6px;
-  margin-bottom: 6px;
   opacity: 0.9;
 }
-
 .bar{
   width: 6px;
   height: 18px;
@@ -179,13 +174,12 @@ a, a:link, a:visited, a:hover, a:active{
 .bar:nth-child(2){ animation-delay: .2s; }
 .bar:nth-child(3){ animation-delay: .4s; }
 .bar:nth-child(4){ animation-delay: .6s; }
-
 @keyframes beat{
   0%,100%{ height: 10px; opacity:.55; }
   50%{ height: 26px; opacity:1; }
 }
 
-/* 🎵 music bar */
+/* 🎵 music player */
 .player{
   width: min(860px, 92vw);
   position: fixed;
@@ -196,10 +190,10 @@ a, a:link, a:visited, a:hover, a:active{
 
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 200, 220, 0.22);
+  background: rgba(255, 200, 220, 0.18);
   backdrop-filter: blur(16px);
-  box-shadow: 0 18px 45px rgba(0,0,0,0.35);
-  border: 1px solid rgba(255,170,205,0.18);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.40);
+  border: 1px solid rgba(255,170,205,0.16);
 }
 
 .playerTop{
@@ -253,7 +247,6 @@ a, a:link, a:visited, a:hover, a:active{
   overflow: hidden;
   cursor: pointer;
 }
-
 .progressFill{
   height: 100%;
   width: 0%;
@@ -279,8 +272,6 @@ a, a:link, a:visited, a:hover, a:active{
 
 <div class="card">
   <div class="name">pawslyy</div>
-
-  <!-- ✅ removed the ✦ ✧ ✦ row completely -->
 
   <div class="icons">
     <a href="https://www.tiktok.com/@emmaviea" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
@@ -326,7 +317,7 @@ a, a:link, a:visited, a:hover, a:active{
 </div>
 
 <script>
-/* 🌧️ rain */
+/* rain */
 const rain = document.getElementById("rain");
 for(let i=0;i<110;i++){
   const d=document.createElement("div");
@@ -338,7 +329,7 @@ for(let i=0;i<110;i++){
   rain.appendChild(d);
 }
 
-/* 🎵 player */
+/* music player */
 const music = document.getElementById("music");
 const playBtn = document.getElementById("playBtn");
 const playIcon = document.getElementById("playIcon");
@@ -390,7 +381,7 @@ progressWrap.addEventListener("click", (e) => {
   music.currentTime = pct * (music.duration || 0);
 });
 
-/* tap anywhere on the bar to start (mobile friendly) */
+/* tap anywhere on player to start (mobile friendly) */
 document.getElementById("player").addEventListener("click", () => {
   if(music.paused) tryPlay();
 }, { passive:true });
