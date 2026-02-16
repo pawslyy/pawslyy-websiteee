@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
-:root { --scale: 1.25; }
+:root { --scale: 1.25; --pink: #ff9fcb; }
 
 * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
 
@@ -19,8 +19,8 @@ body{
   justify-content:center;
   align-items:center;
 
-  /* ✅ your wallpaper */
-  background: url("./R3CF5u0-silent-hill-wallpaper.jpg") no-repeat center/cover;
+  /* ✅ black background */
+  background: #000;
 }
 
 /* ✅ stop purple underline/visited */
@@ -45,7 +45,7 @@ a, a:link, a:visited, a:hover, a:active{
   width: 6px;
   height: 14px;
   border-radius:999px;
-  background: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.18);
   animation: fall linear infinite;
   filter: blur(0.3px);
 }
@@ -55,8 +55,8 @@ a, a:link, a:visited, a:hover, a:active{
 .mist{
   z-index:2;
   background:
-    radial-gradient(circle at 30% 30%, rgba(255,170,205,0.10), rgba(0,0,0,0.14) 55%),
-    radial-gradient(circle at 70% 60%, rgba(255,210,230,0.10), rgba(0,0,0,0.16) 60%);
+    radial-gradient(circle at 30% 30%, rgba(255,170,205,0.10), rgba(0,0,0,0.40) 55%),
+    radial-gradient(circle at 70% 60%, rgba(255,210,230,0.10), rgba(0,0,0,0.45) 60%);
   backdrop-filter: blur(1.5px);
 }
 
@@ -66,9 +66,9 @@ a, a:link, a:visited, a:hover, a:active{
   position:absolute;
   inset:-30%;
   background:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10), transparent 55%),
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 55%),
     radial-gradient(circle at 60% 40%, rgba(255,170,205,0.10), transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08), transparent 55%);
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06), transparent 55%);
   filter: blur(18px);
   opacity: 0.85;
   animation: drift 16s ease-in-out infinite;
@@ -94,13 +94,13 @@ a, a:link, a:visited, a:hover, a:active{
   border-radius: 26px;
   text-align:center;
 
-  background: rgba(255, 200, 220, 0.22);
+  background: rgba(255, 180, 210, 0.14);
   backdrop-filter: blur(18px);
 
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.08),
     0 0 55px rgba(255,170,205,0.20),
-    0 22px 70px rgba(0,0,0,0.42);
+    0 22px 70px rgba(0,0,0,0.60);
 
   animation: glow 5s ease-in-out infinite;
 }
@@ -109,11 +109,11 @@ a, a:link, a:visited, a:hover, a:active{
   0%,100%{ box-shadow:
     0 0 0 1px rgba(255,255,255,0.08),
     0 0 50px rgba(255,170,205,0.18),
-    0 22px 70px rgba(0,0,0,0.42); }
+    0 22px 70px rgba(0,0,0,0.60); }
   50%{ box-shadow:
     0 0 0 1px rgba(255,255,255,0.10),
-    0 0 70px rgba(255,190,220,0.28),
-    0 22px 78px rgba(0,0,0,0.45); }
+    0 0 70px rgba(255,190,220,0.26),
+    0 22px 78px rgba(0,0,0,0.65); }
 }
 
 .name{
@@ -121,7 +121,7 @@ a, a:link, a:visited, a:hover, a:active{
   color:#fff;
   font-weight: 500;
   margin-bottom: 18px;
-  text-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  text-shadow: 0 8px 24px rgba(0,0,0,0.35);
 }
 
 /* icons */
@@ -139,21 +139,22 @@ a, a:link, a:visited, a:hover, a:active{
   place-items:center;
   border-radius: 999px;
 
-  background: rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,170,205,0.22);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.20);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
   transition: transform .25s ease, background .25s ease, box-shadow .25s ease;
 }
 
 .icons a i{
-  color:#fff;
+  /* ✅ pink icons */
+  color: var(--pink);
   font-size: 22px;
 }
 
 .icons a:hover{
   transform: scale(1.12);
-  background: rgba(255,255,255,0.16);
-  box-shadow: 0 0 28px rgba(255,170,205,0.22), 0 16px 35px rgba(0,0,0,0.26);
+  background: rgba(255,255,255,0.12);
+  box-shadow: 0 0 28px rgba(255,170,205,0.22), 0 16px 35px rgba(0,0,0,0.45);
 }
 
 /* 🎧 tiny bars */
@@ -190,9 +191,9 @@ a, a:link, a:visited, a:hover, a:active{
 
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(255, 200, 220, 0.18);
+  background: rgba(255, 180, 210, 0.10);
   backdrop-filter: blur(16px);
-  box-shadow: 0 18px 45px rgba(0,0,0,0.40);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.55);
   border: 1px solid rgba(255,170,205,0.16);
 }
 
@@ -236,7 +237,7 @@ a, a:link, a:visited, a:hover, a:active{
 }
 .playBtn:hover{
   transform: scale(1.06);
-  background: rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.14);
 }
 
 .progressWrap{
@@ -256,7 +257,7 @@ a, a:link, a:visited, a:hover, a:active{
 
 .tapHint{
   margin-top: 8px;
-  color: rgba(255,200,220,0.70);
+  color: rgba(255,180,210,0.85);
   font-size: 12px;
   text-align:center;
   display:none;
@@ -290,7 +291,8 @@ a, a:link, a:visited, a:hover, a:active{
   </div>
 </div>
 
-<audio id="music" preload="metadata" loop>
+<!-- ✅ autoplay attempt -->
+<audio id="music" preload="auto" loop playsinline>
   <source src="./music.mp3" type="audio/mpeg">
 </audio>
 
@@ -313,7 +315,7 @@ a, a:link, a:visited, a:hover, a:active{
     <div class="progressFill" id="progressFill"></div>
   </div>
 
-  <div class="tapHint" id="tapHint">tap play to start music</div>
+  <div class="tapHint" id="tapHint">tap anywhere to start sound</div>
 </div>
 
 <script>
@@ -329,7 +331,7 @@ for(let i=0;i<110;i++){
   rain.appendChild(d);
 }
 
-/* music player */
+/* music */
 const music = document.getElementById("music");
 const playBtn = document.getElementById("playBtn");
 const playIcon = document.getElementById("playIcon");
@@ -338,6 +340,7 @@ const durTime = document.getElementById("durTime");
 const progressFill = document.getElementById("progressFill");
 const progressWrap = document.getElementById("progressWrap");
 const tapHint = document.getElementById("tapHint");
+const player = document.getElementById("player");
 
 function fmt(t){
   if(!isFinite(t)) return "0:00";
@@ -348,6 +351,20 @@ function fmt(t){
 function setPlayUI(isPlaying){
   playIcon.className = isPlaying ? "fa-solid fa-pause" : "fa-solid fa-play";
 }
+
+async function startAutoplay(){
+  // browsers often block autoplay with sound, so we try normally first:
+  try{
+    await music.play();
+    setPlayUI(true);
+    tapHint.classList.remove("show");
+  }catch(e){
+    // fallback: show hint, start on first click/tap
+    tapHint.classList.add("show");
+    setPlayUI(false);
+  }
+}
+
 async function tryPlay(){
   try{
     await music.play();
@@ -381,14 +398,18 @@ progressWrap.addEventListener("click", (e) => {
   music.currentTime = pct * (music.duration || 0);
 });
 
-/* tap anywhere on player to start (mobile friendly) */
-document.getElementById("player").addEventListener("click", () => {
+/* if autoplay blocked, any click starts it */
+function unlock(){
   if(music.paused) tryPlay();
-}, { passive:true });
+  document.removeEventListener("click", unlock);
+  document.removeEventListener("touchstart", unlock);
+}
+document.addEventListener("click", unlock, { passive:true });
+document.addEventListener("touchstart", unlock, { passive:true });
 
 setPlayUI(false);
+startAutoplay();
 </script>
 
 </body>
 </html>
-
