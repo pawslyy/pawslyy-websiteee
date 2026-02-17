@@ -3,92 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>pawslyy</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-
-    background-image: url("anime-bg.jpg");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-
-    cursor: url("cursor.png"), auto;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:url("waaalalallala.jpg") center/cover no-repeat;
+  font-family:Arial, Helvetica, sans-serif;
+  cursor: url("cursor.png") 16 16, auto;
 }
 
 /* dark overlay */
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  z-index:-1;
 }
 
-/* card */
-.card {
-    position: relative;
-    background: rgba(0,0,0,0.75);
-    border-radius: 22px;
-    padding: 40px 60px;
-    text-align: center;
-    color: #ffd1dc;
-    border: 1px solid #ffd1dc;
-    backdrop-filter: blur(10px);
+/* main card */
+.card{
+  background:rgba(0,0,0,0.85);
+  border-radius:18px;
+  padding:40px;
+  text-align:center;
+  color:white;
+  width:260px;
 }
 
 /* title */
-h1 {
-    margin-bottom: 20px;
-    color: #ffd1dc;
+h1{
+  margin:0 0 20px 0;
+  font-weight:500;
 }
 
 /* icons */
-.icons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+.icons{
+  display:flex;
+  gap:14px;
+  justify-content:center;
 }
 
-.icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 1px solid #ffd1dc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffd1dc;
-    transition: 0.3s;
+.icon{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:1px solid white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+  transition:0.2s;
 }
 
-.icon:hover {
-    transform: scale(1.1);
-    background: #ffd1dc;
-    color: black;
+.icon:hover{
+  background:white;
+  color:black;
 }
 
 /* music player */
-.player {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 340px;
-    background: rgba(0,0,0,0.75);
-    border-radius: 20px;
-    padding: 14px;
-    border: 1px solid #ffd1dc;
-    color: #ffd1dc;
+.music{
+  position:fixed;
+  bottom:40px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.85);
+  padding:18px 22px;
+  border-radius:14px;
+  color:white;
+  width:320px;
 }
 </style>
 </head>
@@ -96,28 +84,20 @@ h1 {
 <body>
 
 <div class="card">
-    <h1>pawslyy</h1>
+  <h1>pawslyy</h1>
 
-    <div class="icons">
-        <a href="https://tiktok.com/@stupidbunie" class="icon">
-            <i class="fab fa-tiktok"></i>
-        </a>
-
-        <a href="#" class="icon">
-            <i class="fab fa-x-twitter"></i>
-        </a>
-
-        <a href="#" class="icon">
-            <i class="fab fa-telegram"></i>
-        </a>
-    </div>
+  <div class="icons">
+    <div class="icon">♪</div>
+    <div class="icon">X</div>
+    <div class="icon">✉</div>
+  </div>
 </div>
 
-<div class="player">
-    <div>u seemed so perfect</div>
-    <audio autoplay controls>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
+<div class="music">
+  u seemed so perfect
+  <audio autoplay controls>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
 </div>
 
 </body>
