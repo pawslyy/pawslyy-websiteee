@@ -1,202 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>pawslyy</title>
-
-<style>
-body{
-  margin:0;
-  background:#000;
-  color:white;
-  font-family:system-ui;
-  overflow-x:hidden;
-}
-
-/* center card */
-.card{
-  position:relative;
-  margin:120px auto 40px;
-  width:320px;
-  padding:30px;
-  background:#111;
-  border-radius:18px;
-  text-align:center;
-}
-
-/* links */
-.links a{
-  margin:0 8px;
-  color:white;
-  text-decoration:none;
-}
-.links a:hover{opacity:.7}
-
-/* stars */
-.star{
-  position:fixed;
-  background:white;
-  width:2px;
-  height:2px;
-  border-radius:50%;
-  animation:twinkle 3s infinite;
-}
-@keyframes twinkle{
-  0%{opacity:.2}
-  50%{opacity:1}
-  100%{opacity:.2}
-}
-
-/* heart trail */
-.heart{
-  position:fixed;
-  font-size:14px;
-  pointer-events:none;
-  animation:fadeUp .7s forwards;
-}
-@keyframes fadeUp{
-  to{transform:translateY(-20px);opacity:0}
-}
-
-/* game */
-#game{
-  display:block;
-  margin:40px auto;
-  background:#111;
-  border-radius:12px;
-}
-
-.music{
-  position:fixed;
-  bottom:10px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#111;
-  padding:10px;
-  border-radius:10px;
-}
-</style>
-</head>
-
-<body>
-
-<div class="card">
-<h1>pawslyy</h1>
-<p>hi i love u ♡</p>
-
-<div class="links">
-<a href="https://tiktok.com/@stupidbunie">TikTok</a>
-<a href="https://x.com/pawslyy">Twitter</a>
-<a href="https://t.me/pawslyy">Telegram</a>
-<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
-</div>
-</div>
-
-<canvas id="game" width="420" height="150"></canvas>
-
-<div class="music">
-<audio id="song" src="music.mp3" autoplay loop></audio>
-<button onclick="toggle()">play / pause</button>
-</div>
-
 <script>
-/* stars */
-for(let i=0;i<80;i++){
-let s=document.createElement("div");
-s.className="star";
-s.style.top=Math.random()*100+"vh";
-s.style.left=Math.random()*100+"vw";
-document.body.appendChild(s);
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let bunny = {
+  x: 50,
+  y: 110,
+  w: 20,
+  h: 20,
+  vy: 0,
+  jumping: false
+};
+
+let gravity = 0.6;
+let ground = 110;
+
+let obstacles = [];
+let frame = 0;
+let score = 0;
+
+let jumpSound = new Audio("music.mp3");
+jumpSound.volume = 0.1;
+
+function spawnObstacle(){
+  obstacles.push({
+    x: canvas.width,
+    y: 115,
+    w: 12,
+    h: 15
+  });
 }
 
-/* heart cursor */
-document.addEventListener("mousemove",e=>{
-let h=document.createElement("div");
-h.className="heart";
-h.textContent="♡";
-h.style.left=e.clientX+"px";
-h.style.top=e.clientY+"px";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),700);
-});
+function update(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-/* music autoplay helper */
-let audio=document.getElementById("song");
-document.body.addEventListener("click",()=>audio.play(),{once:true});
-function toggle(){
-audio.paused?audio.play():audio.pause();
+  /* ground */
+  ctx.fillStyle="#222";
+  ctx.fillRect(0,130,canvas.width,20);
+
+  /* bunny physics */
+  bunny.vy += gravity;
+  bunny.y += bunny.vy;
+
+  if(bunny.y >= ground){
+    bunny.y = ground;
+    bunny.jumping = false;
+  }
+
+  /* bunny */
+  ctx.fillStyle="white";
+  ctx.fillRect(bunny.x, bunny.y, bunny.w, bunny.h);
+
+  /* obstacles */
+  if(frame % 90 === 0){
+    spawnObstacle();
+  }
+
+  for(let i=0;i<obstacles.length;i++){
+    let o = obstacles[i];
+    o.x -= 4;
+
+    ctx.fillRect(o.x, o.y, o.w, o.h);
+
+    /* collision */
+    if(
+      bunny.x < o.x + o.w &&
+      bunny.x + bunny.w > o.x &&
+      bunny.y < o.y + o.h &&
+      bunny.y + bunny.h > o.y
+    ){
+      obstacles = [];
+      score = 0;
+    }
+
+    if(o.x < -20){
+      obstacles.splice(i,1);
+      score++;
+    }
+  }
+
+  ctx.fillStyle="white";
+  ctx.fillText("score: " + score, 10, 12);
+
+  frame++;
+  requestAnimationFrame(update);
 }
 
-/* bunny runner game */
-let c=document.getElementById("game");
-let ctx=c.getContext("2d");
+update();
 
-let bunnyY=110;
-let vel=0;
-let gravity=.6;
-let obstacleX=420;
-let score=0;
-
-let jumpSound=new Audio("music.mp3"); // placeholder
-jumpSound.volume=.2;
-
-function draw(){
-ctx.clearRect(0,0,420,150);
-
-/* ground */
-ctx.fillStyle="#222";
-ctx.fillRect(0,130,420,20);
-
-/* bunny */
-ctx.fillStyle="white";
-ctx.fillRect(40,bunnyY,18,18);
-
-/* obstacle */
-ctx.fillRect(obstacleX,115,12,15);
-
-vel+=gravity;
-bunnyY+=vel;
-
-if(bunnyY>110){
-bunnyY=110;
-vel=0;
+/* jump controls */
+function jump(){
+  if(!bunny.jumping){
+    bunny.vy = -10;
+    bunny.jumping = true;
+    jumpSound.play();
+  }
 }
 
-obstacleX-=4;
-
-if(obstacleX<0){
-obstacleX=420;
-score++;
-}
-
-if(obstacleX<55 && bunnyY>100){
-score=0;
-obstacleX=420;
-}
-
-ctx.fillStyle="white";
-ctx.fillText("score: "+score,10,12);
-
-requestAnimationFrame(draw);
-}
-
-draw();
-
-document.addEventListener("keydown",()=>{
-if(bunnyY===110){
-vel=-9;
-jumpSound.play();
-}
-});
-
-c.addEventListener("touchstart",()=>{
-if(bunnyY===110){
-vel=-9;
-jumpSound.play();
-}
-});
+document.addEventListener("keydown", jump);
+canvas.addEventListener("touchstart", jump);
 </script>
-
-</body>
-</html>
