@@ -16,26 +16,64 @@ overflow:hidden;
 /* CARD */
 .card{
 position:absolute;
-top:40%;
+top:35%;
 left:50%;
 transform:translate(-50%,-50%);
 background:#111;
 padding:50px;
 border-radius:20px;
 text-align:center;
+width:420px;
 }
 
-#bio{opacity:.7;margin-top:5px}
+.links a{
+margin:10px;
+color:white;
+text-decoration:none;
+opacity:.8;
+}
+.links a:hover{opacity:1}
 
-/* MINI GAME */
+/* MUSIC BAR */
+.musicbar{
+position:absolute;
+bottom:160px;
+left:50%;
+transform:translateX(-50%);
+background:#111;
+padding:14px 20px;
+border-radius:12px;
+width:340px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
+
+button{
+background:white;
+border:none;
+border-radius:50%;
+width:28px;
+height:28px;
+cursor:pointer;
+}
+
+/* VISUALIZER */
+canvas{
+position:absolute;
+bottom:120px;
+left:0;
+width:100%;
+height:40px;
+}
+
+/* GAME */
 #game{
 position:absolute;
 bottom:0;
-left:0;
 width:100%;
 height:120px;
 border-top:1px solid #333;
-overflow:hidden;
 }
 
 #runner{
@@ -49,7 +87,6 @@ font-size:32px;
 position:absolute;
 bottom:10px;
 right:-20px;
-font-size:24px;
 }
 
 #score{
@@ -57,6 +94,15 @@ position:absolute;
 right:20px;
 top:10px;
 opacity:.6;
+}
+
+#lose{
+position:absolute;
+top:30%;
+left:50%;
+transform:translateX(-50%);
+display:none;
+text-align:center;
 }
 </style>
 </head>
@@ -66,27 +112,75 @@ opacity:.6;
 
 <div class="card">
 <h1>pawslyy</h1>
-<div id="bio">hi i love u ♡</div>
+<div>hi i love u ♡</div>
+
+<div class="links">
+<a href="https://tiktok.com/@stupidbunie">TikTok</a>
+<a href="https://x.com/pawslyy">Twitter</a>
+<a href="https://t.me/pawslyy">Telegram</a>
+<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
 </div>
+</div>
+
+<div class="musicbar">
+<button id="play">▶</button>
+<div>u seemed so perfect</div>
+</div>
+
+<canvas id="viz"></canvas>
 
 <div id="game">
 <div id="runner">🐰</div>
 <div id="score">0</div>
 </div>
 
+<div id="lose">
+<h2>pawslyy 1 — you 0</h2>
+<button onclick="restart()">retry</button>
+</div>
+
 <script>
+/* MUSIC CONTROLS */
+let audio=document.getElementById("music");
+document.getElementById("play").onclick=()=>{
+if(audio.paused){audio.play();play.innerHTML="⏸";}
+else{audio.pause();play.innerHTML="▶";}
+};
+window.addEventListener("click",()=>audio.play(),{once:true});
 
-/* MINI PET GAME */
+/* VISUALIZER */
+let ctx=new AudioContext();
+let src=ctx.createMediaElementSource(audio);
+let analyser=ctx.createAnalyser();
+src.connect(analyser);
+analyser.connect(ctx.destination);
+analyser.fftSize=64;
+
+let canvas=document.getElementById("viz");
+let c=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=40;
+let data=new Uint8Array(analyser.frequencyBinCount);
+
+function draw(){
+requestAnimationFrame(draw);
+analyser.getByteFrequencyData(data);
+c.clearRect(0,0,canvas.width,40);
+for(let i=0;i<data.length;i++){
+c.fillRect(i*8,40-data[i]/4,5,data[i]/4);
+}
+}
+draw();
+
+/* GAME */
 let runner=document.getElementById("runner");
-let game=document.getElementById("game");
 let scoreEl=document.getElementById("score");
-
 let jumping=false;
 let score=0;
+let alive=true;
 
-/* jump */
 document.addEventListener("keydown",e=>{
-if(e.code==="Space" && !jumping){
+if(e.code==="Space"&&!jumping){
 jumping=true;
 let pos=10;
 let up=setInterval(()=>{
@@ -108,8 +202,9 @@ jumping=false;
 }
 });
 
-/* obstacles */
 function spawn(){
+if(!alive)return;
+
 let o=document.createElement("div");
 o.className="obstacle";
 o.innerHTML="🌵";
@@ -121,10 +216,11 @@ let move=setInterval(()=>{
 x-=6;
 o.style.right=(window.innerWidth-x)+"px";
 
-let rTop=parseInt(runner.style.bottom||10);
-if(x<90 && x>40 && rTop<25){
-alert("game over ♡ score: "+score);
-location.reload();
+let r=parseInt(runner.style.bottom||10);
+if(x<90 && x>40 && r<25){
+alive=false;
+document.getElementById("lose").style.display="block";
+clearInterval(move);
 }
 
 if(x<0){
@@ -135,17 +231,13 @@ scoreEl.innerHTML=score;
 }
 },30);
 
-setTimeout(spawn,1500+Math.random()*2000);
+setTimeout(spawn,1800);
 }
-
 spawn();
 
-/* autoplay fix */
-let audio=document.getElementById("music");
-window.addEventListener("click",()=>{
-audio.play();
-},{once:true});
-
+function restart(){
+location.reload();
+}
 </script>
 </body>
 </html>
