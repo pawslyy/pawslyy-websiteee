@@ -6,72 +6,75 @@
 <title>pawslyy</title>
 
 <style>
-body {
+body{
   margin:0;
   background:#000;
   color:white;
-  font-family:Arial, sans-serif;
-  overflow:hidden;
+  font-family:system-ui;
+  overflow-x:hidden;
 }
 
 /* center card */
-.card {
-  position:absolute;
-  top:40%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:#111;
-  padding:40px;
-  border-radius:20px;
-  text-align:center;
+.card{
+  position:relative;
+  margin:120px auto 40px;
   width:320px;
+  padding:30px;
+  background:#111;
+  border-radius:18px;
+  text-align:center;
 }
 
-/* spacing */
-.card h1 {
-  margin-bottom:10px;
-}
-
-.links a {
+/* links */
+.links a{
   margin:0 8px;
   color:white;
   text-decoration:none;
 }
+.links a:hover{opacity:.7}
 
-.musicPlayer {
-  position:absolute;
-  bottom:40px;
+/* stars */
+.star{
+  position:fixed;
+  background:white;
+  width:2px;
+  height:2px;
+  border-radius:50%;
+  animation:twinkle 3s infinite;
+}
+@keyframes twinkle{
+  0%{opacity:.2}
+  50%{opacity:1}
+  100%{opacity:.2}
+}
+
+/* heart trail */
+.heart{
+  position:fixed;
+  font-size:14px;
+  pointer-events:none;
+  animation:fadeUp .7s forwards;
+}
+@keyframes fadeUp{
+  to{transform:translateY(-20px);opacity:0}
+}
+
+/* game */
+#game{
+  display:block;
+  margin:40px auto;
+  background:#111;
+  border-radius:12px;
+}
+
+.music{
+  position:fixed;
+  bottom:10px;
   left:50%;
   transform:translateX(-50%);
   background:#111;
-  padding:15px 20px;
-  border-radius:14px;
-}
-
-#gameCanvas {
-  position:absolute;
-  bottom:0;
-  left:0;
-}
-
-/* stars */
-.star {
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-}
-
-/* falling hearts */
-.heart {
-  position:fixed;
-  color:#ffd1dc;
-  animation:fall 6s linear infinite;
-}
-
-@keyframes fall {
-  from { transform:translateY(-10px); }
-  to { transform:translateY(100vh); }
+  padding:10px;
+  border-radius:10px;
 }
 </style>
 </head>
@@ -80,135 +83,119 @@ body {
 
 <div class="card">
 <h1>pawslyy</h1>
-<div>hi i love u ♡</div>
+<p>hi i love u ♡</p>
 
 <div class="links">
-<a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
-<a href="https://x.com/pawslyy" target="_blank">Twitter</a>
-<a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-<a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
+<a href="https://tiktok.com/@stupidbunie">TikTok</a>
+<a href="https://x.com/pawslyy">Twitter</a>
+<a href="https://t.me/pawslyy">Telegram</a>
+<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
 </div>
 </div>
 
-<div class="musicPlayer">
-<div>u seemed so perfect</div>
-<input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
+<canvas id="game" width="420" height="150"></canvas>
+
+<div class="music">
+<audio id="song" src="music.mp3" autoplay loop></audio>
+<button onclick="toggle()">play / pause</button>
 </div>
-
-<audio id="music" src="music.mp3" loop></audio>
-
-<canvas id="gameCanvas" width="600" height="160"></canvas>
 
 <script>
-/* MUSIC AUTOPLAY */
-const music = document.getElementById("music");
-document.addEventListener("click", () => music.play(), {once:true});
-document.getElementById("volume").oninput = e => music.volume = e.target.value;
-
-/* STARS */
-for(let i=0;i<120;i++){
-  const s=document.createElement("div");
-  s.className="star";
-  s.style.left=Math.random()*100+"vw";
-  s.style.top=Math.random()*100+"vh";
-  document.body.appendChild(s);
+/* stars */
+for(let i=0;i<80;i++){
+let s=document.createElement("div");
+s.className="star";
+s.style.top=Math.random()*100+"vh";
+s.style.left=Math.random()*100+"vw";
+document.body.appendChild(s);
 }
 
-/* FALLING HEARTS */
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart";
-  h.innerText="♡";
-  h.style.left=Math.random()*100+"vw";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
-},800);
-
-/* HEART CURSOR TRAIL */
-document.addEventListener("mousemove", e=>{
-  const heart=document.createElement("div");
-  heart.innerText="♡";
-  heart.style.position="fixed";
-  heart.style.left=e.clientX+"px";
-  heart.style.top=e.clientY+"px";
-  heart.style.color="#ffd1dc";
-  heart.style.fontSize="10px";
-  heart.style.pointerEvents="none";
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),500);
+/* heart cursor */
+document.addEventListener("mousemove",e=>{
+let h=document.createElement("div");
+h.className="heart";
+h.textContent="♡";
+h.style.left=e.clientX+"px";
+h.style.top=e.clientY+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),700);
 });
 
-/* MINI GAME */
-const canvas=document.getElementById("gameCanvas");
-const ctx=canvas.getContext("2d");
+/* music autoplay helper */
+let audio=document.getElementById("song");
+document.body.addEventListener("click",()=>audio.play(),{once:true});
+function toggle(){
+audio.paused?audio.play():audio.pause();
+}
 
-let bunny=new Image();
-bunny.src="https://i.imgur.com/6X12F7K.png";
+/* bunny runner game */
+let c=document.getElementById("game");
+let ctx=c.getContext("2d");
 
-let player={x:50,y:120,vy:0};
-let gravity=0.6;
-let obstacles=[];
-let coins=[];
+let bunnyY=110;
+let vel=0;
+let gravity=.6;
+let obstacleX=420;
 let score=0;
 
-const jumpSound=new Audio("jump.mp3");
-const coinSound=new Audio("coin.mp3");
-const hitSound=new Audio("hit.mp3");
+let jumpSound=new Audio("music.mp3"); // placeholder
+jumpSound.volume=.2;
 
-function spawn(){
-  obstacles.push({x:600,y:130});
+function draw(){
+ctx.clearRect(0,0,420,150);
+
+/* ground */
+ctx.fillStyle="#222";
+ctx.fillRect(0,130,420,20);
+
+/* bunny */
+ctx.fillStyle="white";
+ctx.fillRect(40,bunnyY,18,18);
+
+/* obstacle */
+ctx.fillRect(obstacleX,115,12,15);
+
+vel+=gravity;
+bunnyY+=vel;
+
+if(bunnyY>110){
+bunnyY=110;
+vel=0;
 }
-function spawnCoin(){
-  coins.push({x:600,y:90});
-}
-setInterval(spawn,2000);
-setInterval(spawnCoin,1500);
 
-document.addEventListener("keydown", jump);
-document.addEventListener("touchstart", jump);
+obstacleX-=4;
 
-function jump(){
-  if(player.y>=120){
-    player.vy=-10;
-    jumpSound.play();
-  }
+if(obstacleX<0){
+obstacleX=420;
+score++;
 }
 
-function loop(){
-  ctx.clearRect(0,0,600,160);
-
-  player.vy+=gravity;
-  player.y+=player.vy;
-  if(player.y>120){player.y=120;player.vy=0;}
-
-  ctx.drawImage(bunny,player.x,player.y,30,30);
-
-  obstacles.forEach(o=>{
-    o.x-=5;
-    ctx.fillRect(o.x,o.y,20,20);
-    if(o.x<70&&o.x>40&&player.y>100){
-      hitSound.play();
-      score=0;
-    }
-  });
-
-  coins.forEach(c=>{
-    c.x-=5;
-    ctx.beginPath();
-    ctx.arc(c.x,c.y,6,0,Math.PI*2);
-    ctx.fill();
-    if(Math.abs(c.x-player.x)<10){
-      coinSound.play();
-      score++;
-      c.x=-100;
-    }
-  });
-
-  ctx.fillText("score "+score,10,20);
-
-  requestAnimationFrame(loop);
+if(obstacleX<55 && bunnyY>100){
+score=0;
+obstacleX=420;
 }
-loop();
+
+ctx.fillStyle="white";
+ctx.fillText("score: "+score,10,12);
+
+requestAnimationFrame(draw);
+}
+
+draw();
+
+document.addEventListener("keydown",()=>{
+if(bunnyY===110){
+vel=-9;
+jumpSound.play();
+}
+});
+
+c.addEventListener("touchstart",()=>{
+if(bunnyY===110){
+vel=-9;
+jumpSound.play();
+}
+});
 </script>
 
 </body>
