@@ -14,20 +14,6 @@ body{
   cursor:none;
 }
 
-/* LOADER */
-#loader{
-  position:fixed;
-  inset:0;
-  background:black;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-  animation:fadeOut 2s forwards;
-  animation-delay:2s;
-}
-@keyframes fadeOut{to{opacity:0;visibility:hidden;}}
-
 /* CARD */
 .card{
   position:absolute;
@@ -38,11 +24,7 @@ body{
   padding:40px;
   border-radius:18px;
   text-align:center;
-  opacity:0;
-  animation:fadeIn 2s forwards;
-  animation-delay:2s;
 }
-@keyframes fadeIn{to{opacity:1;}}
 
 /* ICONS */
 .icons a{
@@ -80,14 +62,6 @@ body{
   background:white;
 }
 
-/* BUNNY */
-#bunny{
-  position:absolute;
-  font-size:32px;
-  pointer-events:none;
-  transition:.1s;
-}
-
 /* PLUSH */
 .plush{
   position:absolute;
@@ -115,8 +89,6 @@ body{
 
 <body>
 
-<div id="loader">loading...</div>
-
 <div class="card">
 <h1 id="typing"></h1>
 
@@ -128,18 +100,16 @@ body{
 </div>
 </div>
 
-<div class="player" id="player">
+<div class="player">
 <audio id="audio" src="music.mp3" autoplay loop></audio>
 u seemed so perfect
 </div>
-
-<div id="bunny">🐰</div>
 
 <div class="plush" style="left:20%;top:20%;">🧸</div>
 <div class="plush" style="left:70%;top:30%;">🧸</div>
 
 <script>
-/* TYPING ANIMATION */
+/* TYPING */
 let text="pawslyy";
 let i=0;
 function type(){
@@ -170,13 +140,6 @@ setInterval(()=>{
  document.body.appendChild(h);
  setTimeout(()=>h.remove(),8000);
 },400);
-
-/* BUNNY FOLLOW */
-document.addEventListener("mousemove",e=>{
- let b=document.getElementById("bunny");
- b.style.left=e.pageX+10+"px";
- b.style.top=e.pageY+10+"px";
-});
 
 /* CURSOR TRAIL */
 document.addEventListener("mousemove",e=>{
