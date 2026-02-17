@@ -14,7 +14,7 @@ body{
   cursor:none;
 }
 
-/* LOADING SCREEN */
+/* LOADER */
 #loader{
   position:fixed;
   inset:0;
@@ -23,16 +23,12 @@ body{
   align-items:center;
   justify-content:center;
   z-index:999;
-  font-size:22px;
   animation:fadeOut 2s forwards;
   animation-delay:2s;
 }
+@keyframes fadeOut{to{opacity:0;visibility:hidden;}}
 
-@keyframes fadeOut{
-  to{opacity:0;visibility:hidden;}
-}
-
-/* MAIN CARD */
+/* CARD */
 .card{
   position:absolute;
   top:50%;
@@ -46,10 +42,7 @@ body{
   animation:fadeIn 2s forwards;
   animation-delay:2s;
 }
-
-@keyframes fadeIn{
-  to{opacity:1;}
-}
+@keyframes fadeIn{to{opacity:1;}}
 
 /* ICONS */
 .icons a{
@@ -58,11 +51,9 @@ body{
   text-decoration:none;
   transition:.2s;
 }
-.icons a:hover{
-  transform:scale(1.2);
-}
+.icons a:hover{transform:scale(1.2);}
 
-/* MUSIC PLAYER */
+/* PLAYER */
 .player{
   position:absolute;
   bottom:40px;
@@ -73,25 +64,13 @@ body{
   border-radius:14px;
 }
 
-/* HEARTBEAT */
-.player.beat{
-  animation:heartBeat .6s;
-}
-@keyframes heartBeat{
-  0%{transform:translateX(-50%) scale(1);}
-  50%{transform:translateX(-50%) scale(1.05);}
-  100%{transform:translateX(-50%) scale(1);}
-}
-
-/* FALLING HEARTS */
+/* HEART FALL */
 .heart{
   position:absolute;
   color:pink;
   animation:fall linear infinite;
 }
-@keyframes fall{
-  to{transform:translateY(100vh);}
-}
+@keyframes fall{to{transform:translateY(100vh);}}
 
 /* STARS */
 .star{
@@ -101,7 +80,7 @@ body{
   background:white;
 }
 
-/* BUNNY FOLLOWER */
+/* BUNNY */
 #bunny{
   position:absolute;
   font-size:32px;
@@ -109,7 +88,7 @@ body{
   transition:.1s;
 }
 
-/* PLUSHIES */
+/* PLUSH */
 .plush{
   position:absolute;
   cursor:pointer;
@@ -118,6 +97,18 @@ body{
 @keyframes float{
   0%,100%{transform:translateY(0);}
   50%{transform:translateY(-15px);}
+}
+
+/* CURSOR TRAIL */
+.trail{
+  position:absolute;
+  pointer-events:none;
+  font-size:14px;
+  opacity:.8;
+  animation:fadeTrail .6s forwards;
+}
+@keyframes fadeTrail{
+  to{opacity:0; transform:translateY(-10px);}
 }
 </style>
 </head>
@@ -148,19 +139,19 @@ u seemed so perfect
 <div class="plush" style="left:70%;top:30%;">🧸</div>
 
 <script>
-/* typing */
-let t="pawslyy";
+/* TYPING ANIMATION */
+let text="pawslyy";
 let i=0;
 function type(){
- if(i<t.length){
-  document.getElementById("typing").innerHTML+=t.charAt(i);
+ if(i<text.length){
+  document.getElementById("typing").innerHTML+=text.charAt(i);
   i++;
   setTimeout(type,120);
  }
 }
 type();
 
-/* stars */
+/* STARS */
 for(let i=0;i<100;i++){
  let s=document.createElement("div");
  s.className="star";
@@ -169,7 +160,7 @@ for(let i=0;i<100;i++){
  document.body.appendChild(s);
 }
 
-/* hearts */
+/* HEARTS */
 setInterval(()=>{
  let h=document.createElement("div");
  h.className="heart";
@@ -180,33 +171,34 @@ setInterval(()=>{
  setTimeout(()=>h.remove(),8000);
 },400);
 
-/* bunny follow */
+/* BUNNY FOLLOW */
 document.addEventListener("mousemove",e=>{
  let b=document.getElementById("bunny");
  b.style.left=e.pageX+10+"px";
  b.style.top=e.pageY+10+"px";
 });
 
-/* heartbeat on music */
-let audio=document.getElementById("audio");
-let player=document.getElementById("player");
-setInterval(()=>{
- if(!audio.paused){
-  player.classList.add("beat");
-  setTimeout(()=>player.classList.remove("beat"),200);
- }
-},700);
+/* CURSOR TRAIL */
+document.addEventListener("mousemove",e=>{
+ let t=document.createElement("div");
+ t.className="trail";
+ t.innerHTML="❤";
+ t.style.left=e.pageX+"px";
+ t.style.top=e.pageY+"px";
+ document.body.appendChild(t);
+ setTimeout(()=>t.remove(),600);
+});
 
-/* plush click */
+/* PLUSH CLICK */
 document.querySelectorAll(".plush").forEach(p=>{
  p.addEventListener("click",()=>{
   p.innerHTML="💗";
  });
 });
 
-/* autoplay fix */
+/* AUTOPLAY FIX */
 document.body.addEventListener("click",()=>{
- audio.play();
+ document.getElementById("audio").play();
 },{once:true});
 </script>
 
