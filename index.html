@@ -6,77 +6,102 @@
 <title>pawslyy</title>
 
 <style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:url("waaalalallala.jpg") center/cover no-repeat;
-  font-family:Arial, Helvetica, sans-serif;
-  cursor: url("cursor.png") 16 16, auto;
+/* ---------- GLOBAL ---------- */
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  color: white;
+
+  background: url("background.jpg") center/cover no-repeat fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: url("cursor.png"), auto;
 }
 
-/* dark overlay */
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.55);
-  z-index:-1;
+/* ---------- CARD ---------- */
+.card {
+  background: rgba(0,0,0,0.65);
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  backdrop-filter: blur(8px);
 }
 
-/* main card */
-.card{
-  background:rgba(0,0,0,0.85);
-  border-radius:18px;
-  padding:40px;
-  text-align:center;
-  color:white;
-  width:260px;
+h1 {
+  margin: 0 0 18px 0;
+  font-weight: 500;
 }
 
-/* title */
-h1{
-  margin:0 0 20px 0;
-  font-weight:500;
+/* ---------- SOCIAL ICONS ---------- */
+.icons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
 }
 
-/* icons */
-.icons{
-  display:flex;
-  gap:14px;
-  justify-content:center;
+.icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s;
 }
 
-.icon{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  border:1px solid white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
-  transition:0.2s;
+.icon:hover {
+  background: white;
+  color: black;
 }
 
-.icon:hover{
-  background:white;
-  color:black;
+/* ---------- MUSIC PLAYER ---------- */
+.player {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+
+  background: rgba(0,0,0,0.75);
+  border-radius: 16px;
+  padding: 16px;
 }
 
-/* music player */
-.music{
-  position:fixed;
-  bottom:40px;
-  left:50%;
-  transform:translateX(-50%);
-  background:rgba(0,0,0,0.85);
-  padding:18px 22px;
-  border-radius:14px;
-  color:white;
-  width:320px;
+/* equalizer */
+.equalizer {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.bar {
+  width: 4px;
+  height: 20px;
+  background: white;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+.bar:nth-child(2){animation-delay:.1s}
+.bar:nth-child(3){animation-delay:.2s}
+.bar:nth-child(4){animation-delay:.3s}
+.bar:nth-child(5){animation-delay:.4s}
+.bar:nth-child(6){animation-delay:.5s}
+.bar:nth-child(7){animation-delay:.6s}
+
+@keyframes bounce {
+  0%,100% { transform: scaleY(.3); }
+  50% { transform: scaleY(1); }
+}
+
+audio {
+  width: 100%;
 }
 </style>
 </head>
@@ -87,18 +112,34 @@ h1{
   <h1>pawslyy</h1>
 
   <div class="icons">
-    <div class="icon">♪</div>
-    <div class="icon">X</div>
-    <div class="icon">✉</div>
+    <a class="icon" href="https://tiktok.com/@stupidbunie">♪</a>
+    <a class="icon" href="#">X</a>
+    <a class="icon" href="#">✉</a>
   </div>
 </div>
 
-<div class="music">
-  u seemed so perfect
-  <audio autoplay controls>
+<div class="player">
+  <div class="equalizer">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <audio id="music" controls autoplay loop>
     <source src="music.mp3" type="audio/mpeg">
   </audio>
 </div>
+
+<script>
+/* autoplay fix for browsers */
+window.addEventListener("click", () => {
+  document.getElementById("music").play();
+});
+</script>
 
 </body>
 </html>
