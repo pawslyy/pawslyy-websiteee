@@ -6,7 +6,6 @@
 <title>pawslyy</title>
 
 <style>
-/* ---------- GLOBAL ---------- */
 body {
   margin: 0;
   height: 100vh;
@@ -21,7 +20,6 @@ body {
   cursor: url("cursor.png"), auto;
 }
 
-/* ---------- CARD ---------- */
 .card {
   background: rgba(0,0,0,0.65);
   padding: 30px;
@@ -35,7 +33,6 @@ h1 {
   font-weight: 500;
 }
 
-/* ---------- SOCIAL ICONS ---------- */
 .icons {
   display: flex;
   justify-content: center;
@@ -60,20 +57,18 @@ h1 {
   color: black;
 }
 
-/* ---------- MUSIC PLAYER ---------- */
+/* music player */
 .player {
   position: fixed;
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   width: 340px;
-
   background: rgba(0,0,0,0.75);
   border-radius: 16px;
   padding: 16px;
 }
 
-/* equalizer */
 .equalizer {
   display: flex;
   gap: 4px;
@@ -112,9 +107,17 @@ audio {
   <h1>pawslyy</h1>
 
   <div class="icons">
-    <a class="icon" href="https://tiktok.com/@stupidbunie">♪</a>
-    <a class="icon" href="#">X</a>
-    <a class="icon" href="#">✉</a>
+    <!-- TikTok -->
+    <a class="icon" href="https://tiktok.com/@stupidbunie" target="_blank">♪</a>
+
+    <!-- Twitter/X -->
+    <a class="icon" href="https://twitter.com" target="_blank">X</a>
+
+    <!-- Telegram -->
+    <a class="icon" href="https://t.me" target="_blank">✉</a>
+
+    <!-- Roblox -->
+    <a class="icon" href="https://www.roblox.com/users/2634203674/profile" target="_blank">R</a>
   </div>
 </div>
 
@@ -135,7 +138,6 @@ audio {
 </div>
 
 <script>
-/* autoplay fix for browsers */
 window.addEventListener("click", () => {
   document.getElementById("music").play();
 });
