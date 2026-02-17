@@ -1,21 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pawslyy</title>
 
 <style>
-body {
+body{
   margin:0;
   background:#000;
   color:white;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family:Arial;
   overflow:hidden;
   cursor:none;
 }
 
-/* CENTER CARD */
+/* LOADING SCREEN */
+#loader{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  font-size:22px;
+  animation:fadeOut 2s forwards;
+  animation-delay:2s;
+}
+
+@keyframes fadeOut{
+  to{opacity:0;visibility:hidden;}
+}
+
+/* MAIN CARD */
 .card{
   position:absolute;
   top:50%;
@@ -25,18 +42,24 @@ body {
   padding:40px;
   border-radius:18px;
   text-align:center;
+  opacity:0;
+  animation:fadeIn 2s forwards;
+  animation-delay:2s;
+}
+
+@keyframes fadeIn{
+  to{opacity:1;}
 }
 
 /* ICONS */
 .icons a{
   margin:10px;
-  display:inline-block;
-  transition:0.2s;
   color:white;
   text-decoration:none;
+  transition:.2s;
 }
 .icons a:hover{
-  transform:translateY(-5px) scale(1.1);
+  transform:scale(1.2);
 }
 
 /* MUSIC PLAYER */
@@ -48,39 +71,29 @@ body {
   background:#111;
   padding:20px;
   border-radius:14px;
-  width:300px;
 }
 
-.eq{
-  display:flex;
-  justify-content:center;
-  gap:3px;
-  margin-bottom:10px;
+/* HEARTBEAT */
+.player.beat{
+  animation:heartBeat .6s;
+}
+@keyframes heartBeat{
+  0%{transform:translateX(-50%) scale(1);}
+  50%{transform:translateX(-50%) scale(1.05);}
+  100%{transform:translateX(-50%) scale(1);}
 }
 
-.bar{
-  width:4px;
-  height:10px;
-  background:white;
-  animation:beat 0.5s infinite alternate;
-}
-
-@keyframes beat{
-  from{height:5px}
-  to{height:25px}
-}
-
-/* HEART FALL */
+/* FALLING HEARTS */
 .heart{
   position:absolute;
   color:pink;
   animation:fall linear infinite;
 }
 @keyframes fall{
-  to{ transform:translateY(100vh); }
+  to{transform:translateY(100vh);}
 }
 
-/* PIXEL STARS */
+/* STARS */
 .star{
   position:absolute;
   width:2px;
@@ -88,84 +101,64 @@ body {
   background:white;
 }
 
-/* BUNNY */
-.bunny{
+/* BUNNY FOLLOWER */
+#bunny{
   position:absolute;
-  bottom:20px;
-  right:20px;
-  font-size:40px;
+  font-size:32px;
+  pointer-events:none;
+  transition:.1s;
 }
 
-/* FLOATING PLUSH */
+/* PLUSHIES */
 .plush{
   position:absolute;
-  animation:float 6s infinite ease-in-out;
+  cursor:pointer;
+  animation:float 5s infinite ease-in-out;
 }
 @keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-15px)}
-}
-
-/* CURSOR */
-.cursor{
-  position:absolute;
-  pointer-events:none;
-  font-size:18px;
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-15px);}
 }
 </style>
 </head>
 
 <body>
 
+<div id="loader">loading...</div>
+
 <div class="card">
-  <h1 id="typing"></h1>
+<h1 id="typing"></h1>
 
-  <div class="icons">
-    <a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
-    <a href="https://x.com/pawslyy" target="_blank">Twitter</a>
-    <a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-    <a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
-  </div>
+<div class="icons">
+<a href="https://tiktok.com/@stupidbunie">TikTok</a>
+<a href="https://x.com/pawslyy">Twitter</a>
+<a href="https://t.me/pawslyy">Telegram</a>
+<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
+</div>
 </div>
 
-<div class="player">
-  <div class="eq">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
-  <audio id="audio" src="music.mp3" autoplay loop></audio>
+<div class="player" id="player">
+<audio id="audio" src="music.mp3" autoplay loop></audio>
+u seemed so perfect
 </div>
 
-<div class="bunny">🐰</div>
-<div class="plush" style="left:10%;top:20%;">🧸</div>
-<div class="plush" style="left:80%;top:30%;">🧸</div>
+<div id="bunny">🐰</div>
+
+<div class="plush" style="left:20%;top:20%;">🧸</div>
+<div class="plush" style="left:70%;top:30%;">🧸</div>
 
 <script>
-/* typing animation */
-let text="pawslyy";
+/* typing */
+let t="pawslyy";
 let i=0;
 function type(){
- if(i<text.length){
-   document.getElementById("typing").innerHTML+=text.charAt(i);
-   i++;
-   setTimeout(type,120);
+ if(i<t.length){
+  document.getElementById("typing").innerHTML+=t.charAt(i);
+  i++;
+  setTimeout(type,120);
  }
 }
 type();
-
-/* falling hearts */
-setInterval(()=>{
- let h=document.createElement("div");
- h.className="heart";
- h.innerHTML="❤";
- h.style.left=Math.random()*100+"vw";
- h.style.animationDuration=(3+Math.random()*5)+"s";
- document.body.appendChild(h);
- setTimeout(()=>h.remove(),8000);
-},400);
 
 /* stars */
 for(let i=0;i<100;i++){
@@ -176,23 +169,45 @@ for(let i=0;i<100;i++){
  document.body.appendChild(s);
 }
 
-/* cursor hearts */
+/* hearts */
+setInterval(()=>{
+ let h=document.createElement("div");
+ h.className="heart";
+ h.innerHTML="❤";
+ h.style.left=Math.random()*100+"vw";
+ h.style.animationDuration=(3+Math.random()*5)+"s";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),8000);
+},400);
+
+/* bunny follow */
 document.addEventListener("mousemove",e=>{
- let c=document.createElement("div");
- c.className="cursor";
- c.innerHTML="❤";
- c.style.left=e.pageX+"px";
- c.style.top=e.pageY+"px";
- document.body.appendChild(c);
- setTimeout(()=>c.remove(),500);
+ let b=document.getElementById("bunny");
+ b.style.left=e.pageX+10+"px";
+ b.style.top=e.pageY+10+"px";
 });
 
-/* click sound */
-document.addEventListener("click",()=>{
- let snd=new Audio("music.mp3");
- snd.volume=0.1;
- snd.play();
+/* heartbeat on music */
+let audio=document.getElementById("audio");
+let player=document.getElementById("player");
+setInterval(()=>{
+ if(!audio.paused){
+  player.classList.add("beat");
+  setTimeout(()=>player.classList.remove("beat"),200);
+ }
+},700);
+
+/* plush click */
+document.querySelectorAll(".plush").forEach(p=>{
+ p.addEventListener("click",()=>{
+  p.innerHTML="💗";
+ });
 });
+
+/* autoplay fix */
+document.body.addEventListener("click",()=>{
+ audio.play();
+},{once:true});
 </script>
 
 </body>
