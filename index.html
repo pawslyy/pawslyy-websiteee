@@ -13,6 +13,25 @@ color:white;
 overflow:hidden;
 }
 
+/* STARS */
+.star{
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+opacity:.8;
+}
+
+/* FALLING HEARTS */
+.heart{
+position:absolute;
+color:pink;
+animation:fall 6s linear infinite;
+}
+@keyframes fall{
+to{transform:translateY(100vh);opacity:0;}
+}
+
 /* CARD */
 .card{
 position:absolute;
@@ -26,7 +45,6 @@ text-align:center;
 width:420px;
 }
 
-/* LINKS (BLACK + WHITE) */
 .links a{
 margin:10px;
 color:white;
@@ -34,6 +52,23 @@ text-decoration:none;
 }
 .links a:visited{color:white;}
 .links a:hover{opacity:.6}
+
+/* MUSIC CONTROLS */
+.musicbox{
+position:absolute;
+bottom:160px;
+left:50%;
+transform:translateX(-50%);
+background:#111;
+padding:10px;
+border-radius:12px;
+width:260px;
+text-align:center;
+}
+
+input[type=range]{
+width:100%;
+}
 
 /* GAME */
 #game{
@@ -46,14 +81,12 @@ overflow:hidden;
 border-top:1px solid #333;
 }
 
-/* CLOUDS */
 .cloud{
 position:absolute;
 font-size:28px;
 opacity:.6;
 }
 
-/* RUNNER */
 #runner{
 position:absolute;
 bottom:10px;
@@ -79,13 +112,13 @@ opacity:.7;
 </head>
 <body>
 
-<audio id="music" src="music.mp3" autoplay loop></audio>
+<audio id="music" src="music.mp3" loop></audio>
 <audio id="jumpSfx" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
 <audio id="hitSfx" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 
 <div class="card">
 <h1 id="title"></h1>
-<div id="bio"></div>
+<div>hi i love u ♡</div>
 
 <div class="links">
 <a href="https://tiktok.com/@stupidbunie">TikTok</a>
@@ -95,12 +128,30 @@ opacity:.7;
 </div>
 </div>
 
+<div class="musicbox">
+<div>u seemed so perfect</div>
+<input type="range" id="volume" min="0" max="1" step="0.01" value="0.6">
+</div>
+
 <div id="game">
 <div id="runner">🐰</div>
 <div id="score">0</div>
 </div>
 
 <script>
+
+/* AUTOPLAY + VOLUME */
+let music=document.getElementById("music");
+music.volume=0.6;
+
+function startMusic(){
+music.play().catch(()=>{});
+}
+startMusic();
+document.addEventListener("click",startMusic,{once:true});
+document.addEventListener("touchstart",startMusic,{once:true});
+
+volume.oninput=e=>music.volume=e.target.value;
 
 /* TITLE TYPING LOOP */
 let titleText="pawslyy";
@@ -112,15 +163,24 @@ setTimeout(titleLoop,150);
 }
 titleLoop();
 
-/* BIO LOOP */
-let bioText="hi i love u ♡";
-let bi=0;
-function bioLoop(){
-bio.innerHTML=bioText.substring(0,bi);
-bi++; if(bi>bioText.length)bi=0;
-setTimeout(bioLoop,130);
+/* STAR BACKGROUND */
+for(let i=0;i<120;i++){
+let s=document.createElement("div");
+s.className="star";
+s.style.top=Math.random()*100+"vh";
+s.style.left=Math.random()*100+"vw";
+document.body.appendChild(s);
 }
-bioLoop();
+
+/* FALLING HEARTS */
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="♡";
+h.style.left=Math.random()*100+"vw";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),6000);
+},500);
 
 /* CLOUD BACKGROUND */
 setInterval(()=>{
@@ -145,16 +205,7 @@ let scoreEl=document.getElementById("score");
 let jumping=false;
 let score=0;
 let alive=true;
-let skins=["🐰","🐇","🐱","🐶"];
-let skin=0;
 
-runner.onclick=()=>{
-skin++;
-if(skin>=skins.length)skin=0;
-runner.innerHTML=skins[skin];
-};
-
-/* jump */
 function jump(){
 if(!jumping){
 jumpSfx.play();
@@ -187,7 +238,6 @@ document.addEventListener("touchstart",jump);
 /* HIGH SCORE */
 let best=localStorage.getItem("bestScore")||0;
 
-/* obstacles */
 function spawn(){
 if(!alive)return;
 
@@ -223,11 +273,6 @@ scoreEl.innerHTML=score+" | best "+best;
 setTimeout(spawn,1700);
 }
 spawn();
-
-/* AUTOPLAY FIX */
-window.addEventListener("click",()=>{
-music.play();
-},{once:true});
 
 </script>
 </body>
