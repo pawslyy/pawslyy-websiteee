@@ -26,6 +26,12 @@ body{
   text-align:center;
 }
 
+.bio{
+  font-size:14px;
+  opacity:.7;
+  margin-top:6px;
+}
+
 /* ICONS */
 .icons a{
   margin:10px;
@@ -50,9 +56,11 @@ body{
 .heart{
   position:absolute;
   color:pink;
-  animation:fall linear infinite;
+  animation:fall linear forwards;
 }
-@keyframes fall{to{transform:translateY(100vh);}}
+@keyframes fall{
+  to{transform:translateY(100vh); opacity:0;}
+}
 
 /* STARS */
 .star{
@@ -73,17 +81,15 @@ body{
   50%{transform:translateY(-15px);}
 }
 
-/* CURSOR TRAIL */
-.trail{
+/* BUNNY PET */
+#bunny{
   position:absolute;
-  pointer-events:none;
-  font-size:14px;
-  opacity:.8;
-  animation:fadeTrail .6s forwards;
+  bottom:20px;
+  right:20px;
+  font-size:36px;
+  cursor:pointer;
 }
-@keyframes fadeTrail{
-  to{opacity:0; transform:translateY(-10px);}
-}
+.sleep{ opacity:.5; }
 </style>
 </head>
 
@@ -91,6 +97,7 @@ body{
 
 <div class="card">
 <h1 id="typing"></h1>
+<div class="bio">hi i love u ♡</div>
 
 <div class="icons">
 <a href="https://tiktok.com/@stupidbunie">TikTok</a>
@@ -107,6 +114,8 @@ u seemed so perfect
 
 <div class="plush" style="left:20%;top:20%;">🧸</div>
 <div class="plush" style="left:70%;top:30%;">🧸</div>
+
+<div id="bunny" class="sleep">🐰</div>
 
 <script>
 /* TYPING */
@@ -130,26 +139,15 @@ for(let i=0;i<100;i++){
  document.body.appendChild(s);
 }
 
-/* HEARTS */
-setInterval(()=>{
+/* CLICK SPAWN HEARTS */
+document.addEventListener("click",e=>{
  let h=document.createElement("div");
  h.className="heart";
  h.innerHTML="❤";
- h.style.left=Math.random()*100+"vw";
- h.style.animationDuration=(3+Math.random()*5)+"s";
+ h.style.left=e.pageX+"px";
+ h.style.top=e.pageY+"px";
  document.body.appendChild(h);
- setTimeout(()=>h.remove(),8000);
-},400);
-
-/* CURSOR TRAIL */
-document.addEventListener("mousemove",e=>{
- let t=document.createElement("div");
- t.className="trail";
- t.innerHTML="❤";
- t.style.left=e.pageX+"px";
- t.style.top=e.pageY+"px";
- document.body.appendChild(t);
- setTimeout(()=>t.remove(),600);
+ setTimeout(()=>h.remove(),2000);
 });
 
 /* PLUSH CLICK */
@@ -159,9 +157,19 @@ document.querySelectorAll(".plush").forEach(p=>{
  });
 });
 
+/* BUNNY PET */
+let bunny=document.getElementById("bunny");
+let awake=false;
+bunny.addEventListener("click",()=>{
+ awake=!awake;
+ bunny.classList.toggle("sleep");
+ bunny.innerHTML=awake?"🐰✨":"🐰";
+});
+
 /* AUTOPLAY FIX */
+let audio=document.getElementById("audio");
 document.body.addEventListener("click",()=>{
- document.getElementById("audio").play();
+ audio.play();
 },{once:true});
 </script>
 
