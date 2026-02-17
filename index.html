@@ -7,16 +7,16 @@
 <style>
 body{
 margin:0;
-background:black;
-color:white;
+background:#000;
 font-family:Arial;
+color:white;
 overflow:hidden;
 }
 
-/* CARD */
+/* INTRO */
 .card{
 position:absolute;
-top:35%;
+top:45%;
 left:50%;
 transform:translate(-50%,-50%);
 background:#111;
@@ -24,47 +24,52 @@ padding:50px;
 border-radius:20px;
 text-align:center;
 width:420px;
+opacity:0;
+animation:intro 1.5s forwards, breathe 5s infinite;
+border:1px solid #444;
 }
 
-.links a{
-margin:10px;
-color:white;
-text-decoration:none;
-opacity:.8;
+@keyframes intro{to{opacity:1}}
+@keyframes breathe{
+0%,100%{transform:translate(-50%,-50%) scale(1)}
+50%{transform:translate(-50%,-50%) scale(1.02)}
 }
-.links a:hover{opacity:1}
 
-/* MUSIC BAR */
-.musicbar{
+/* MUSIC PULSE BORDER */
+.card.playing{
+border-color:pink;
+}
+
+/* STARS */
+.star{
 position:absolute;
-bottom:160px;
-left:50%;
-transform:translateX(-50%);
-background:#111;
-padding:14px 20px;
-border-radius:12px;
-width:340px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-}
-
-button{
+width:2px;
+height:2px;
 background:white;
-border:none;
-border-radius:50%;
-width:28px;
-height:28px;
+opacity:.7;
 cursor:pointer;
 }
 
-/* VISUALIZER */
-canvas{
+/* HEART TRAIL */
+.trail{
 position:absolute;
-bottom:120px;
-left:0;
-width:100%;
-height:40px;
+color:pink;
+pointer-events:none;
+animation:fade 1s forwards;
+}
+@keyframes fade{
+to{opacity:0;transform:translateY(-20px);}
+}
+
+/* STICKER PANEL */
+#panel{
+position:absolute;
+top:60px;
+left:20px;
+background:#111;
+padding:10px;
+border-radius:10px;
+display:none;
 }
 
 /* GAME */
@@ -80,7 +85,7 @@ border-top:1px solid #333;
 position:absolute;
 bottom:10px;
 left:40px;
-font-size:32px;
+font-size:30px;
 }
 
 .obstacle{
@@ -89,20 +94,13 @@ bottom:10px;
 right:-20px;
 }
 
-#score{
+/* BUNNY */
+#bunny{
 position:absolute;
-right:20px;
-top:10px;
-opacity:.6;
-}
-
-#lose{
-position:absolute;
-top:30%;
-left:50%;
-transform:translateX(-50%);
-display:none;
-text-align:center;
+bottom:140px;
+right:40px;
+font-size:34px;
+cursor:pointer;
 }
 </style>
 </head>
@@ -110,9 +108,9 @@ text-align:center;
 
 <audio id="music" src="music.mp3" autoplay loop></audio>
 
-<div class="card">
+<div class="card" id="card">
 <h1>pawslyy</h1>
-<div>hi i love u ♡</div>
+<div id="bio"></div>
 
 <div class="links">
 <a href="https://tiktok.com/@stupidbunie">TikTok</a>
@@ -122,62 +120,123 @@ text-align:center;
 </div>
 </div>
 
-<div class="musicbar">
-<button id="play">▶</button>
-<div>u seemed so perfect</div>
+<div id="bunny">🐰</div>
+
+<div id="stickerBtn" style="position:absolute;top:20px;left:20px;cursor:pointer;">
+stickers ♡
 </div>
 
-<canvas id="viz"></canvas>
+<div id="panel">
+<span onclick="stick('⭐')">⭐</span>
+<span onclick="stick('💗')">💗</span>
+<span onclick="stick('🧸')">🧸</span>
+</div>
 
 <div id="game">
 <div id="runner">🐰</div>
-<div id="score">0</div>
-</div>
-
-<div id="lose">
-<h2>pawslyy 1 — you 0</h2>
-<button onclick="restart()">retry</button>
 </div>
 
 <script>
-/* MUSIC CONTROLS */
-let audio=document.getElementById("music");
-document.getElementById("play").onclick=()=>{
-if(audio.paused){audio.play();play.innerHTML="⏸";}
-else{audio.pause();play.innerHTML="▶";}
+
+/* BIO LOOP */
+let bio="hi i love u ♡";
+let i=0;
+function loop(){
+bioEl.innerHTML=bio.substring(0,i);
+i++; if(i>bio.length)i=0;
+setTimeout(loop,120);
+}
+let bioEl=document.getElementById("bio");
+loop();
+
+/* STARS + PARALLAX */
+let stars=[];
+for(let i=0;i<100;i++){
+let s=document.createElement("div");
+s.className="star";
+s.style.left=Math.random()*100+"vw";
+s.style.top=Math.random()*100+"vh";
+s.onclick=()=>s.remove();
+document.body.appendChild(s);
+stars.push(s);
+}
+
+document.addEventListener("mousemove",e=>{
+stars.forEach(st=>{
+st.style.transform=`translate(${e.clientX/120}px,${e.clientY/120}px)`;
+});
+});
+
+/* HEART TRAIL */
+document.addEventListener("mousemove",e=>{
+let t=document.createElement("div");
+t.className="trail";
+t.innerHTML="♡";
+t.style.left=e.clientX+"px";
+t.style.top=e.clientY+"px";
+document.body.appendChild(t);
+setTimeout(()=>t.remove(),700);
+});
+
+/* MEMORY HEARTS */
+document.addEventListener("click",e=>{
+let h=document.createElement("div");
+h.innerHTML="♡";
+h.style.position="absolute";
+h.style.left=e.clientX+"px";
+h.style.top=e.clientY+"px";
+document.body.appendChild(h);
+});
+
+/* STICKERS */
+let open=false;
+stickerBtn.onclick=()=>{
+open=!open;
+panel.style.display=open?"block":"none";
 };
+
+function stick(x){
+document.onclick=e=>{
+let s=document.createElement("div");
+s.innerHTML=x;
+s.style.position="absolute";
+s.style.left=e.clientX+"px";
+s.style.top=e.clientY+"px";
+document.body.appendChild(s);
+document.onclick=null;
+};
+}
+
+/* CARD TILT */
+let card=document.getElementById("card");
+document.addEventListener("mousemove",e=>{
+let x=(window.innerWidth/2-e.clientX)/40;
+let y=(window.innerHeight/2-e.clientY)/40;
+card.style.transform=`translate(-50%,-50%) rotateY(${x}deg) rotateX(${y}deg)`;
+});
+
+/* BUNNY MOOD SYSTEM */
+let bunny=document.getElementById("bunny");
+bunny.onclick=()=>{
+bunny.innerHTML="🐰✨";
+setTimeout(()=>bunny.innerHTML="😴",4000);
+};
+
+/* MUSIC BORDER */
+let audio=document.getElementById("music");
+setInterval(()=>{
+if(!audio.paused){
+card.classList.add("playing");
+setTimeout(()=>card.classList.remove("playing"),200);
+}
+},800);
+
+/* AUTOPLAY FIX */
 window.addEventListener("click",()=>audio.play(),{once:true});
 
-/* VISUALIZER */
-let ctx=new AudioContext();
-let src=ctx.createMediaElementSource(audio);
-let analyser=ctx.createAnalyser();
-src.connect(analyser);
-analyser.connect(ctx.destination);
-analyser.fftSize=64;
-
-let canvas=document.getElementById("viz");
-let c=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=40;
-let data=new Uint8Array(analyser.frequencyBinCount);
-
-function draw(){
-requestAnimationFrame(draw);
-analyser.getByteFrequencyData(data);
-c.clearRect(0,0,canvas.width,40);
-for(let i=0;i<data.length;i++){
-c.fillRect(i*8,40-data[i]/4,5,data[i]/4);
-}
-}
-draw();
-
-/* GAME */
+/* MINI GAME */
 let runner=document.getElementById("runner");
-let scoreEl=document.getElementById("score");
 let jumping=false;
-let score=0;
-let alive=true;
 
 document.addEventListener("keydown",e=>{
 if(e.code==="Space"&&!jumping){
@@ -186,7 +245,7 @@ let pos=10;
 let up=setInterval(()=>{
 pos+=6;
 runner.style.bottom=pos+"px";
-if(pos>70) clearInterval(up);
+if(pos>70)clearInterval(up);
 },20);
 
 setTimeout(()=>{
@@ -202,9 +261,8 @@ jumping=false;
 }
 });
 
+/* obstacles */
 function spawn(){
-if(!alive)return;
-
 let o=document.createElement("div");
 o.className="obstacle";
 o.innerHTML="🌵";
@@ -218,16 +276,13 @@ o.style.right=(window.innerWidth-x)+"px";
 
 let r=parseInt(runner.style.bottom||10);
 if(x<90 && x>40 && r<25){
-alive=false;
-document.getElementById("lose").style.display="block";
-clearInterval(move);
+alert("pawslyy wins ♡");
+location.reload();
 }
 
 if(x<0){
 clearInterval(move);
 o.remove();
-score++;
-scoreEl.innerHTML=score;
 }
 },30);
 
@@ -235,9 +290,6 @@ setTimeout(spawn,1800);
 }
 spawn();
 
-function restart(){
-location.reload();
-}
 </script>
 </body>
 </html>
