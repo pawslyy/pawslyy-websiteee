@@ -7,16 +7,16 @@
 <style>
 body{
 margin:0;
-background:#000;
+background:black;
 font-family:Arial;
 color:white;
 overflow:hidden;
 }
 
-/* INTRO */
+/* CARD */
 .card{
 position:absolute;
-top:45%;
+top:40%;
 left:50%;
 transform:translate(-50%,-50%);
 background:#111;
@@ -24,92 +24,67 @@ padding:50px;
 border-radius:20px;
 text-align:center;
 width:420px;
-opacity:0;
-animation:intro 1.5s forwards, breathe 5s infinite;
-border:1px solid #444;
 }
 
-@keyframes intro{to{opacity:1}}
-@keyframes breathe{
-0%,100%{transform:translate(-50%,-50%) scale(1)}
-50%{transform:translate(-50%,-50%) scale(1.02)}
+/* LINKS (BLACK + WHITE) */
+.links a{
+margin:10px;
+color:white;
+text-decoration:none;
 }
-
-/* MUSIC PULSE BORDER */
-.card.playing{
-border-color:pink;
-}
-
-/* STARS */
-.star{
-position:absolute;
-width:2px;
-height:2px;
-background:white;
-opacity:.7;
-cursor:pointer;
-}
-
-/* HEART TRAIL */
-.trail{
-position:absolute;
-color:pink;
-pointer-events:none;
-animation:fade 1s forwards;
-}
-@keyframes fade{
-to{opacity:0;transform:translateY(-20px);}
-}
-
-/* STICKER PANEL */
-#panel{
-position:absolute;
-top:60px;
-left:20px;
-background:#111;
-padding:10px;
-border-radius:10px;
-display:none;
-}
+.links a:visited{color:white;}
+.links a:hover{opacity:.6}
 
 /* GAME */
 #game{
 position:absolute;
 bottom:0;
 width:100%;
-height:120px;
+height:140px;
+background:#111;
+overflow:hidden;
 border-top:1px solid #333;
 }
 
+/* CLOUDS */
+.cloud{
+position:absolute;
+font-size:28px;
+opacity:.6;
+}
+
+/* RUNNER */
 #runner{
 position:absolute;
 bottom:10px;
 left:40px;
-font-size:30px;
+font-size:34px;
 }
 
 .obstacle{
 position:absolute;
 bottom:10px;
 right:-20px;
+font-size:24px;
 }
 
-/* BUNNY */
-#bunny{
+#score{
 position:absolute;
-bottom:140px;
-right:40px;
-font-size:34px;
-cursor:pointer;
+right:20px;
+top:10px;
+font-size:14px;
+opacity:.7;
 }
 </style>
 </head>
 <body>
 
 <audio id="music" src="music.mp3" autoplay loop></audio>
+<audio id="jumpSfx" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+<audio id="hitSfx" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 
-<div class="card" id="card">
-<h1>pawslyy</h1>
+<div class="card">
+<h1 id="title"></h1>
 <div id="bio"></div>
 
 <div class="links">
@@ -120,132 +95,75 @@ cursor:pointer;
 </div>
 </div>
 
-<div id="bunny">🐰</div>
-
-<div id="stickerBtn" style="position:absolute;top:20px;left:20px;cursor:pointer;">
-stickers ♡
-</div>
-
-<div id="panel">
-<span onclick="stick('⭐')">⭐</span>
-<span onclick="stick('💗')">💗</span>
-<span onclick="stick('🧸')">🧸</span>
-</div>
-
 <div id="game">
 <div id="runner">🐰</div>
+<div id="score">0</div>
 </div>
 
 <script>
 
+/* TITLE TYPING LOOP */
+let titleText="pawslyy";
+let ti=0;
+function titleLoop(){
+title.innerHTML=titleText.substring(0,ti);
+ti++; if(ti>titleText.length)ti=0;
+setTimeout(titleLoop,150);
+}
+titleLoop();
+
 /* BIO LOOP */
-let bio="hi i love u ♡";
-let i=0;
-function loop(){
-bioEl.innerHTML=bio.substring(0,i);
-i++; if(i>bio.length)i=0;
-setTimeout(loop,120);
+let bioText="hi i love u ♡";
+let bi=0;
+function bioLoop(){
+bio.innerHTML=bioText.substring(0,bi);
+bi++; if(bi>bioText.length)bi=0;
+setTimeout(bioLoop,130);
 }
-let bioEl=document.getElementById("bio");
-loop();
+bioLoop();
 
-/* STARS + PARALLAX */
-let stars=[];
-for(let i=0;i<100;i++){
-let s=document.createElement("div");
-s.className="star";
-s.style.left=Math.random()*100+"vw";
-s.style.top=Math.random()*100+"vh";
-s.onclick=()=>s.remove();
-document.body.appendChild(s);
-stars.push(s);
-}
-
-document.addEventListener("mousemove",e=>{
-stars.forEach(st=>{
-st.style.transform=`translate(${e.clientX/120}px,${e.clientY/120}px)`;
-});
-});
-
-/* HEART TRAIL */
-document.addEventListener("mousemove",e=>{
-let t=document.createElement("div");
-t.className="trail";
-t.innerHTML="♡";
-t.style.left=e.clientX+"px";
-t.style.top=e.clientY+"px";
-document.body.appendChild(t);
-setTimeout(()=>t.remove(),700);
-});
-
-/* MEMORY HEARTS */
-document.addEventListener("click",e=>{
-let h=document.createElement("div");
-h.innerHTML="♡";
-h.style.position="absolute";
-h.style.left=e.clientX+"px";
-h.style.top=e.clientY+"px";
-document.body.appendChild(h);
-});
-
-/* STICKERS */
-let open=false;
-stickerBtn.onclick=()=>{
-open=!open;
-panel.style.display=open?"block":"none";
-};
-
-function stick(x){
-document.onclick=e=>{
-let s=document.createElement("div");
-s.innerHTML=x;
-s.style.position="absolute";
-s.style.left=e.clientX+"px";
-s.style.top=e.clientY+"px";
-document.body.appendChild(s);
-document.onclick=null;
-};
-}
-
-/* CARD TILT */
-let card=document.getElementById("card");
-document.addEventListener("mousemove",e=>{
-let x=(window.innerWidth/2-e.clientX)/40;
-let y=(window.innerHeight/2-e.clientY)/40;
-card.style.transform=`translate(-50%,-50%) rotateY(${x}deg) rotateX(${y}deg)`;
-});
-
-/* BUNNY MOOD SYSTEM */
-let bunny=document.getElementById("bunny");
-bunny.onclick=()=>{
-bunny.innerHTML="🐰✨";
-setTimeout(()=>bunny.innerHTML="😴",4000);
-};
-
-/* MUSIC BORDER */
-let audio=document.getElementById("music");
+/* CLOUD BACKGROUND */
 setInterval(()=>{
-if(!audio.paused){
-card.classList.add("playing");
-setTimeout(()=>card.classList.remove("playing"),200);
-}
-},800);
+let cl=document.createElement("div");
+cl.className="cloud";
+cl.innerHTML="☁";
+cl.style.top=Math.random()*50+"px";
+cl.style.left=window.innerWidth+"px";
+game.appendChild(cl);
 
-/* AUTOPLAY FIX */
-window.addEventListener("click",()=>audio.play(),{once:true});
+let x=window.innerWidth;
+let move=setInterval(()=>{
+x-=1;
+cl.style.left=x+"px";
+if(x<-40){clearInterval(move);cl.remove();}
+},30);
+},2000);
 
 /* MINI GAME */
 let runner=document.getElementById("runner");
+let scoreEl=document.getElementById("score");
 let jumping=false;
+let score=0;
+let alive=true;
+let skins=["🐰","🐇","🐱","🐶"];
+let skin=0;
 
-document.addEventListener("keydown",e=>{
-if(e.code==="Space"&&!jumping){
+runner.onclick=()=>{
+skin++;
+if(skin>=skins.length)skin=0;
+runner.innerHTML=skins[skin];
+};
+
+/* jump */
+function jump(){
+if(!jumping){
+jumpSfx.play();
 jumping=true;
 let pos=10;
 let up=setInterval(()=>{
 pos+=6;
 runner.style.bottom=pos+"px";
-if(pos>70)clearInterval(up);
+if(pos>70) clearInterval(up);
 },20);
 
 setTimeout(()=>{
@@ -259,10 +177,20 @@ jumping=false;
 },20);
 },300);
 }
+}
+
+document.addEventListener("keydown",e=>{
+if(e.code==="Space") jump();
 });
+document.addEventListener("touchstart",jump);
+
+/* HIGH SCORE */
+let best=localStorage.getItem("bestScore")||0;
 
 /* obstacles */
 function spawn(){
+if(!alive)return;
+
 let o=document.createElement("div");
 o.className="obstacle";
 o.innerHTML="🌵";
@@ -276,19 +204,30 @@ o.style.right=(window.innerWidth-x)+"px";
 
 let r=parseInt(runner.style.bottom||10);
 if(x<90 && x>40 && r<25){
-alert("pawslyy wins ♡");
+hitSfx.play();
+alive=false;
+best=Math.max(best,score);
+localStorage.setItem("bestScore",best);
+alert("pawslyy 1 — you 0 | best "+best);
 location.reload();
 }
 
 if(x<0){
 clearInterval(move);
 o.remove();
+score++;
+scoreEl.innerHTML=score+" | best "+best;
 }
 },30);
 
-setTimeout(spawn,1800);
+setTimeout(spawn,1700);
 }
 spawn();
+
+/* AUTOPLAY FIX */
+window.addEventListener("click",()=>{
+music.play();
+},{once:true});
 
 </script>
 </body>
