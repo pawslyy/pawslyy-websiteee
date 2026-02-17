@@ -2,74 +2,61 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pawslyy</title>
 
 <style>
 body{
 margin:0;
 background:black;
-font-family:Arial;
 color:white;
+font-family:Arial;
 overflow:hidden;
 }
 
 /* CARD */
 .card{
 position:absolute;
-top:50%;
+top:40%;
 left:50%;
 transform:translate(-50%,-50%);
 background:#111;
-padding:60px;
-border-radius:22px;
+padding:50px;
+border-radius:20px;
 text-align:center;
-width:420px;
-border:1px solid #333;
-animation:intro 2s forwards, breathe 5s infinite;
-opacity:0;
-}
-@keyframes intro{to{opacity:1}}
-@keyframes breathe{
-0%,100%{transform:translate(-50%,-50%) scale(1)}
-50%{transform:translate(-50%,-50%) scale(1.02)}
 }
 
-/* STARS */
-.star{
-position:absolute;
-width:2px;
-height:2px;
-background:white;
-opacity:.7;
-}
+#bio{opacity:.7;margin-top:5px}
 
-/* VISUALIZER */
-canvas{
+/* MINI GAME */
+#game{
 position:absolute;
 bottom:0;
 left:0;
 width:100%;
 height:120px;
+border-top:1px solid #333;
+overflow:hidden;
 }
 
-/* BUNNY */
-#bunny{
+#runner{
 position:absolute;
-bottom:60px;
-left:20px;
-font-size:36px;
+bottom:10px;
+left:40px;
+font-size:32px;
 }
 
-/* HEART TRAIL */
-.trail{
+.obstacle{
 position:absolute;
-color:pink;
-pointer-events:none;
-animation:fade 1s forwards;
+bottom:10px;
+right:-20px;
+font-size:24px;
 }
-@keyframes fade{
-to{opacity:0;transform:translateY(-20px);}
+
+#score{
+position:absolute;
+right:20px;
+top:10px;
+opacity:.6;
 }
 </style>
 </head>
@@ -79,97 +66,85 @@ to{opacity:0;transform:translateY(-20px);}
 
 <div class="card">
 <h1>pawslyy</h1>
-<div id="bio"></div>
-
-<div class="links">
-<a href="https://tiktok.com/@stupidbunie">TikTok</a>
-<a href="https://x.com/pawslyy">Twitter</a>
-<a href="https://t.me/pawslyy">Telegram</a>
-<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
-</div>
+<div id="bio">hi i love u ♡</div>
 </div>
 
-<canvas id="viz"></canvas>
-<div id="bunny">🐰</div>
+<div id="game">
+<div id="runner">🐰</div>
+<div id="score">0</div>
+</div>
 
 <script>
 
-/* BIO LOOP */
-let bio="hi i love u ♡";
-let i=0;
-function loop(){
-document.getElementById("bio").innerHTML=bio.substring(0,i);
-i++; if(i>bio.length)i=0;
-setTimeout(loop,120);
-}
-loop();
+/* MINI PET GAME */
+let runner=document.getElementById("runner");
+let game=document.getElementById("game");
+let scoreEl=document.getElementById("score");
 
-/* STARS */
-for(let i=0;i<120;i++){
-let s=document.createElement("div");
-s.className="star";
-s.style.left=Math.random()*100+"vw";
-s.style.top=Math.random()*100+"vh";
-document.body.appendChild(s);
-}
+let jumping=false;
+let score=0;
 
-/* HEART TRAIL */
-document.addEventListener("mousemove",e=>{
-let t=document.createElement("div");
-t.className="trail";
-t.innerHTML="♡";
-t.style.left=e.clientX+"px";
-t.style.top=e.clientY+"px";
-document.body.appendChild(t);
-setTimeout(()=>t.remove(),800);
+/* jump */
+document.addEventListener("keydown",e=>{
+if(e.code==="Space" && !jumping){
+jumping=true;
+let pos=10;
+let up=setInterval(()=>{
+pos+=6;
+runner.style.bottom=pos+"px";
+if(pos>70) clearInterval(up);
+},20);
+
+setTimeout(()=>{
+let down=setInterval(()=>{
+pos-=6;
+runner.style.bottom=pos+"px";
+if(pos<=10){
+clearInterval(down);
+jumping=false;
+}
+},20);
+},300);
+}
 });
 
-/* REAL AUDIO VISUALIZER */
+/* obstacles */
+function spawn(){
+let o=document.createElement("div");
+o.className="obstacle";
+o.innerHTML="🌵";
+game.appendChild(o);
+
+let x=window.innerWidth;
+
+let move=setInterval(()=>{
+x-=6;
+o.style.right=(window.innerWidth-x)+"px";
+
+let rTop=parseInt(runner.style.bottom||10);
+if(x<90 && x>40 && rTop<25){
+alert("game over ♡ score: "+score);
+location.reload();
+}
+
+if(x<0){
+clearInterval(move);
+o.remove();
+score++;
+scoreEl.innerHTML=score;
+}
+},30);
+
+setTimeout(spawn,1500+Math.random()*2000);
+}
+
+spawn();
+
+/* autoplay fix */
 let audio=document.getElementById("music");
-let ctx=new AudioContext();
-let src=ctx.createMediaElementSource(audio);
-let analyser=ctx.createAnalyser();
-src.connect(analyser);
-analyser.connect(ctx.destination);
-analyser.fftSize=64;
-
-let canvas=document.getElementById("viz");
-let c=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=120;
-
-let data=new Uint8Array(analyser.frequencyBinCount);
-
-function draw(){
-requestAnimationFrame(draw);
-analyser.getByteFrequencyData(data);
-c.clearRect(0,0,canvas.width,canvas.height);
-
-for(let i=0;i<data.length;i++){
-let bar=data[i];
-c.fillStyle="white";
-c.fillRect(i*10,120-bar/2,6,bar/2);
-}
-}
-draw();
-
-/* AUTOPLAY FIX */
 window.addEventListener("click",()=>{
 audio.play();
-ctx.resume();
 },{once:true});
-
-/* WALKING BUNNY */
-let bunny=document.getElementById("bunny");
-let pos=0;
-let dir=1;
-
-setInterval(()=>{
-pos+=dir*4;
-if(pos>window.innerWidth-40) dir=-1;
-if(pos<0) dir=1;
-bunny.style.left=pos+"px";
-},60);
 
 </script>
 </body>
