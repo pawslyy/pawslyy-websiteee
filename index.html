@@ -52,14 +52,25 @@ body{
   border-radius:14px;
 }
 
-/* HEART FALL */
+/* FALLING HEARTS */
 .heart{
   position:absolute;
   color:pink;
-  animation:fall linear forwards;
+  animation:fall linear infinite;
 }
 @keyframes fall{
   to{transform:translateY(100vh); opacity:0;}
+}
+
+/* CLICK HEART */
+.clickHeart{
+  position:absolute;
+  color:pink;
+  pointer-events:none;
+  animation:pop 1s forwards;
+}
+@keyframes pop{
+  to{transform:translateY(-40px); opacity:0;}
 }
 
 /* STARS */
@@ -81,7 +92,7 @@ body{
   50%{transform:translateY(-15px);}
 }
 
-/* BUNNY PET */
+/* BUNNY */
 #bunny{
   position:absolute;
   bottom:20px;
@@ -90,6 +101,18 @@ body{
   cursor:pointer;
 }
 .sleep{ opacity:.5; }
+
+/* CURSOR TRAIL */
+.trail{
+  position:absolute;
+  pointer-events:none;
+  font-size:14px;
+  opacity:.8;
+  animation:fadeTrail .6s forwards;
+}
+@keyframes fadeTrail{
+  to{opacity:0; transform:translateY(-10px);}
+}
 </style>
 </head>
 
@@ -139,15 +162,37 @@ for(let i=0;i<100;i++){
  document.body.appendChild(s);
 }
 
-/* CLICK SPAWN HEARTS */
-document.addEventListener("click",e=>{
+/* FALLING HEARTS */
+setInterval(()=>{
  let h=document.createElement("div");
  h.className="heart";
+ h.innerHTML="❤";
+ h.style.left=Math.random()*100+"vw";
+ h.style.animationDuration=(3+Math.random()*5)+"s";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),8000);
+},500);
+
+/* CLICK SPAWN HEART */
+document.addEventListener("click",e=>{
+ let h=document.createElement("div");
+ h.className="clickHeart";
  h.innerHTML="❤";
  h.style.left=e.pageX+"px";
  h.style.top=e.pageY+"px";
  document.body.appendChild(h);
- setTimeout(()=>h.remove(),2000);
+ setTimeout(()=>h.remove(),1000);
+});
+
+/* CURSOR TRAIL */
+document.addEventListener("mousemove",e=>{
+ let t=document.createElement("div");
+ t.className="trail";
+ t.innerHTML="❤";
+ t.style.left=e.pageX+"px";
+ t.style.top=e.pageY+"px";
+ document.body.appendChild(t);
+ setTimeout(()=>t.remove(),600);
 });
 
 /* PLUSH CLICK */
