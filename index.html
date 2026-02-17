@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,218 +7,231 @@
 
 <style>
 body{
-  margin:0;
-  background:#000;
-  font-family:Arial, Helvetica, sans-serif;
-  color:white;
-  overflow:hidden;
+margin:0;
+background:black;
+font-family:Arial;
+color:white;
+overflow:hidden;
 }
 
-/* floating stars */
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  opacity:.8;
-  animation:twinkle 3s infinite alternate;
-}
-@keyframes twinkle{
-  from{opacity:.2}
-  to{opacity:1}
-}
-
-/* card */
+/* INTRO GLOW */
 .card{
-  position:absolute;
-  top:45%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:#111;
-  padding:40px;
-  border-radius:18px;
-  text-align:center;
-  animation:breath 4s ease-in-out infinite;
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#111;
+padding:60px;
+border-radius:22px;
+text-align:center;
+width:420px;
+border:1px solid #333;
+opacity:0;
+animation:intro 2s forwards, breathe 5s infinite;
 }
-@keyframes breath{
-  0%,100%{transform:translate(-50%,-50%) scale(1)}
-  50%{transform:translate(-50%,-50%) scale(1.02)}
+@keyframes intro{to{opacity:1}}
+@keyframes breathe{
+0%,100%{transform:translate(-50%,-50%) scale(1)}
+50%{transform:translate(-50%,-50%) scale(1.02)}
 }
 
-h1{margin:0;font-weight:600}
+/* PARALLAX STARS */
+.star{
+position:absolute;
+width:2px;
+height:2px;
+background:white;
+opacity:.7;
+}
 
-/* links */
+/* GLOW FOLLOW */
+.glow{
+position:absolute;
+width:250px;
+height:250px;
+background:radial-gradient(circle,rgba(255,192,203,.2),transparent);
+pointer-events:none;
+}
+
+/* LINKS */
 .links a{
-  color:white;
-  margin:0 12px;
-  text-decoration:none;
-  position:relative;
+margin:10px;
+color:white;
+text-decoration:none;
 }
-.links a:hover::after{
-  content:"♡";
-  position:absolute;
-  top:-10px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:12px;
+.links a:hover{opacity:.6}
+
+/* STICKER BUTTON */
+#stickerBtn{
+position:absolute;
+top:20px;
+left:20px;
+cursor:pointer;
+opacity:.7;
 }
 
-/* typing dots */
-.typing::after{
-  content:"...";
-  animation:dots 1.5s infinite;
-}
-@keyframes dots{
-  0%{content:"."}
-  33%{content:".."}
-  66%{content:"..."}
-}
-
-/* music player */
-.player{
-  position:absolute;
-  bottom:80px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#111;
-  padding:20px;
-  border-radius:12px;
+/* STICKER PANEL */
+#panel{
+position:absolute;
+top:60px;
+left:20px;
+background:#111;
+padding:10px;
+border-radius:10px;
+display:none;
 }
 
-/* hearts burst */
-.heart{
-  position:absolute;
-  color:pink;
-  animation:pop 1s forwards;
-}
-@keyframes pop{
-  to{transform:translateY(-60px);opacity:0}
-}
-
-/* plushie */
-.plush{
-  position:absolute;
-  cursor:grab;
-  font-size:22px;
-}
-
-/* bunny */
+/* BUNNY */
 #bunny{
-  position:absolute;
-  bottom:10px;
-  right:10px;
-  cursor:pointer;
+position:absolute;
+bottom:60px;
+right:40px;
+font-size:36px;
+cursor:pointer;
 }
 
-/* sticker */
-.sticker{
-  position:absolute;
-  font-size:18px;
+/* HEART */
+.heart{
+position:absolute;
+color:pink;
+animation:float 1.2s forwards;
+}
+@keyframes float{
+to{transform:translateY(-60px);opacity:0}
 }
 </style>
 </head>
-
 <body>
 
-<audio id="music" autoplay loop>
-<source src="music.mp3" type="audio/mpeg">
-</audio>
+<audio id="music" src="music.mp3" autoplay loop></audio>
+
+<div class="glow" id="glow"></div>
 
 <div class="card" id="card">
 <h1>pawslyy</h1>
-<div class="typing">hi i love u ♡</div>
+<div id="bio"></div>
 
 <div class="links">
-<a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
-<a href="https://x.com/pawslyy" target="_blank">Twitter</a>
-<a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-<a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
+<a href="https://tiktok.com/@stupidbunie">TikTok</a>
+<a href="https://x.com/pawslyy">Twitter</a>
+<a href="https://t.me/pawslyy">Telegram</a>
+<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
+</div>
 </div>
 
-<div id="pet">🐰</div>
+<div id="stickerBtn">stickers ♡</div>
+<div id="panel">
+<span onclick="stick('⭐')">⭐</span>
+<span onclick="stick('💗')">💗</span>
+<span onclick="stick('🧸')">🧸</span>
 </div>
-
-<div class="player">u seemed so perfect</div>
 
 <div id="bunny">🐰</div>
 
 <script>
-/* stars */
+
+/* BIO TYPING LOOP */
+let bio="hi i love u ♡";
+let i=0;
+function loop(){
+document.getElementById("bio").innerHTML=bio.substring(0,i);
+i++;
+if(i>bio.length)i=0;
+setTimeout(loop,120);
+}
+loop();
+
+/* STARS + PARALLAX */
+let stars=[];
 for(let i=0;i<120;i++){
- let s=document.createElement("div");
- s.className="star";
- s.style.left=Math.random()*window.innerWidth+"px";
- s.style.top=Math.random()*window.innerHeight+"px";
- document.body.appendChild(s);
+let s=document.createElement("div");
+s.className="star";
+s.style.left=Math.random()*100+"vw";
+s.style.top=Math.random()*100+"vh";
+document.body.appendChild(s);
+stars.push(s);
 }
 
-/* click hearts burst */
+document.addEventListener("mousemove",e=>{
+stars.forEach(st=>{
+st.style.transform=`translate(${e.clientX/100}px,${e.clientY/100}px)`;
+});
+});
+
+/* GLOW FOLLOW */
+let glow=document.getElementById("glow");
+document.addEventListener("mousemove",e=>{
+glow.style.left=e.clientX-120+"px";
+glow.style.top=e.clientY-120+"px";
+});
+
+/* HEART CURSOR TRAIL */
+document.addEventListener("mousemove",e=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="♡";
+h.style.left=e.clientX+"px";
+h.style.top=e.clientY+"px";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),1000);
+});
+
+/* MEMORY HEARTS */
 document.addEventListener("click",e=>{
- for(let i=0;i<6;i++){
-  let h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="♡";
-  h.style.left=e.clientX+"px";
-  h.style.top=e.clientY+"px";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),1000);
- }
+for(let i=0;i<6;i++){
+let h=document.createElement("div");
+h.innerHTML="♡";
+h.style.position="absolute";
+h.style.left=e.clientX+"px";
+h.style.top=e.clientY+"px";
+document.body.appendChild(h);
+}
 });
 
-/* double click plushie spawn */
-document.addEventListener("dblclick",e=>{
- let p=document.createElement("div");
- p.className="plush";
- p.innerHTML="🧸";
- p.style.left=e.clientX+"px";
- p.style.top=e.clientY+"px";
- document.body.appendChild(p);
- drag(p);
-});
+/* STICKER DRAWER */
+let open=false;
+document.getElementById("stickerBtn").onclick=()=>{
+open=!open;
+panel.style.display=open?"block":"none";
+};
 
-/* draggable plushies */
-function drag(el){
- el.onmousedown=function(e){
-  document.onmousemove=function(ev){
-   el.style.left=ev.clientX+"px";
-   el.style.top=ev.clientY+"px";
-  }
-  document.onmouseup=function(){
-   document.onmousemove=null;
-  }
- }
+function stick(x){
+document.onclick=e=>{
+let s=document.createElement("div");
+s.innerHTML=x;
+s.style.position="absolute";
+s.style.left=e.clientX+"px";
+s.style.top=e.clientY+"px";
+document.body.appendChild(s);
+document.onclick=null;
+};
 }
 
-/* floating stars pop */
-document.querySelectorAll(".star").forEach(st=>{
- st.onclick=()=>st.remove();
+/* CARD TILT */
+let card=document.getElementById("card");
+document.addEventListener("mousemove",e=>{
+let x=(window.innerWidth/2-e.clientX)/40;
+let y=(window.innerHeight/2-e.clientY)/40;
+card.style.transform=`translate(-50%,-50%) rotateY(${x}deg) rotateX(${y}deg)`;
 });
 
-/* bunny expression */
+/* BUNNY MOOD SYSTEM */
 let bunny=document.getElementById("bunny");
-let mood=false;
+let mood=0;
 bunny.onclick=()=>{
- mood=!mood;
- bunny.innerHTML=mood?"(•ᴗ•)":"🐰";
-}
+mood=1;
+bunny.innerHTML="🐰✨";
+setTimeout(()=>{
+mood=2;
+bunny.innerHTML="😴";
+},5000);
+};
 
-/* sticker system (shift click) */
-document.addEventListener("click",e=>{
- if(e.shiftKey){
-  let s=document.createElement("div");
-  s.className="sticker";
-  s.innerHTML="⭐";
-  s.style.left=e.clientX+"px";
-  s.style.top=e.clientY+"px";
-  document.body.appendChild(s);
- }
-});
-
-/* autoplay fix */
+/* AUTOPLAY FIX */
 window.addEventListener("click",()=>{
- document.getElementById("music").play();
+document.getElementById("music").play();
 },{once:true});
-</script>
 
+</script>
 </body>
 </html>
