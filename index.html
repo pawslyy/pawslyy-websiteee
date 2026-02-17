@@ -4,32 +4,15 @@
 <meta charset="UTF-8">
 <title>pawslyy</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 <style>
 body{
 margin:0;
-background:#ffeef5;
-font-family:Arial;
-color:#444;
+background:black;
+font-family:'Press Start 2P', monospace;
+color:white;
 overflow:hidden;
-}
-
-/* STARS */
-.star{
-position:absolute;
-width:2px;
-height:2px;
-background:white;
-opacity:.8;
-}
-
-/* FALLING HEARTS */
-.heart{
-position:absolute;
-color:#ff9ecb;
-animation:fall 6s linear infinite;
-}
-@keyframes fall{
-to{transform:translateY(100vh);opacity:0;}
 }
 
 /* CARD */
@@ -38,39 +21,45 @@ position:absolute;
 top:40%;
 left:50%;
 transform:translate(-50%,-50%);
-background:#fff0f7;
-padding:50px;
-border-radius:24px;
+background:#111;
+padding:40px;
+border-radius:18px;
 text-align:center;
 width:420px;
-box-shadow:0 0 25px rgba(255,182,193,.3);
-border:2px solid #ffd1dc;
+border:1px solid #333;
 }
 
 .links a{
 margin:10px;
-color:#ff7fb0;
+color:white;
 text-decoration:none;
 }
-.links a:visited{color:#ff7fb0;}
-.links a:hover{opacity:.6}
 
-/* MUSIC CONTROLS */
-.musicbox{
+/* STARS */
+.star{
 position:absolute;
-bottom:160px;
-left:50%;
-transform:translateX(-50%);
-background:#fff0f7;
-padding:10px;
-border-radius:14px;
-width:260px;
-text-align:center;
-border:2px solid #ffd1dc;
+font-size:10px;
+cursor:pointer;
 }
 
-input[type=range]{
-width:100%;
+/* SPARKLES */
+.spark{
+position:absolute;
+color:pink;
+animation:pop .6s forwards;
+}
+@keyframes pop{to{opacity:0;transform:translateY(-20px);}}
+
+/* ACHIEVEMENT */
+.toast{
+position:absolute;
+bottom:200px;
+left:50%;
+transform:translateX(-50%);
+background:#111;
+padding:8px 14px;
+border-radius:10px;
+font-size:10px;
 }
 
 /* GAME */
@@ -79,45 +68,39 @@ position:absolute;
 bottom:0;
 width:100%;
 height:140px;
-background:#ffd1dc;
-overflow:hidden;
-border-top:3px solid #fff;
-}
-
-.cloud{
-position:absolute;
-font-size:28px;
-opacity:.6;
+background:#111;
+border-top:1px solid #333;
 }
 
 #runner{
 position:absolute;
 bottom:10px;
 left:40px;
-font-size:34px;
+font-size:26px;
+}
+
+.coin{
+position:absolute;
+bottom:50px;
+font-size:18px;
 }
 
 .obstacle{
 position:absolute;
 bottom:10px;
-right:-20px;
-font-size:24px;
 }
 
-#score{
+#counter{
 position:absolute;
-right:20px;
 top:10px;
-font-size:14px;
-opacity:.7;
+left:10px;
+font-size:10px;
 }
 </style>
 </head>
 <body>
 
 <audio id="music" src="music.mp3" loop></audio>
-<audio id="jumpSfx" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
-<audio id="hitSfx" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
 
 <div class="card">
 <h1>pawslyy</h1>
@@ -129,85 +112,104 @@ opacity:.7;
 <a href="https://t.me/pawslyy">Telegram</a>
 <a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
 </div>
-</div>
 
-<div class="musicbox">
-<div>u seemed so perfect</div>
-<input type="range" id="volume" min="0" max="1" step="0.01" value="0.6">
+<div id="counter">stars: 0</div>
+<button id="decorate">decorate</button>
 </div>
 
 <div id="game">
 <div id="runner">🐰</div>
-<div id="score">0</div>
 </div>
 
 <script>
 
-/* AUTOPLAY + VOLUME */
-let music=document.getElementById("music");
-music.volume=0.6;
-
-function startMusic(){
+/* AUTOPLAY */
 music.play().catch(()=>{});
-}
-startMusic();
-document.addEventListener("click",startMusic,{once:true});
-document.addEventListener("touchstart",startMusic,{once:true});
+document.addEventListener("click",()=>music.play(),{once:true});
 
-volume.oninput=e=>music.volume=e.target.value;
-
-/* STAR BACKGROUND */
-for(let i=0;i<120;i++){
+/* COLLECTIBLE STARS */
+let starCount=0;
+for(let i=0;i<40;i++){
 let s=document.createElement("div");
 s.className="star";
-s.style.top=Math.random()*100+"vh";
+s.innerHTML="✦";
 s.style.left=Math.random()*100+"vw";
+s.style.top=Math.random()*100+"vh";
 document.body.appendChild(s);
+
+s.onclick=()=>{
+starCount++;
+counter.innerHTML="stars: "+starCount;
+spark(s.offsetLeft,s.offsetTop);
+s.remove();
+};
 }
 
-/* FALLING HEARTS */
-setInterval(()=>{
-let h=document.createElement("div");
-h.className="heart";
-h.innerHTML="♡";
-h.style.left=Math.random()*100+"vw";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),6000);
-},500);
+/* SPARKLE EFFECT */
+function spark(x,y){
+for(let i=0;i<4;i++){
+let sp=document.createElement("div");
+sp.className="spark";
+sp.innerHTML="✦";
+sp.style.left=x+"px";
+sp.style.top=y+"px";
+document.body.appendChild(sp);
+setTimeout(()=>sp.remove(),600);
+}
+}
 
-/* CLOUD BACKGROUND */
-setInterval(()=>{
-let cl=document.createElement("div");
-cl.className="cloud";
-cl.innerHTML="☁";
-cl.style.top=Math.random()*50+"px";
-cl.style.left=window.innerWidth+"px";
-game.appendChild(cl);
+/* CLICK SPARKLES */
+document.addEventListener("click",e=>{
+spark(e.clientX,e.clientY);
+});
 
-let x=window.innerWidth;
-let move=setInterval(()=>{
-x-=1;
-cl.style.left=x+"px";
-if(x<-40){clearInterval(move);cl.remove();}
-},30);
-},2000);
+/* STICKER MODE */
+let decorating=false;
+decorate.onclick=()=>decorating=!decorating;
+
+document.addEventListener("click",e=>{
+if(decorating){
+let st=document.createElement("div");
+st.innerHTML="⭐";
+st.style.position="absolute";
+st.style.left=e.clientX+"px";
+st.style.top=e.clientY+"px";
+document.body.appendChild(st);
+}
+});
+
+/* BUNNY COSTUMES */
+let runner=document.getElementById("runner");
+let skins=["🐰","🐱","🐶","🦊"];
+let skin=0;
+runner.onclick=()=>{
+skin++; if(skin>=skins.length)skin=0;
+runner.innerHTML=skins[skin];
+achievement("bunny clicked");
+};
+
+/* PET MOOD */
+setInterval(()=>{
+runner.innerHTML="😴";
+},15000);
+
+music.onplay=()=>{
+runner.innerHTML="🐰";
+};
 
 /* MINI GAME */
-let runner=document.getElementById("runner");
-let scoreEl=document.getElementById("score");
 let jumping=false;
 let score=0;
-let alive=true;
 
 function jump(){
 if(!jumping){
-jumpSfx.play();
 jumping=true;
+achievement("first jump");
 let pos=10;
 let up=setInterval(()=>{
 pos+=6;
 runner.style.bottom=pos+"px";
-if(pos>70) clearInterval(up);
+if(pos>70)clearInterval(up);
 },20);
 
 setTimeout(()=>{
@@ -224,48 +226,47 @@ jumping=false;
 }
 
 document.addEventListener("keydown",e=>{
-if(e.code==="Space") jump();
+if(e.code==="Space")jump();
 });
 document.addEventListener("touchstart",jump);
 
-let best=localStorage.getItem("bestScore")||0;
-
-function spawn(){
-if(!alive)return;
-
-let o=document.createElement("div");
-o.className="obstacle";
-o.innerHTML="🌵";
-game.appendChild(o);
+/* COINS */
+function coin(){
+let c=document.createElement("div");
+c.className="coin";
+c.innerHTML="💗";
+game.appendChild(c);
 
 let x=window.innerWidth;
-
 let move=setInterval(()=>{
-x-=6;
-o.style.right=(window.innerWidth-x)+"px";
+x-=5;
+c.style.left=x+"px";
 
-let r=parseInt(runner.style.bottom||10);
-if(x<90 && x>40 && r<25){
-hitSfx.play();
-alive=false;
-best=Math.max(best,score);
-localStorage.setItem("bestScore",best);
-alert("pawslyy 1 — you 0 | best "+best);
-location.reload();
+if(x<60 && x>30){
+score++;
+achievement("coin!");
+c.remove();
+clearInterval(move);
 }
 
 if(x<0){
+c.remove();
 clearInterval(move);
-o.remove();
-score++;
-scoreEl.innerHTML=score+" | best "+best;
 }
 },30);
 
-setTimeout(spawn,1700);
+setTimeout(coin,3000);
 }
-spawn();
+coin();
 
+/* ACHIEVEMENTS */
+function achievement(text){
+let t=document.createElement("div");
+t.className="toast";
+t.innerHTML=text;
+document.body.appendChild(t);
+setTimeout(()=>t.remove(),2000);
+}
 </script>
 </body>
 </html>
