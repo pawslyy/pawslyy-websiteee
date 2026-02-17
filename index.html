@@ -7,96 +7,110 @@
 
 <style>
 body {
-  margin: 0;
-  height: 100vh;
-  font-family: Arial, sans-serif;
-  color: white;
-
-  background: url("background.jpg") center/cover no-repeat fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: url("cursor.png"), auto;
+  margin:0;
+  background:#000;
+  color:white;
+  font-family:Arial, Helvetica, sans-serif;
+  overflow:hidden;
+  cursor:none;
 }
 
-.card {
-  background: rgba(0,0,0,0.65);
-  padding: 30px;
-  border-radius: 16px;
-  text-align: center;
-  backdrop-filter: blur(8px);
+/* CENTER CARD */
+.card{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#111;
+  padding:40px;
+  border-radius:18px;
+  text-align:center;
 }
 
-h1 {
-  margin: 0 0 18px 0;
-  font-weight: 500;
+/* ICONS */
+.icons a{
+  margin:10px;
+  display:inline-block;
+  transition:0.2s;
+  color:white;
+  text-decoration:none;
+}
+.icons a:hover{
+  transform:translateY(-5px) scale(1.1);
 }
 
-.icons {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
+/* MUSIC PLAYER */
+.player{
+  position:absolute;
+  bottom:40px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111;
+  padding:20px;
+  border-radius:14px;
+  width:300px;
 }
 
-.icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: 1px solid white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  color: white;
-  transition: 0.2s;
+.eq{
+  display:flex;
+  justify-content:center;
+  gap:3px;
+  margin-bottom:10px;
 }
 
-.icon:hover {
-  background: white;
-  color: black;
+.bar{
+  width:4px;
+  height:10px;
+  background:white;
+  animation:beat 0.5s infinite alternate;
 }
 
-/* music player */
-.player {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 340px;
-  background: rgba(0,0,0,0.75);
-  border-radius: 16px;
-  padding: 16px;
+@keyframes beat{
+  from{height:5px}
+  to{height:25px}
 }
 
-.equalizer {
-  display: flex;
-  gap: 4px;
-  justify-content: center;
-  margin-bottom: 10px;
+/* HEART FALL */
+.heart{
+  position:absolute;
+  color:pink;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{ transform:translateY(100vh); }
 }
 
-.bar {
-  width: 4px;
-  height: 20px;
-  background: white;
-  animation: bounce 1s infinite ease-in-out;
+/* PIXEL STARS */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
 }
 
-.bar:nth-child(2){animation-delay:.1s}
-.bar:nth-child(3){animation-delay:.2s}
-.bar:nth-child(4){animation-delay:.3s}
-.bar:nth-child(5){animation-delay:.4s}
-.bar:nth-child(6){animation-delay:.5s}
-.bar:nth-child(7){animation-delay:.6s}
-
-@keyframes bounce {
-  0%,100% { transform: scaleY(.3); }
-  50% { transform: scaleY(1); }
+/* BUNNY */
+.bunny{
+  position:absolute;
+  bottom:20px;
+  right:20px;
+  font-size:40px;
 }
 
-audio {
-  width: 100%;
+/* FLOATING PLUSH */
+.plush{
+  position:absolute;
+  animation:float 6s infinite ease-in-out;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-15px)}
+}
+
+/* CURSOR */
+.cursor{
+  position:absolute;
+  pointer-events:none;
+  font-size:18px;
 }
 </style>
 </head>
@@ -104,42 +118,80 @@ audio {
 <body>
 
 <div class="card">
-  <h1>pawslyy</h1>
+  <h1 id="typing"></h1>
 
   <div class="icons">
-    <!-- TikTok -->
-    <a class="icon" href="https://tiktok.com/@stupidbunie" target="_blank">♪</a>
-
-    <!-- Twitter/X -->
-    <a class="icon" href="https://twitter.com" target="_blank">X</a>
-
-    <!-- Telegram -->
-    <a class="icon" href="https://t.me" target="_blank">✉</a>
-
-    <!-- Roblox -->
-    <a class="icon" href="https://www.roblox.com/users/2634203674/profile" target="_blank">R</a>
+    <a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
+    <a href="https://x.com/pawslyy" target="_blank">Twitter</a>
+    <a href="https://t.me/pawslyy" target="_blank">Telegram</a>
+    <a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
   </div>
 </div>
 
 <div class="player">
-  <div class="equalizer">
-    <div class="bar"></div>
-    <div class="bar"></div>
+  <div class="eq">
     <div class="bar"></div>
     <div class="bar"></div>
     <div class="bar"></div>
     <div class="bar"></div>
     <div class="bar"></div>
   </div>
-
-  <audio id="music" controls autoplay loop>
-    <source src="music.mp3" type="audio/mpeg">
-  </audio>
+  <audio id="audio" src="music.mp3" autoplay loop></audio>
 </div>
 
+<div class="bunny">🐰</div>
+<div class="plush" style="left:10%;top:20%;">🧸</div>
+<div class="plush" style="left:80%;top:30%;">🧸</div>
+
 <script>
-window.addEventListener("click", () => {
-  document.getElementById("music").play();
+/* typing animation */
+let text="pawslyy";
+let i=0;
+function type(){
+ if(i<text.length){
+   document.getElementById("typing").innerHTML+=text.charAt(i);
+   i++;
+   setTimeout(type,120);
+ }
+}
+type();
+
+/* falling hearts */
+setInterval(()=>{
+ let h=document.createElement("div");
+ h.className="heart";
+ h.innerHTML="❤";
+ h.style.left=Math.random()*100+"vw";
+ h.style.animationDuration=(3+Math.random()*5)+"s";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),8000);
+},400);
+
+/* stars */
+for(let i=0;i<100;i++){
+ let s=document.createElement("div");
+ s.className="star";
+ s.style.left=Math.random()*100+"vw";
+ s.style.top=Math.random()*100+"vh";
+ document.body.appendChild(s);
+}
+
+/* cursor hearts */
+document.addEventListener("mousemove",e=>{
+ let c=document.createElement("div");
+ c.className="cursor";
+ c.innerHTML="❤";
+ c.style.left=e.pageX+"px";
+ c.style.top=e.pageY+"px";
+ document.body.appendChild(c);
+ setTimeout(()=>c.remove(),500);
+});
+
+/* click sound */
+document.addEventListener("click",()=>{
+ let snd=new Audio("music.mp3");
+ snd.volume=0.1;
+ snd.play();
 });
 </script>
 
