@@ -14,18 +14,29 @@ body {
   text-align: center;
   overflow-x: hidden;
   font-size: 140%;
+  cursor: url("https://cur.cursors-4u.net/cursors/cur-9/cur817.cur"), auto;
 }
 
-.border-top, .border-bottom {
+/* lace edges */
+body::before,
+body::after {
+  content: "୨୧ ୨୧ ୨୧ ୨୧ ୨୧ ୨୧ ୨୧ ୨୧ ୨୧ ୨୧ ୨୧ ୨୧";
+  position: fixed;
+  left: 0;
+  width: 100%;
   background: #ffeaf5;
-  padding: 14px;
-  font-size: 26px;
+  padding: 8px 0;
+  font-size: 20px;
   letter-spacing: 6px;
+  z-index: 100;
 }
+
+body::before { top: 0; }
+body::after { bottom: 0; }
 
 header {
   font-size: 34px;
-  padding: 14px;
+  padding: 30px 14px;
 }
 
 .card {
@@ -66,7 +77,7 @@ header {
   cursor: pointer;
 }
 
-/* cursor symbols */
+/* cursor trail */
 .symbol {
   position: fixed;
   pointer-events: none;
@@ -97,14 +108,9 @@ header {
 
 <body>
 
-<div class="border-top">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
-
 <header>Pawslyy</header>
 
 <div class="card">
-<h2>hi angels ૮₍ ˶ᵔ ᵕ ᵔ˶ ₎ა</h2>
-<p>my cute pastel internet space</p>
-
 <div class="social-links">
 <a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
 <a href="https://twitter.com/pawslyy" target="_blank">Twitter</a>
@@ -118,8 +124,6 @@ header {
 <div id="gameArea"></div>
 <p>score: <span id="score">0</span></p>
 </div>
-
-<div class="border-bottom">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
 
 <audio id="bgMusic" autoplay loop>
 <source src="music.mp3" type="audio/mpeg">
@@ -143,7 +147,7 @@ document.addEventListener("mousemove", function(e) {
   setTimeout(() => el.remove(), 1200);
 });
 
-/* falling symbols slower */
+/* falling symbols */
 setInterval(() => {
   const fall = document.createElement("div");
   fall.className = "fall";
