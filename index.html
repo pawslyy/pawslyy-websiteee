@@ -9,12 +9,12 @@
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif;
-  background: #fff7fb;
-  color: #444;
+  background: linear-gradient(#fff0f7, #ffe6f3);
   text-align: center;
+  overflow-x: hidden;
+  color: #555;
 }
 
-/* Header */
 header {
   background: #ffcce6;
   padding: 18px;
@@ -32,46 +32,38 @@ header {
 }
 
 .hero h1 {
-  font-size: 30px;
+  font-size: 34px;
 }
 
 .hero p {
   font-size: 18px;
 }
 
-.btn {
-  background: #ff8fc7;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 12px;
-  color: white;
-  font-size: 16px;
+/* Game box */
+.game-box {
+  background: white;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+#gameArea {
+  height: 180px;
+  background: #fff7fb;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
   margin-top: 10px;
+}
+
+.star {
+  position: absolute;
+  font-size: 22px;
   cursor: pointer;
 }
 
-/* Products */
-.products {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  padding: 25px;
-}
-
-.card {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  animation: fadeUp 0.6s ease;
-}
-
-.card img {
-  width: 100%;
-  border-radius: 12px;
-}
-
-/* Socials */
+/* Social links */
 .socials {
   padding: 30px;
 }
@@ -79,7 +71,7 @@ header {
 .social-links {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -90,44 +82,9 @@ header {
   text-decoration: none;
   color: #444;
   font-weight: 600;
-  transition: 0.2s;
 }
 
-.social-links a:hover {
-  background: #ffb3db;
-}
-
-/* Desktop */
-@media (min-width: 768px) {
-  .products {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 900px;
-    margin: auto;
-  }
-
-  .hero h1 {
-    font-size: 40px;
-  }
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Heart trail */
+/* Cursor hearts */
 .heart {
   position: fixed;
   pointer-events: none;
@@ -135,11 +92,29 @@ header {
   animation: floatUp 1s linear forwards;
 }
 
+/* Falling hearts */
+.fall {
+  position: fixed;
+  top: -20px;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh);
+  }
+}
+
 @keyframes floatUp {
   to {
     transform: translateY(-25px);
     opacity: 0;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 </style>
 </head>
@@ -149,33 +124,19 @@ header {
 <header>Pawslyy</header>
 
 <section class="hero">
-<h1>Cute Things for Cute Pets</h1>
-<p>Welcome to Pawslyy — soft, cozy pet accessories.</p>
-<button class="btn">Shop Now</button>
+<h1>૮₍ ˶ᵔ ᵕ ᵔ˶ ₎ა</h1>
+<p>Welcome to my cute internet corner ✿</p>
 </section>
 
-<section class="products">
-<div class="card">
-<img src="https://placekitten.com/300/200">
-<h3>Plush Bed</h3>
-<p>Super soft comfort.</p>
-</div>
-
-<div class="card">
-<img src="https://placekitten.com/301/200">
-<h3>Pink Collar</h3>
-<p>Stylish and comfy.</p>
-</div>
-
-<div class="card">
-<img src="https://placekitten.com/302/200">
-<h3>Cozy Blanket</h3>
-<p>Warm and fluffy.</p>
-</div>
+<section class="game-box">
+<h2>Catch the Star Game ⭐</h2>
+<p>Tap the stars!</p>
+<div id="gameArea"></div>
+<p>Score: <span id="score">0</span></p>
 </section>
 
 <section class="socials">
-<h2>Follow Pawslyy</h2>
+<h2>Find Me Online</h2>
 <div class="social-links">
 <a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
 <a href="https://twitter.com/pawslyy" target="_blank">Twitter</a>
@@ -184,27 +145,61 @@ header {
 </div>
 </section>
 
-<!-- Music -->
 <audio id="bgMusic" autoplay loop>
 <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// autoplay backup (mobile browsers require interaction)
+/* music autoplay backup */
 window.addEventListener("click", () => {
   document.getElementById("bgMusic").play();
 }, { once: true });
 
-// pastel heart cursor trail
+/* cursor hearts */
 document.addEventListener("mousemove", function(e) {
   const heart = document.createElement("div");
   heart.className = "heart";
-  heart.innerHTML = "💖";
+  heart.innerHTML = "💗";
   heart.style.left = e.clientX + "px";
   heart.style.top = e.clientY + "px";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 900);
 });
+
+/* falling hearts background */
+setInterval(() => {
+  const fall = document.createElement("div");
+  fall.className = "fall";
+  fall.innerHTML = "💖";
+  fall.style.left = Math.random() * 100 + "vw";
+  fall.style.animationDuration = (3 + Math.random() * 4) + "s";
+  document.body.appendChild(fall);
+  setTimeout(() => fall.remove(), 7000);
+}, 400);
+
+/* mini kawaii game */
+let score = 0;
+const gameArea = document.getElementById("gameArea");
+
+function spawnStar() {
+  const star = document.createElement("div");
+  star.className = "star";
+  star.innerHTML = "⭐";
+
+  star.style.left = Math.random() * 90 + "%";
+  star.style.top = Math.random() * 70 + "%";
+
+  star.onclick = () => {
+    score++;
+    document.getElementById("score").innerText = score;
+    star.remove();
+  };
+
+  gameArea.appendChild(star);
+  setTimeout(() => star.remove(), 2000);
+}
+
+setInterval(spawnStar, 800);
 </script>
 
 </body>
