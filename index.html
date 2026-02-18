@@ -1,114 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pawslyy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pawslyy</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      background: #fff7fb;
-      text-align: center;
-      overflow-x: hidden;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: #fff7fb;
+  color: #444;
+  text-align: center;
+}
 
-    header {
-      background: #ffb6d9;
-      padding: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-    }
+/* Header */
+header {
+  background: #ffcce6;
+  padding: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
-    section {
-      padding: 25px;
-    }
+/* Hero */
+.hero {
+  padding: 40px 20px;
+  animation: fadeIn 1s ease-in;
+}
 
-    h1 {
-      font-size: 28px;
-    }
+.hero h1 {
+  font-size: 30px;
+}
 
-    p {
-      font-size: 18px;
-    }
+.hero p {
+  font-size: 18px;
+}
 
-    button {
-      padding: 12px 18px;
-      font-size: 16px;
-      background: #ff6fb0;
-      border: none;
-      border-radius: 10px;
-      color: white;
-    }
+.btn {
+  background: #ff8fc7;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+}
 
-    /* Heart trail */
-    .heart {
-      position: fixed;
-      pointer-events: none;
-      font-size: 16px;
-      animation: float 1s linear forwards;
-    }
+/* Products */
+.products {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 25px;
+}
 
-    @keyframes float {
-      to {
-        transform: translateY(-20px);
-        opacity: 0;
-      }
-    }
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  animation: fadeUp 0.6s ease;
+}
 
-    /* Desktop scaling */
-    @media (min-width: 768px) {
-      body {
-        font-size: 18px;
-      }
+.card img {
+  width: 100%;
+  border-radius: 12px;
+}
 
-      h1 {
-        font-size: 36px;
-      }
+/* Socials */
+.socials {
+  padding: 30px;
+}
 
-      section {
-        max-width: 900px;
-        margin: auto;
-      }
-    }
-  </style>
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.social-links a {
+  background: #ffd6ec;
+  padding: 10px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #444;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.social-links a:hover {
+  background: #ffb3db;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .products {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 900px;
+    margin: auto;
+  }
+
+  .hero h1 {
+    font-size: 40px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Heart trail */
+.heart {
+  position: fixed;
+  pointer-events: none;
+  font-size: 14px;
+  animation: floatUp 1s linear forwards;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-25px);
+    opacity: 0;
+  }
+}
+</style>
 </head>
+
 <body>
 
 <header>Pawslyy</header>
 
-<section>
-  <h1>Welcome to Pawslyy</h1>
-  <p>Cute pets. Cute vibes. Cute everything.</p>
-  <button>Explore</button>
+<section class="hero">
+<h1>Cute Things for Cute Pets</h1>
+<p>Welcome to Pawslyy — soft, cozy pet accessories.</p>
+<button class="btn">Shop Now</button>
+</section>
+
+<section class="products">
+<div class="card">
+<img src="https://placekitten.com/300/200">
+<h3>Plush Bed</h3>
+<p>Super soft comfort.</p>
+</div>
+
+<div class="card">
+<img src="https://placekitten.com/301/200">
+<h3>Pink Collar</h3>
+<p>Stylish and comfy.</p>
+</div>
+
+<div class="card">
+<img src="https://placekitten.com/302/200">
+<h3>Cozy Blanket</h3>
+<p>Warm and fluffy.</p>
+</div>
+</section>
+
+<section class="socials">
+<h2>Follow Pawslyy</h2>
+<div class="social-links">
+<a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
+<a href="https://twitter.com/pawslyy" target="_blank">Twitter</a>
+<a href="https://t.me/pawslyy" target="_blank">Telegram</a>
+<a href="https://www.roblox.com/users/profile?username=inwjecting" target="_blank">Roblox</a>
+</div>
 </section>
 
 <!-- Music -->
-<audio id="bgMusic" loop>
-  <source src="song.mp3" type="audio/mpeg">
+<audio id="bgMusic" autoplay loop>
+<source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-  // Autoplay music (mobile needs interaction)
-  window.addEventListener("click", () => {
-    document.getElementById("bgMusic").play();
-  }, { once: true });
+// autoplay backup (mobile browsers require interaction)
+window.addEventListener("click", () => {
+  document.getElementById("bgMusic").play();
+}, { once: true });
 
-  // Heart cursor trail
-  document.addEventListener("mousemove", function(e) {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "💗";
-    heart.style.left = e.clientX + "px";
-    heart.style.top = e.clientY + "px";
-    document.body.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 1000);
-  });
+// pastel heart cursor trail
+document.addEventListener("mousemove", function(e) {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "💖";
+  heart.style.left = e.clientX + "px";
+  heart.style.top = e.clientY + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 900);
+});
 </script>
 
 </body>
