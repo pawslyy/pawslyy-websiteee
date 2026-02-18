@@ -6,9 +6,7 @@
 <title>Pawslyy</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -17,42 +15,33 @@ body {
   color: #d88fb3;
   text-align: center;
   overflow-x: hidden;
-  cursor: url("https://cur.cursors-4u.net/cursors/cur-9/cur817.cur"), auto;
 }
 
-/* page container */
-.container {
-  max-width: 720px;
-  margin: auto;
-  padding: 20px;
-}
-
-/* animated header */
+/* header decoration */
 .lace-header {
-  font-size: clamp(20px, 4vw, 36px);
+  font-size: clamp(22px, 4vw, 36px);
   padding: 16px;
   background: #ffeaf5;
-  animation: floatGlow 3s ease-in-out infinite,
-             pastelRainbow 6s linear infinite;
-}
-
-header {
-  font-size: clamp(22px, 5vw, 34px);
-  margin: 10px 0 20px 0;
+  color: #f4a6c0;
+  animation: floatGlow 3s ease-in-out infinite;
 }
 
 @keyframes floatGlow {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(6px); }
+  50% { transform: translateY(5px); }
   100% { transform: translateY(0px); }
 }
 
-@keyframes pastelRainbow {
-  0% { color: #f4a6c0; }
-  25% { color: #f7b6d2; }
-  50% { color: #cdb4db; }
-  75% { color: #bde0fe; }
-  100% { color: #ffc8dd; }
+header {
+  font-size: clamp(22px, 5vw, 34px);
+  margin: 12px 0 20px 0;
+}
+
+/* layout container */
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 20px;
 }
 
 /* cards */
@@ -62,9 +51,15 @@ header {
   padding: 24px;
   border-radius: 24px;
   box-shadow: 0 6px 18px rgba(255,182,214,0.3);
+  animation: fadeIn 0.8s ease;
 }
 
-/* social buttons */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* social links */
 .social-links {
   display: flex;
   flex-wrap: wrap;
@@ -79,57 +74,69 @@ header {
   text-decoration: none;
   color: #c96f9c;
   font-weight: bold;
+  transition: transform .15s;
 }
 
-/* game */
+.social-links a:hover {
+  transform: scale(1.08);
+}
+
+/* pixel jump game */
 #gameArea {
-  height: 220px;
-  background: #fff7fb;
+  height: 200px;
+  background: #ffeaf5;
   border-radius: 16px;
   position: relative;
   overflow: hidden;
-  margin-top: 10px;
+  border: 3px solid #ffd6ec;
 }
 
-.item {
+.player {
   position: absolute;
-  font-size: 26px;
-  cursor: pointer;
+  bottom: 0;
+  left: 40px;
+  font-size: 28px;
 }
 
-/* cursor trail */
-.symbol {
+.obstacle {
+  position: absolute;
+  bottom: 0;
+  right: -40px;
+  font-size: 28px;
+}
+
+.jump {
+  animation: jump 0.45s ease;
+}
+
+@keyframes jump {
+  0% { bottom: 0; }
+  50% { bottom: 70px; }
+  100% { bottom: 0; }
+}
+
+/* clean cursor sparkle */
+.sparkle {
   position: fixed;
   pointer-events: none;
-  font-size: 18px;
-  animation: floatUp 1s linear forwards;
+  font-size: 12px;
+  opacity: 0.6;
+  animation: sparkleFade 0.8s linear forwards;
 }
 
-@keyframes floatUp {
+@keyframes sparkleFade {
   to {
-    transform: translateY(-25px);
+    transform: translateY(-10px);
     opacity: 0;
   }
 }
 
-/* falling symbols */
-.fall {
-  position: fixed;
-  top: -20px;
-  font-size: 22px;
-  animation: fall linear forwards;
-}
-
-@keyframes fall {
-  to { transform: translateY(100vh); }
-}
-
-/* bottom decoration */
 .lace-bottom {
   font-size: clamp(18px, 3vw, 26px);
   padding: 14px;
   background: #ffeaf5;
   margin-top: 20px;
+  color: #f4a6c0;
 }
 </style>
 </head>
@@ -154,8 +161,10 @@ header {
 </div>
 
 <div class="card">
-<h3>catch the symbols ✧</h3>
-<div id="gameArea"></div>
+<h3>pixel jump game</h3>
+<div id="gameArea">
+<div class="player" id="player">୨୧</div>
+</div>
 <p>score: <span id="score">0</span></p>
 </div>
 
@@ -167,8 +176,12 @@ header {
 <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="popSound">
-<source src="https://assets.mixkit.co/sfx/preview/mixkit-bubble-pop-up-alert-notification-2357.mp3">
+<audio id="jumpSound">
+<source src="https://assets.mixkit.co/sfx/preview/mixkit-quick-jump-arcade-game-239.mp3">
+</audio>
+
+<audio id="hitSound">
+<source src="https://assets.mixkit.co/sfx/preview/mixkit-retro-arcade-lose-2027.mp3">
 </audio>
 
 <script>
@@ -176,56 +189,71 @@ window.addEventListener("click", () => {
   document.getElementById("bgMusic").play();
 }, { once: true });
 
-const symbols = ["♡","୨୧","✧","꒰","꒱","⋆"];
-
-/* cursor trail */
-document.addEventListener("mousemove", function(e) {
-  const el = document.createElement("div");
-  el.className = "symbol";
-  el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-  el.style.left = e.clientX + "px";
-  el.style.top = e.clientY + "px";
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1000);
+/* sparkle cursor */
+document.addEventListener("mousemove", e => {
+  const s = document.createElement("div");
+  s.className = "sparkle";
+  s.innerHTML = "✧";
+  s.style.left = e.clientX + "px";
+  s.style.top = e.clientY + "px";
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 800);
 });
 
-/* falling symbols */
-setInterval(() => {
-  const fall = document.createElement("div");
-  fall.className = "fall";
-  fall.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-  fall.style.left = Math.random() * 100 + "vw";
-  fall.style.animationDuration = (6 + Math.random() * 4) + "s";
-  document.body.appendChild(fall);
-  setTimeout(() => fall.remove(), 10000);
-}, 800);
-
-/* mini game */
-let score = 0;
+/* jump game */
+const player = document.getElementById("player");
 const gameArea = document.getElementById("gameArea");
-const popSound = document.getElementById("popSound");
+const jumpSound = document.getElementById("jumpSound");
+const hitSound = document.getElementById("hitSound");
 
-function spawnItem() {
-  const item = document.createElement("div");
-  item.className = "item";
-  item.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+let score = 0;
+let jumping = false;
 
-  item.style.left = Math.random() * 90 + "%";
-  item.style.top = Math.random() * 70 + "%";
-
-  item.onclick = () => {
-    popSound.currentTime = 0;
-    popSound.play();
-    score++;
-    document.getElementById("score").innerText = score;
-    item.remove();
-  };
-
-  gameArea.appendChild(item);
-  setTimeout(() => item.remove(), 2400);
+function jump() {
+  if (jumping) return;
+  jumping = true;
+  jumpSound.currentTime = 0;
+  jumpSound.play();
+  player.classList.add("jump");
+  setTimeout(() => {
+    player.classList.remove("jump");
+    jumping = false;
+  }, 450);
 }
 
-setInterval(spawnItem, 1100);
+document.addEventListener("keydown", jump);
+document.addEventListener("click", jump);
+
+function spawnObstacle() {
+  const obstacle = document.createElement("div");
+  obstacle.className = "obstacle";
+  obstacle.innerHTML = "✿";
+  gameArea.appendChild(obstacle);
+
+  let pos = gameArea.offsetWidth;
+  const move = setInterval(() => {
+    pos -= 5;
+    obstacle.style.right = (gameArea.offsetWidth - pos) + "px";
+
+    const playerBottom = parseInt(window.getComputedStyle(player).bottom);
+    if (pos < 80 && pos > 40 && playerBottom < 20) {
+      hitSound.play();
+      score = 0;
+      document.getElementById("score").innerText = score;
+      obstacle.remove();
+      clearInterval(move);
+    }
+
+    if (pos <= 0) {
+      score++;
+      document.getElementById("score").innerText = score;
+      obstacle.remove();
+      clearInterval(move);
+    }
+  }, 20);
+}
+
+setInterval(spawnObstacle, 2000);
 </script>
 
 </body>
