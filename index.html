@@ -2,21 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pawslyy</title>
 
 <style>
 body{
   margin:0;
   background:black;
-  font-family:Arial, Helvetica, sans-serif;
-  overflow:hidden;
+  font-family:Arial, sans-serif;
   color:white;
+  overflow:hidden;
 }
 
-/* stars */
+/* pixel cursor */
+body{
+  cursor:url("cursor.png"), auto;
+}
+
+/* stars background */
 .star{
-  position:fixed;
+  position:absolute;
   width:2px;
   height:2px;
   background:white;
@@ -25,21 +29,19 @@ body{
 
 /* falling hearts */
 .heart{
-  position:fixed;
+  position:absolute;
   color:#ffd1dc;
-  font-size:12px;
-  animation:fall 8s linear infinite;
+  font-size:14px;
+  animation:fall linear forwards;
 }
-
 @keyframes fall{
-  from{transform:translateY(-10px);}
-  to{transform:translateY(110vh);}
+  to{ transform:translateY(100vh); opacity:0; }
 }
 
-/* center card */
+/* main card */
 .card{
   position:absolute;
-  top:40%;
+  top:35%;
   left:50%;
   transform:translate(-50%,-50%);
   background:#111;
@@ -55,161 +57,178 @@ body{
 }
 
 /* music player */
-#musicPlayer{
-  position:fixed;
-  bottom:140px;
+.player{
+  position:absolute;
+  bottom:160px; /* moved up */
   left:50%;
   transform:translateX(-50%);
   background:#111;
   padding:10px 20px;
-  border-radius:14px;
+  border-radius:10px;
 }
 
-/* GAME FIXED POSITION */
-#gameContainer{
-  position:fixed;
-  bottom:40px;
+/* game canvas */
+#game{
+  position:absolute;
+  bottom:20px;
   left:50%;
   transform:translateX(-50%);
-  text-align:center;
+  background:#111;
 }
 
-#score{
-  font-size:14px;
-  margin-bottom:6px;
-  opacity:.8;
-}
-
-canvas{
-  background:#222;
-  border-radius:8px;
+/* bunny pet */
+#pet{
+  position:absolute;
+  width:70px;
+  transition:.2s;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="card" id="card">
 <h1>pawslyy</h1>
 <p>hi i love u ♡</p>
 
 <div class="links">
-<a href="https://www.tiktok.com/@stupidbunie" target="_blank">TikTok</a>
-<a href="https://x.com/pawslyy" target="_blank">Twitter</a>
-<a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-<a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
+<a href="https://www.tiktok.com/@stupidbunie">TikTok</a>
+<a href="https://x.com/pawslyy">Twitter</a>
+<a href="https://t.me/pawslyy">Telegram</a>
+<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
 </div>
 </div>
 
-<!-- music -->
-<div id="musicPlayer">
+<div class="player">
 u seemed so perfect
-<input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
+<input type="range" id="vol" min="0" max="1" step="0.01" value="0.5">
 </div>
 
-<audio id="music" src="music.mp3" autoplay loop></audio>
+<audio id="music" autoplay loop>
+<source src="music.mp3">
+</audio>
 
-<!-- game -->
-<div id="gameContainer">
-<div id="score">score: 0</div>
-<canvas id="gameCanvas" width="300" height="90"></canvas>
-</div>
+<canvas id="game" width="500" height="140"></canvas>
+
+<img id="pet" src="bunny.png">
 
 <script>
-/* autoplay fix */
-const music=document.getElementById("music");
-document.body.addEventListener("click",()=>music.play(),{once:true});
 
-document.getElementById("volume").oninput=e=>{
-music.volume=e.target.value;
+/* autoplay audio fix */
+window.addEventListener("click",()=>{
+  document.getElementById("music").play();
+},{once:true});
+
+document.getElementById("vol").oninput=e=>{
+  music.volume=e.target.value;
 };
 
 /* stars */
-for(let i=0;i<80;i++){
-let s=document.createElement("div");
-s.className="star";
-s.style.top=Math.random()*100+"vh";
-s.style.left=Math.random()*100+"vw";
-document.body.appendChild(s);
+for(let i=0;i<120;i++){
+  let s=document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*100+"vw";
+  s.style.top=Math.random()*100+"vh";
+  document.body.appendChild(s);
 }
 
 /* falling hearts */
 setInterval(()=>{
-let h=document.createElement("div");
-h.className="heart";
-h.innerHTML="♡";
-h.style.left=Math.random()*100+"vw";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),8000);
-},900);
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerText="♡";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=4+Math.random()*3+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+},500);
 
-/* mini game */
-const canvas=document.getElementById("gameCanvas");
-const ctx=canvas.getContext("2d");
+/* bunny pet */
+const pet=document.getElementById("pet");
+let state="idle";
 
-let bunnyY=60;
-let velocity=0;
-let gravity=.5;
+pet.style.left="50%";
+pet.style.top="200px";
+
+setInterval(()=>{
+  if(state==="idle"){
+    pet.style.transform="translateX("+(Math.sin(Date.now()/600)*10)+"px)";
+  }
+},30);
+
+pet.onclick=()=>{
+  state="happy";
+  pet.style.transform="scale(1.2)";
+  setTimeout(()=>{
+    pet.style.transform="scale(1)";
+    state="idle";
+  },800);
+};
+
+/* sleepy mode */
+setInterval(()=>{
+  state="sleepy";
+  pet.style.opacity=".6";
+},15000);
+
+setInterval(()=>{
+  state="idle";
+  pet.style.opacity="1";
+},20000);
+
+/* game */
+const c=document.getElementById("game");
+const ctx=c.getContext("2d");
+
+let bunnyY=100;
+let vel=0;
+let gravity=.6;
 let jumping=false;
-let obstacles=[];
+let obstacleX=500;
 let score=0;
 
 function jump(){
-if(!jumping){
-velocity=-8;
-jumping=true;
-}
+  if(!jumping){
+    vel=-10;
+    jumping=true;
+  }
 }
 
 document.addEventListener("keydown",e=>{
-if(e.code==="Space") jump();
+ if(e.code==="Space") jump();
 });
 
-canvas.addEventListener("click",jump);
+c.addEventListener("click",jump);
 
-function spawnObstacle(){
-obstacles.push({x:300});
+function loop(){
+  ctx.clearRect(0,0,500,140);
+
+  vel+=gravity;
+  bunnyY+=vel;
+  if(bunnyY>100){ bunnyY=100; jumping=false;}
+
+  ctx.fillStyle="white";
+  ctx.fillRect(50,bunnyY,20,20);
+
+  obstacleX-=4;
+  if(obstacleX<0){
+    obstacleX=500;
+    score++;
+  }
+
+  ctx.fillRect(obstacleX,100,15,30);
+
+  ctx.fillText("score: "+score,10,20);
+
+  if(obstacleX<70 && bunnyY>80){
+    obstacleX=500;
+    score=0;
+  }
+
+  requestAnimationFrame(loop);
 }
+loop();
 
-setInterval(spawnObstacle,2000);
-
-function gameLoop(){
-ctx.clearRect(0,0,300,90);
-
-velocity+=gravity;
-bunnyY+=velocity;
-
-if(bunnyY>60){
-bunnyY=60;
-velocity=0;
-jumping=false;
-}
-
-/* bunny */
-ctx.fillStyle="white";
-ctx.fillRect(20,bunnyY,10,10);
-
-/* obstacles */
-ctx.fillStyle="white";
-for(let o of obstacles){
-o.x-=3;
-ctx.fillRect(o.x,70,8,8);
-
-if(o.x<30 && o.x>20 && bunnyY>55){
-score=0;
-obstacles=[];
-}
-
-if(o.x===20) score++;
-}
-
-document.getElementById("score").innerText="score: "+score;
-
-requestAnimationFrame(gameLoop);
-}
-
-gameLoop();
 </script>
-
 </body>
 </html>
