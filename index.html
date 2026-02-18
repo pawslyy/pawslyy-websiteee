@@ -1,234 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>pawslyy</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pawslyy</title>
 
-<style>
-body{
-  margin:0;
-  background:black;
-  font-family:Arial, sans-serif;
-  color:white;
-  overflow:hidden;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background: #fff7fb;
+      text-align: center;
+      overflow-x: hidden;
+    }
 
-/* pixel cursor */
-body{
-  cursor:url("cursor.png"), auto;
-}
+    header {
+      background: #ffb6d9;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
 
-/* stars background */
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  opacity:.8;
-}
+    section {
+      padding: 25px;
+    }
 
-/* falling hearts */
-.heart{
-  position:absolute;
-  color:#ffd1dc;
-  font-size:14px;
-  animation:fall linear forwards;
-}
-@keyframes fall{
-  to{ transform:translateY(100vh); opacity:0; }
-}
+    h1 {
+      font-size: 28px;
+    }
 
-/* main card */
-.card{
-  position:absolute;
-  top:35%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:#111;
-  padding:40px 60px;
-  border-radius:18px;
-  text-align:center;
-}
+    p {
+      font-size: 18px;
+    }
 
-.links a{
-  color:white;
-  text-decoration:none;
-  margin:0 10px;
-}
+    button {
+      padding: 12px 18px;
+      font-size: 16px;
+      background: #ff6fb0;
+      border: none;
+      border-radius: 10px;
+      color: white;
+    }
 
-/* music player */
-.player{
-  position:absolute;
-  bottom:160px; /* moved up */
-  left:50%;
-  transform:translateX(-50%);
-  background:#111;
-  padding:10px 20px;
-  border-radius:10px;
-}
+    /* Heart trail */
+    .heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 16px;
+      animation: float 1s linear forwards;
+    }
 
-/* game canvas */
-#game{
-  position:absolute;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#111;
-}
+    @keyframes float {
+      to {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+    }
 
-/* bunny pet */
-#pet{
-  position:absolute;
-  width:70px;
-  transition:.2s;
-}
-</style>
+    /* Desktop scaling */
+    @media (min-width: 768px) {
+      body {
+        font-size: 18px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      section {
+        max-width: 900px;
+        margin: auto;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="card" id="card">
-<h1>pawslyy</h1>
-<p>hi i love u ♡</p>
+<header>Pawslyy</header>
 
-<div class="links">
-<a href="https://www.tiktok.com/@stupidbunie">TikTok</a>
-<a href="https://x.com/pawslyy">Twitter</a>
-<a href="https://t.me/pawslyy">Telegram</a>
-<a href="https://www.roblox.com/users/2634203674/profile">Roblox</a>
-</div>
-</div>
+<section>
+  <h1>Welcome to Pawslyy</h1>
+  <p>Cute pets. Cute vibes. Cute everything.</p>
+  <button>Explore</button>
+</section>
 
-<div class="player">
-u seemed so perfect
-<input type="range" id="vol" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<audio id="music" autoplay loop>
-<source src="music.mp3">
+<!-- Music -->
+<audio id="bgMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
 </audio>
 
-<canvas id="game" width="500" height="140"></canvas>
-
-<img id="pet" src="bunny.png">
-
 <script>
+  // Autoplay music (mobile needs interaction)
+  window.addEventListener("click", () => {
+    document.getElementById("bgMusic").play();
+  }, { once: true });
 
-/* autoplay audio fix */
-window.addEventListener("click",()=>{
-  document.getElementById("music").play();
-},{once:true});
+  // Heart cursor trail
+  document.addEventListener("mousemove", function(e) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💗";
+    heart.style.left = e.clientX + "px";
+    heart.style.top = e.clientY + "px";
+    document.body.appendChild(heart);
 
-document.getElementById("vol").oninput=e=>{
-  music.volume=e.target.value;
-};
-
-/* stars */
-for(let i=0;i<120;i++){
-  let s=document.createElement("div");
-  s.className="star";
-  s.style.left=Math.random()*100+"vw";
-  s.style.top=Math.random()*100+"vh";
-  document.body.appendChild(s);
-}
-
-/* falling hearts */
-setInterval(()=>{
-  let h=document.createElement("div");
-  h.className="heart";
-  h.innerText="♡";
-  h.style.left=Math.random()*100+"vw";
-  h.style.animationDuration=4+Math.random()*3+"s";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),7000);
-},500);
-
-/* bunny pet */
-const pet=document.getElementById("pet");
-let state="idle";
-
-pet.style.left="50%";
-pet.style.top="200px";
-
-setInterval(()=>{
-  if(state==="idle"){
-    pet.style.transform="translateX("+(Math.sin(Date.now()/600)*10)+"px)";
-  }
-},30);
-
-pet.onclick=()=>{
-  state="happy";
-  pet.style.transform="scale(1.2)";
-  setTimeout(()=>{
-    pet.style.transform="scale(1)";
-    state="idle";
-  },800);
-};
-
-/* sleepy mode */
-setInterval(()=>{
-  state="sleepy";
-  pet.style.opacity=".6";
-},15000);
-
-setInterval(()=>{
-  state="idle";
-  pet.style.opacity="1";
-},20000);
-
-/* game */
-const c=document.getElementById("game");
-const ctx=c.getContext("2d");
-
-let bunnyY=100;
-let vel=0;
-let gravity=.6;
-let jumping=false;
-let obstacleX=500;
-let score=0;
-
-function jump(){
-  if(!jumping){
-    vel=-10;
-    jumping=true;
-  }
-}
-
-document.addEventListener("keydown",e=>{
- if(e.code==="Space") jump();
-});
-
-c.addEventListener("click",jump);
-
-function loop(){
-  ctx.clearRect(0,0,500,140);
-
-  vel+=gravity;
-  bunnyY+=vel;
-  if(bunnyY>100){ bunnyY=100; jumping=false;}
-
-  ctx.fillStyle="white";
-  ctx.fillRect(50,bunnyY,20,20);
-
-  obstacleX-=4;
-  if(obstacleX<0){
-    obstacleX=500;
-    score++;
-  }
-
-  ctx.fillRect(obstacleX,100,15,30);
-
-  ctx.fillText("score: "+score,10,20);
-
-  if(obstacleX<70 && bunnyY>80){
-    obstacleX=500;
-    score=0;
-  }
-
-  requestAnimationFrame(loop);
-}
-loop();
-
+    setTimeout(() => heart.remove(), 1000);
+  });
 </script>
+
 </body>
 </html>
