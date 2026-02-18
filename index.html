@@ -2,20 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pawslyy</title>
 
 <style>
 body{
   margin:0;
   background:black;
-  font-family:Arial, sans-serif;
-  color:white;
+  font-family:Arial, Helvetica, sans-serif;
   overflow:hidden;
-}
-
-/* background elements shouldn't block clicks */
-.star, .heart {
-  pointer-events:none;
+  color:white;
 }
 
 /* stars */
@@ -24,7 +20,6 @@ body{
   width:2px;
   height:2px;
   background:white;
-  border-radius:50%;
   opacity:.8;
 }
 
@@ -32,196 +27,188 @@ body{
 .heart{
   position:fixed;
   color:#ffd1dc;
-  animation:fall 6s linear infinite;
-}
-@keyframes fall{
-  from{transform:translateY(-20px)}
-  to{transform:translateY(110vh)}
+  font-size:12px;
+  animation:fall 8s linear infinite;
 }
 
-/* card */
+@keyframes fall{
+  from{transform:translateY(-10px);}
+  to{transform:translateY(110vh);}
+}
+
+/* center card */
 .card{
   position:absolute;
   top:40%;
   left:50%;
   transform:translate(-50%,-50%);
   background:#111;
-  padding:40px 70px;
+  padding:40px 60px;
   border-radius:18px;
   text-align:center;
-  z-index:5;
 }
 
-/* links */
-.links{
-  margin-top:10px;
-}
 .links a{
-  margin:0 12px;
   color:white;
   text-decoration:none;
-  font-size:18px;
-}
-.links a:hover{
-  opacity:.6;
+  margin:0 10px;
 }
 
 /* music player */
-.player{
-  position:absolute;
+#musicPlayer{
+  position:fixed;
   bottom:140px;
   left:50%;
   transform:translateX(-50%);
   background:#111;
   padding:10px 20px;
   border-radius:14px;
-  z-index:5;
 }
 
-/* game */
-#game{
-  position:absolute;
-  bottom:0;
+/* GAME FIXED POSITION */
+#gameContainer{
+  position:fixed;
+  bottom:40px;
   left:50%;
   transform:translateX(-50%);
-  background:#000;
-  z-index:2;
+  text-align:center;
+}
+
+#score{
+  font-size:14px;
+  margin-bottom:6px;
+  opacity:.8;
+}
+
+canvas{
+  background:#222;
+  border-radius:8px;
 }
 </style>
 </head>
 
 <body>
 
-<audio id="song" src="music.mp3" autoplay loop></audio>
-
 <div class="card">
-  <h1>pawslyy</h1>
-  <div>hi i love u ♡</div>
+<h1>pawslyy</h1>
+<p>hi i love u ♡</p>
 
-  <div class="links">
-    <a href="https://www.tiktok.com/@stupidbunie" target="_blank">TikTok</a>
-    <a href="https://x.com/pawslyy" target="_blank">Twitter</a>
-    <a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-    <a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
-  </div>
+<div class="links">
+<a href="https://www.tiktok.com/@stupidbunie" target="_blank">TikTok</a>
+<a href="https://x.com/pawslyy" target="_blank">Twitter</a>
+<a href="https://t.me/pawslyy" target="_blank">Telegram</a>
+<a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
+</div>
 </div>
 
-<div class="player">
-  u seemed so perfect
-  <input type="range" min="0" max="1" step="0.01"
-    value="1"
-    oninput="song.volume=this.value">
+<!-- music -->
+<div id="musicPlayer">
+u seemed so perfect
+<input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
 </div>
 
-<canvas id="game" width="420" height="150"></canvas>
+<audio id="music" src="music.mp3" autoplay loop></audio>
+
+<!-- game -->
+<div id="gameContainer">
+<div id="score">score: 0</div>
+<canvas id="gameCanvas" width="300" height="90"></canvas>
+</div>
 
 <script>
-const song=document.getElementById("song");
+/* autoplay fix */
+const music=document.getElementById("music");
+document.body.addEventListener("click",()=>music.play(),{once:true});
+
+document.getElementById("volume").oninput=e=>{
+music.volume=e.target.value;
+};
 
 /* stars */
 for(let i=0;i<80;i++){
-  let s=document.createElement("div");
-  s.className="star";
-  s.style.left=Math.random()*100+"vw";
-  s.style.top=Math.random()*100+"vh";
-  document.body.appendChild(s);
+let s=document.createElement("div");
+s.className="star";
+s.style.top=Math.random()*100+"vh";
+s.style.left=Math.random()*100+"vw";
+document.body.appendChild(s);
 }
 
 /* falling hearts */
 setInterval(()=>{
-  let h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="♡";
-  h.style.left=Math.random()*100+"vw";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
-},600);
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="♡";
+h.style.left=Math.random()*100+"vw";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),8000);
+},900);
 
-/* heart cursor trail */
-document.addEventListener("mousemove",e=>{
-  let t=document.createElement("div");
-  t.innerHTML="♡";
-  t.style.position="fixed";
-  t.style.left=e.clientX+"px";
-  t.style.top=e.clientY+"px";
-  t.style.color="#ffd1dc";
-  t.style.fontSize="12px";
-  t.style.pointerEvents="none";
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),500);
-});
-
-/* bunny runner game */
-const canvas=document.getElementById("game");
+/* mini game */
+const canvas=document.getElementById("gameCanvas");
 const ctx=canvas.getContext("2d");
 
-let bunny={x:50,y:110,w:20,h:20,vy:0,jumping:false};
+let bunnyY=60;
+let velocity=0;
+let gravity=.5;
+let jumping=false;
 let obstacles=[];
-let gravity=.6;
-let ground=110;
 let score=0;
-let frame=0;
-
-function spawn(){
-  obstacles.push({x:420,y:115,w:12,h:15});
-}
-
-function loop(){
-  ctx.clearRect(0,0,420,150);
-
-  ctx.fillStyle="#222";
-  ctx.fillRect(0,130,420,20);
-
-  bunny.vy+=gravity;
-  bunny.y+=bunny.vy;
-
-  if(bunny.y>=ground){
-    bunny.y=ground;
-    bunny.jumping=false;
-  }
-
-  ctx.fillStyle="white";
-  ctx.fillRect(bunny.x,bunny.y,bunny.w,bunny.h);
-
-  if(frame%90===0) spawn();
-
-  obstacles.forEach((o,i)=>{
-    o.x-=4;
-    ctx.fillRect(o.x,o.y,o.w,o.h);
-
-    if(
-      bunny.x<o.x+o.w &&
-      bunny.x+bunny.w>o.x &&
-      bunny.y<o.y+o.h &&
-      bunny.y+bunny.h>o.y
-    ){
-      obstacles=[];
-      score=0;
-    }
-
-    if(o.x<-20){
-      obstacles.splice(i,1);
-      score++;
-    }
-  });
-
-  ctx.fillStyle="white";
-  ctx.fillText("score: "+score,10,12);
-
-  frame++;
-  requestAnimationFrame(loop);
-}
-loop();
 
 function jump(){
-  if(!bunny.jumping){
-    bunny.vy=-10;
-    bunny.jumping=true;
-  }
+if(!jumping){
+velocity=-8;
+jumping=true;
+}
 }
 
-document.addEventListener("keydown",jump);
-canvas.addEventListener("touchstart",jump);
+document.addEventListener("keydown",e=>{
+if(e.code==="Space") jump();
+});
+
+canvas.addEventListener("click",jump);
+
+function spawnObstacle(){
+obstacles.push({x:300});
+}
+
+setInterval(spawnObstacle,2000);
+
+function gameLoop(){
+ctx.clearRect(0,0,300,90);
+
+velocity+=gravity;
+bunnyY+=velocity;
+
+if(bunnyY>60){
+bunnyY=60;
+velocity=0;
+jumping=false;
+}
+
+/* bunny */
+ctx.fillStyle="white";
+ctx.fillRect(20,bunnyY,10,10);
+
+/* obstacles */
+ctx.fillStyle="white";
+for(let o of obstacles){
+o.x-=3;
+ctx.fillRect(o.x,70,8,8);
+
+if(o.x<30 && o.x>20 && bunnyY>55){
+score=0;
+obstacles=[];
+}
+
+if(o.x===20) score++;
+}
+
+document.getElementById("score").innerText="score: "+score;
+
+requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
 </script>
 
 </body>
