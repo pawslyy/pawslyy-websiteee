@@ -19,8 +19,8 @@ body{
   width:2px;
   height:2px;
   background:white;
-  opacity:.8;
   border-radius:50%;
+  opacity:.8;
 }
 
 /* falling hearts */
@@ -34,7 +34,7 @@ body{
   to{transform:translateY(110vh)}
 }
 
-/* main card */
+/* card */
 .card{
   position:absolute;
   top:40%;
@@ -47,16 +47,20 @@ body{
 }
 
 /* links */
+.links{
+  margin-top:10px;
+}
 .links a{
-  margin:0 10px;
+  margin:0 12px;
   color:white;
   text-decoration:none;
+  font-size:18px;
 }
 .links a:hover{
   opacity:.6;
 }
 
-/* music bar */
+/* music player */
 .player{
   position:absolute;
   bottom:140px;
@@ -87,7 +91,7 @@ body{
   <div>hi i love u ♡</div>
 
   <div class="links">
-    <a href="https://tiktok.com" target="_blank">TikTok</a>
+    <a href="https://www.tiktok.com/@stupidbunie" target="_blank">TikTok</a>
     <a href="https://x.com/pawslyy" target="_blank">Twitter</a>
     <a href="https://t.me/pawslyy" target="_blank">Telegram</a>
     <a href="https://www.roblox.com/users/2634203674/profile" target="_blank">Roblox</a>
@@ -101,7 +105,7 @@ body{
     oninput="song.volume=this.value">
 </div>
 
-<canvas id="game" width="400" height="150"></canvas>
+<canvas id="game" width="420" height="150"></canvas>
 
 <script>
 /* stars */
@@ -147,18 +151,15 @@ let ground=110;
 let score=0;
 let frame=0;
 
-let jumpSound=new Audio("music.mp3");
-jumpSound.volume=.05;
-
 function spawn(){
-  obstacles.push({x:400,y:115,w:12,h:15});
+  obstacles.push({x:420,y:115,w:12,h:15});
 }
 
 function loop(){
-  ctx.clearRect(0,0,400,150);
+  ctx.clearRect(0,0,420,150);
 
   ctx.fillStyle="#222";
-  ctx.fillRect(0,130,400,20);
+  ctx.fillRect(0,130,420,20);
 
   bunny.vy+=gravity;
   bunny.y+=bunny.vy;
@@ -168,6 +169,7 @@ function loop(){
     bunny.jumping=false;
   }
 
+  /* bunny */
   ctx.fillStyle="white";
   ctx.fillRect(bunny.x,bunny.y,bunny.w,bunny.h);
 
@@ -193,6 +195,7 @@ function loop(){
     }
   });
 
+  ctx.fillStyle="white";
   ctx.fillText("score: "+score,10,12);
 
   frame++;
@@ -204,7 +207,6 @@ function jump(){
   if(!bunny.jumping){
     bunny.vy=-10;
     bunny.jumping=true;
-    jumpSound.play();
   }
 }
 
