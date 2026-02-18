@@ -13,55 +13,70 @@ body {
   color: #d88fb3;
   text-align: center;
   overflow-x: hidden;
+  font-size: 140%;
 }
 
-/* decorative borders */
 .border-top, .border-bottom {
   background: #ffeaf5;
-  padding: 10px;
-  font-size: 18px;
-  letter-spacing: 4px;
+  padding: 14px;
+  font-size: 26px;
+  letter-spacing: 6px;
 }
 
 header {
-  font-size: 24px;
-  padding: 10px;
+  font-size: 34px;
+  padding: 14px;
 }
 
-/* main card */
 .card {
   background: #ffffffcc;
   margin: 30px auto;
-  padding: 25px;
-  border-radius: 25px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 6px 16px rgba(255,182,214,0.4);
+  padding: 35px;
+  border-radius: 30px;
+  width: 92%;
+  max-width: 650px;
+  box-shadow: 0 8px 20px rgba(255,182,214,0.4);
 }
 
-/* links */
 .social-links a {
   display: inline-block;
   background: #ffd6ec;
-  margin: 6px;
-  padding: 10px 14px;
-  border-radius: 14px;
+  margin: 8px;
+  padding: 14px 20px;
+  border-radius: 18px;
   text-decoration: none;
   color: #c96f9c;
   font-weight: bold;
+  font-size: 20px;
+}
+
+/* mini game */
+#gameArea {
+  height: 230px;
+  background: #fff7fb;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.item {
+  position: absolute;
+  font-size: 30px;
+  cursor: pointer;
 }
 
 /* cursor symbols */
 .symbol {
   position: fixed;
   pointer-events: none;
-  font-size: 14px;
-  animation: floatUp 1s linear forwards;
+  font-size: 22px;
+  animation: floatUp 1.2s linear forwards;
 }
 
 @keyframes floatUp {
   to {
-    transform: translateY(-20px);
+    transform: translateY(-30px);
     opacity: 0;
   }
 }
@@ -69,7 +84,8 @@ header {
 /* falling symbols */
 .fall {
   position: fixed;
-  top: -10px;
+  top: -20px;
+  font-size: 26px;
   animation: fall linear forwards;
 }
 
@@ -81,12 +97,12 @@ header {
 
 <body>
 
-<div class="border-top">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
+<div class="border-top">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
 
 <header>Pawslyy</header>
 
 <div class="card">
-<h2>꒰ ♡ ꒱</h2>
+<h2>hi angels ૮₍ ˶ᵔ ᵕ ᵔ˶ ₎ა</h2>
 <p>my cute pastel internet space</p>
 
 <div class="social-links">
@@ -97,7 +113,13 @@ header {
 </div>
 </div>
 
-<div class="border-bottom">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
+<div class="card">
+<h3>catch the symbols ✧</h3>
+<div id="gameArea"></div>
+<p>score: <span id="score">0</span></p>
+</div>
+
+<div class="border-bottom">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
 
 <audio id="bgMusic" autoplay loop>
 <source src="music.mp3" type="audio/mpeg">
@@ -108,9 +130,9 @@ window.addEventListener("click", () => {
   document.getElementById("bgMusic").play();
 }, { once: true });
 
-/* cursor symbol trail */
 const symbols = ["♡","୨୧","✧","꒰","꒱","⋆"];
 
+/* cursor trail */
 document.addEventListener("mousemove", function(e) {
   const el = document.createElement("div");
   el.className = "symbol";
@@ -118,19 +140,43 @@ document.addEventListener("mousemove", function(e) {
   el.style.left = e.clientX + "px";
   el.style.top = e.clientY + "px";
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 900);
+  setTimeout(() => el.remove(), 1200);
 });
 
-/* falling symbols */
+/* falling symbols slower */
 setInterval(() => {
   const fall = document.createElement("div");
   fall.className = "fall";
   fall.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
   fall.style.left = Math.random() * 100 + "vw";
-  fall.style.animationDuration = (3 + Math.random() * 3) + "s";
+  fall.style.animationDuration = (6 + Math.random() * 4) + "s";
   document.body.appendChild(fall);
-  setTimeout(() => fall.remove(), 6000);
-}, 500);
+  setTimeout(() => fall.remove(), 10000);
+}, 700);
+
+/* mini game */
+let score = 0;
+const gameArea = document.getElementById("gameArea");
+
+function spawnItem() {
+  const item = document.createElement("div");
+  item.className = "item";
+  item.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+
+  item.style.left = Math.random() * 90 + "%";
+  item.style.top = Math.random() * 70 + "%";
+
+  item.onclick = () => {
+    score++;
+    document.getElementById("score").innerText = score;
+    item.remove();
+  };
+
+  gameArea.appendChild(item);
+  setTimeout(() => item.remove(), 2400);
+}
+
+setInterval(spawnItem, 1100);
 </script>
 
 </body>
