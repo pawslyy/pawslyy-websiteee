@@ -8,24 +8,19 @@
 <style>
 body {
   margin: 0;
-  font-family: "Comic Sans MS", "Segoe UI", sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background: #fff6fb;
   color: #d88fb3;
   text-align: center;
   overflow-x: hidden;
 }
 
-/* bow borders */
+/* decorative borders */
 .border-top, .border-bottom {
-  background: repeating-linear-gradient(
-    90deg,
-    #ffd6ec,
-    #ffd6ec 40px,
-    #ffeaf5 40px,
-    #ffeaf5 80px
-  );
-  padding: 12px;
+  background: #ffeaf5;
+  padding: 10px;
   font-size: 18px;
+  letter-spacing: 4px;
 }
 
 header {
@@ -56,8 +51,8 @@ header {
   font-weight: bold;
 }
 
-/* cursor hearts */
-.heart {
+/* cursor symbols */
+.symbol {
   position: fixed;
   pointer-events: none;
   font-size: 14px;
@@ -71,7 +66,7 @@ header {
   }
 }
 
-/* falling stars */
+/* falling symbols */
 .fall {
   position: fixed;
   top: -10px;
@@ -86,12 +81,12 @@ header {
 
 <body>
 
-<div class="border-top">🎀 🎀 🎀 🎀 🎀 🎀 🎀 🎀</div>
+<div class="border-top">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
 
 <header>Pawslyy</header>
 
 <div class="card">
-<h2>૮₍ ˶ᵔ ᵕ ᵔ˶ ₎ა</h2>
+<h2>꒰ ♡ ꒱</h2>
 <p>my cute pastel internet space</p>
 
 <div class="social-links">
@@ -102,7 +97,7 @@ header {
 </div>
 </div>
 
-<div class="border-bottom">🎀 🎀 🎀 🎀 🎀 🎀 🎀 🎀</div>
+<div class="border-bottom">୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧ ♡ ୨୧</div>
 
 <audio id="bgMusic" autoplay loop>
 <source src="music.mp3" type="audio/mpeg">
@@ -113,22 +108,24 @@ window.addEventListener("click", () => {
   document.getElementById("bgMusic").play();
 }, { once: true });
 
-/* cursor hearts */
+/* cursor symbol trail */
+const symbols = ["♡","୨୧","✧","꒰","꒱","⋆"];
+
 document.addEventListener("mousemove", function(e) {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "💗";
-  heart.style.left = e.clientX + "px";
-  heart.style.top = e.clientY + "px";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 900);
+  const el = document.createElement("div");
+  el.className = "symbol";
+  el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+  el.style.left = e.clientX + "px";
+  el.style.top = e.clientY + "px";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 900);
 });
 
-/* falling stars */
+/* falling symbols */
 setInterval(() => {
   const fall = document.createElement("div");
   fall.className = "fall";
-  fall.innerHTML = "⭐";
+  fall.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
   fall.style.left = Math.random() * 100 + "vw";
   fall.style.animationDuration = (3 + Math.random() * 3) + "s";
   document.body.appendChild(fall);
