@@ -7,76 +7,63 @@
 
 <style>
 :root{
+--bg:#f6e7ea;
+--glass:rgba(255,255,255,.45);
 --pink1:#eec7cf;
 --pink2:#f3d5da;
---pink3:#f7e5e9;
 --text:#b98f86;
---text2:#caa29a;
---glass: rgba(255,255,255,.45);
---glass2: rgba(255,255,255,.25);
---shadow:0 14px 40px rgba(180,140,130,.25);
---shadow2:0 10px 24px rgba(180,140,130,.18);
---radius:22px;
---radius2:16px;
+--radius:20px;
+--shadow:0 10px 30px rgba(160,120,110,.2);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{
+background:url("bg.jpg") center/cover fixed;
 font-family:'Segoe UI',sans-serif;
-background:url("bg.jpg") center/cover no-repeat fixed;
-min-height:100vh;
 overflow-x:hidden;
 }
 
-/* overlay tint for readability */
 body::before{
 content:"";
 position:fixed;
 inset:0;
-background:rgba(255,255,255,0.35);
+background:rgba(255,255,255,.35);
 backdrop-filter:blur(2px);
 z-index:-1;
 }
 
-.lace-header{
+/* HEADER */
+.header{
 text-align:center;
 padding:14px;
-background:var(--glass);
-color:var(--text2);
-font-size:clamp(20px,4vw,36px);
+font-size:28px;
+color:var(--text);
 animation:float 4s ease-in-out infinite;
 }
 
 @keyframes float{
 0%,100%{transform:translateY(0)}
-50%{transform:translateY(5px)}
+50%{transform:translateY(6px)}
 }
 
-.container{
-width:min(720px,92vw);
-margin:auto;
-padding:20px;
-display:flex;
-flex-direction:column;
-gap:16px;
-}
-
-.brand{
-text-align:center;
-font-size:clamp(22px,5vw,34px);
-color:var(--text);
-font-weight:bold;
-}
-
+/* CARDS */
 .card{
 background:var(--glass);
-backdrop-filter:blur(12px);
+backdrop-filter:blur(10px);
 padding:20px;
+margin:20px auto;
+width:min(700px,90vw);
 border-radius:var(--radius);
 box-shadow:var(--shadow);
+transition:.2s;
 }
 
+.card:hover{
+transform:translateY(-4px);
+}
+
+/* SOCIALS */
 .socials{
 display:flex;
 flex-wrap:wrap;
@@ -86,31 +73,26 @@ justify-content:center;
 
 .socials a{
 background:var(--pink2);
-padding:12px 16px;
-border-radius:14px;
+padding:10px 16px;
+border-radius:12px;
 text-decoration:none;
 color:var(--text);
 font-weight:bold;
-transition:.2s;
 }
 
-.socials a:hover{
-transform:scale(1.05);
-}
-
-.gameWrap{
+/* GAME */
+#game{
 height:200px;
-background:var(--pink3);
-border-radius:var(--radius2);
+background:var(--pink1);
+border-radius:16px;
 position:relative;
 overflow:hidden;
-border:2px solid var(--pink2);
 }
 
 #player{
 position:absolute;
+bottom:22px;
 left:40px;
-bottom:26px;
 font-size:28px;
 }
 
@@ -127,170 +109,211 @@ animation:jump .45s ease;
 .ground{
 position:absolute;
 bottom:0;
-width:100%;
-height:22px;
-background:var(--pink1);
+height:20px;
+width:200%;
+background:var(--pink2);
+animation:move 1s linear infinite;
+}
+
+@keyframes move{
+from{transform:translateX(0)}
+to{transform:translateX(-50%)}
 }
 
 .obstacle{
 position:absolute;
-bottom:24px;
+bottom:22px;
 font-size:28px;
-right:-50px;
+right:-40px;
 }
 
+/* OVERLAY */
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(255,255,255,.6);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+}
+
+/* HUD */
 .hud{
 display:flex;
 justify-content:space-between;
-margin-top:10px;
+margin-top:8px;
 color:var(--text);
-font-weight:bold;
 }
 
-.cursorDot{
+.pop{
+animation:pop .2s;
+}
+
+@keyframes pop{
+50%{transform:scale(1.2)}
+}
+
+/* CURSOR */
+.dot{
 position:fixed;
 width:8px;
 height:8px;
-border-radius:50%;
 background:var(--pink1);
+border-radius:50%;
 pointer-events:none;
-transform:translate(-50%,-50%);
-z-index:9999;
+z-index:999;
 }
 
-.lace-bottom{
-text-align:center;
-padding:12px;
+.ring{
+position:fixed;
+width:20px;
+height:20px;
+border:2px solid var(--pink1);
+border-radius:50%;
+pointer-events:none;
+z-index:998;
+}
+
+/* MUSIC BUTTON */
+.music{
+position:fixed;
+bottom:15px;
+right:15px;
 background:var(--glass);
-color:var(--text2);
-font-size:clamp(18px,3vw,26px);
+padding:10px;
+border-radius:14px;
+box-shadow:var(--shadow);
+cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="lace-header">⊹₊˚‧︵‿₊୨ᰔ୧₊‿︵‧˚₊⊹</div>
-
-<div class="container">
-
-<div class="brand">Pawslyy</div>
+<div class="header">⊹₊˚‧︵‿₊୨ᰔ୧₊‿︵‧˚₊⊹</div>
 
 <div class="card">
 <div class="socials">
 <a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
 <a href="https://twitter.com/pawslyy" target="_blank">Twitter</a>
 <a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-<a href="https://www.roblox.com/users/profile?username=inwjecting" target="_blank">Roblox</a>
+<a href="https://roblox.com/users/profile?username=inwjecting" target="_blank">Roblox</a>
 </div>
 </div>
 
 <div class="card">
-<div class="gameWrap" id="game">
+<div id="game">
 <div id="player">୨୧</div>
 <div class="ground"></div>
+<div class="overlay" id="overlay">
+<button onclick="start()">start</button>
+</div>
 </div>
 <div class="hud">
-<div>score: <span id="score">0</span></div>
-<div>best: <span id="best">0</span></div>
+score:<span id="score">0</span>
+best:<span id="best">0</span>
 </div>
 </div>
 
-</div>
+<div class="dot" id="dot"></div>
+<div class="ring" id="ring"></div>
 
-<div class="lace-bottom">⊹₊˚‧︵‿₊୨ᰔ୧₊‿︵‧˚₊⊹</div>
+<div class="music" onclick="toggle()">♫</div>
 
-<div class="cursorDot" id="cursorDot"></div>
-
-<audio id="bgMusic" autoplay loop>
+<audio id="music" autoplay loop>
 <source src="music.mp3">
 </audio>
 
 <script>
-window.addEventListener("click",()=>bgMusic.play(),{once:true});
+music.play().catch(()=>{});
+document.addEventListener("click",()=>music.play(),{once:true});
 
+function toggle(){
+music.paused?music.play():music.pause();
+}
+
+/* CURSOR */
 document.addEventListener("mousemove",e=>{
-cursorDot.style.left=e.clientX+"px";
-cursorDot.style.top=e.clientY+"px";
+dot.style.left=e.clientX+"px";
+dot.style.top=e.clientY+"px";
+ring.style.left=e.clientX-6+"px";
+ring.style.top=e.clientY-6+"px";
 });
 
+/* GAME */
 let score=0;
 let best=localStorage.getItem("best")||0;
-document.getElementById("best").textContent=best;
-
-const player=document.getElementById("player");
-const game=document.getElementById("game");
-let jumping=false;
-let running=true;
+bestEl=document.getElementById("best");
+bestEl.textContent=best;
+let running=false;
 let speed=4;
 
 function jump(){
-if(jumping)return;
-jumping=true;
+if(!running)return;
 player.classList.add("jump");
-setTimeout(()=>{
-player.classList.remove("jump");
-jumping=false;
-},450);
+setTimeout(()=>player.classList.remove("jump"),450);
 }
 
 document.addEventListener("keydown",jump);
 document.addEventListener("click",jump);
 
-function spawnObstacle(){
+function start(){
+overlay.style.display="none";
+running=true;
+spawn();
+}
+
+function spawn(){
+if(!running)return;
+
 const obs=document.createElement("div");
 obs.className="obstacle";
 obs.innerHTML="✿";
 game.appendChild(obs);
 
 let passed=false;
-let x=-50;
+let x=-40;
 
 const move=setInterval(()=>{
-
 x+=speed;
 obs.style.right=x+"px";
 
-const pRect=player.getBoundingClientRect();
-const oRect=obs.getBoundingClientRect();
+const p=player.getBoundingClientRect();
+const o=obs.getBoundingClientRect();
 
-const hit=
-pRect.right-12>oRect.left &&
-pRect.left+12<oRect.right &&
-pRect.bottom-12>oRect.top &&
-pRect.top+12<oRect.bottom;
-
-if(hit){
+if(p.right-10>o.left&&p.bottom-10>o.top&&p.left+10<o.right){
 running=false;
+overlay.style.display="flex";
 score=0;
-document.getElementById("score").textContent=score;
+scoreEl.textContent=score;
 obs.remove();
 clearInterval(move);
-running=true;
 return;
 }
 
-if(!passed && oRect.right<pRect.left){
+if(!passed&&o.right<p.left){
 passed=true;
 score++;
-document.getElementById("score").textContent=score;
+scoreEl.textContent=score;
+scoreEl.classList.add("pop");
+setTimeout(()=>scoreEl.classList.remove("pop"),200);
 if(score>best){
 best=score;
 localStorage.setItem("best",best);
-document.getElementById("best").textContent=best;
+bestEl.textContent=best;
 }
 }
 
-if(oRect.right<0){
+if(o.right<0){
 obs.remove();
 clearInterval(move);
 }
 
 },16);
+
+setTimeout(spawn,2000-Math.random()*500);
 }
-
-setInterval(spawnObstacle,2000);
 </script>
-
 </body>
 </html>
