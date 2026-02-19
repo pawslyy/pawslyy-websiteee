@@ -1,319 +1,661 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pawslyy</title>
 
 <style>
+/* ========= Design System ========= */
 :root{
---bg:#f6e7ea;
---glass:rgba(255,255,255,.45);
---pink1:#eec7cf;
---pink2:#f3d5da;
---text:#b98f86;
---radius:20px;
---shadow:0 10px 30px rgba(160,120,110,.2);
+  --bgTint: rgba(255,255,255,.28);
+
+  --ink: #b98f86;
+  --ink2:#caa29a;
+
+  --pink1:#eec7cf;
+  --pink2:#f3d5da;
+  --pink3:#f7e5e9;
+
+  --glass: rgba(255,255,255,.55);
+  --glass2: rgba(255,255,255,.35);
+
+  --shadow: 0 14px 40px rgba(160,120,110,.20);
+  --shadow2: 0 10px 24px rgba(160,120,110,.15);
+
+  --r: 22px;
+  --r2: 16px;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
 
+/* ========= Background ========= */
 body{
-background:url("bg.jpg") center/cover fixed;
-font-family:'Segoe UI',sans-serif;
-overflow-x:hidden;
+  font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: url("bg.jpg") center/cover no-repeat fixed;
+  color: var(--ink2);
+  overflow-x:hidden;
 }
 
 body::before{
-content:"";
-position:fixed;
-inset:0;
-background:rgba(255,255,255,.35);
-backdrop-filter:blur(2px);
-z-index:-1;
+  content:"";
+  position:fixed;
+  inset:0;
+  background: var(--bgTint);
+  backdrop-filter: blur(2px);
+  z-index:-1;
 }
 
-/* HEADER */
-.header{
-text-align:center;
-padding:14px;
-font-size:28px;
-color:var(--text);
-animation:float 4s ease-in-out infinite;
+/* ========= Header Decoration ========= */
+.lace{
+  width:100%;
+  text-align:center;
+  padding: 14px 12px;
+  background: rgba(255,255,255,.35);
+  border-bottom: 1px solid rgba(238,199,207,.55);
+  backdrop-filter: blur(10px);
+  color: var(--ink2);
+  font-size: clamp(18px, 4vw, 34px);
+  animation: laceFloat 4s ease-in-out infinite;
+}
+@keyframes laceFloat{
+  0%,100%{ transform: translateY(0); text-shadow: 0 0 0 rgba(238,199,207,0); }
+  50%{ transform: translateY(6px); text-shadow: 0 10px 26px rgba(238,199,207,.35); }
 }
 
-@keyframes float{
-0%,100%{transform:translateY(0)}
-50%{transform:translateY(6px)}
+/* ========= Layout ========= */
+.container{
+  width: min(760px, 92vw);
+  margin: 18px auto 26px;
+  display:flex;
+  flex-direction:column;
+  gap: 16px;
+  padding-bottom: 90px;
 }
 
-/* CARDS */
+.brand{
+  text-align:center;
+  font-size: clamp(22px, 5vw, 34px);
+  color: var(--ink);
+  font-weight: 900;
+  letter-spacing: .5px;
+  animation: fadeUp .7s ease both;
+}
+@keyframes fadeUp{
+  from{opacity:0; transform: translateY(10px);}
+  to{opacity:1; transform: translateY(0);}
+}
+
 .card{
-background:var(--glass);
-backdrop-filter:blur(10px);
-padding:20px;
-margin:20px auto;
-width:min(700px,90vw);
-border-radius:var(--radius);
-box-shadow:var(--shadow);
-transition:.2s;
+  background: var(--glass);
+  border: 1px solid rgba(238,199,207,.55);
+  backdrop-filter: blur(14px);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  transition: transform .18s ease, box-shadow .18s ease;
+  animation: fadeUp .7s ease both;
 }
-
 .card:hover{
-transform:translateY(-4px);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 48px rgba(160,120,110,.22);
 }
 
-/* SOCIALS */
+/* ========= Social Links ========= */
 .socials{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-justify-content:center;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
 }
-
 .socials a{
-background:var(--pink2);
-padding:10px 16px;
-border-radius:12px;
-text-decoration:none;
-color:var(--text);
-font-weight:bold;
+  text-decoration:none;
+  color: var(--ink);
+  font-weight: 900;
+  background: rgba(243,213,218,.85);
+  border: 1px solid rgba(238,199,207,.65);
+  padding: 12px 16px;
+  border-radius: 14px;
+  box-shadow: 0 10px 18px rgba(160,120,110,.10);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.socials a:hover{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 16px 26px rgba(160,120,110,.16);
 }
 
-/* GAME */
-#game{
-height:200px;
-background:var(--pink1);
-border-radius:16px;
-position:relative;
-overflow:hidden;
+/* ========= Game ========= */
+.gameTitle{
+  text-align:center;
+  color: var(--ink);
+  font-weight: 1000;
+  letter-spacing: .2px;
+  margin-bottom: 10px;
 }
 
+.gameWrap{
+  position: relative;
+  height: 220px;
+  border-radius: var(--r2);
+  background: rgba(247,229,233,.88);
+  border: 2px solid rgba(243,213,218,.95);
+  overflow:hidden;
+}
+
+/* subtle pixel grid */
+.gameWrap::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(to right, rgba(238,199,207,.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(238,199,207,.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity:.35;
+  pointer-events:none;
+}
+
+/* player + obstacles */
 #player{
-position:absolute;
-bottom:22px;
-left:40px;
-font-size:28px;
+  position:absolute;
+  left: 56px;
+  bottom: 26px;
+  font-size: 30px;
+  filter: drop-shadow(0 10px 14px rgba(160,120,110,.18));
+  will-change: transform;
 }
-
-.jump{
-animation:jump .45s ease;
-}
-
-@keyframes jump{
-0%{transform:translateY(0)}
-50%{transform:translateY(-80px)}
-100%{transform:translateY(0)}
-}
-
-.ground{
-position:absolute;
-bottom:0;
-height:20px;
-width:200%;
-background:var(--pink2);
-animation:move 1s linear infinite;
-}
-
-@keyframes move{
-from{transform:translateX(0)}
-to{transform:translateX(-50%)}
-}
-
 .obstacle{
-position:absolute;
-bottom:22px;
-font-size:28px;
-right:-40px;
+  position:absolute;
+  bottom: 26px;
+  font-size: 28px;
+  filter: drop-shadow(0 10px 14px rgba(160,120,110,.14));
+  will-change: transform;
 }
 
-/* OVERLAY */
-.overlay{
-position:absolute;
-inset:0;
-background:rgba(255,255,255,.6);
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
+/* ground */
+.ground{
+  position:absolute;
+  left:0; right:0;
+  bottom:0;
+  height: 22px;
+  background: linear-gradient(90deg, rgba(238,199,207,.85), rgba(243,213,218,.85));
+  border-top: 2px solid rgba(238,199,207,.75);
+}
+.ground::after{
+  content:"";
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,255,255,.35) 0 12px,
+    rgba(255,255,255,0) 12px 24px
+  );
+  opacity:.55;
+  animation: groundMove 1.1s linear infinite;
+}
+@keyframes groundMove{
+  from{transform: translateX(0)}
+  to{transform: translateX(-48px)}
 }
 
 /* HUD */
 .hud{
-display:flex;
-justify-content:space-between;
-margin-top:8px;
-color:var(--text);
+  display:flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  color: var(--ink);
+  font-weight: 900;
 }
+.hud small{ opacity:.85; font-weight:800; }
 
 .pop{
-animation:pop .2s;
+  animation: pop .22s ease;
 }
-
 @keyframes pop{
-50%{transform:scale(1.2)}
+  0%{transform: scale(1)}
+  50%{transform: scale(1.15)}
+  100%{transform: scale(1)}
 }
 
-/* CURSOR */
-.dot{
-position:fixed;
-width:8px;
-height:8px;
-background:var(--pink1);
-border-radius:50%;
-pointer-events:none;
-z-index:999;
+/* overlay (start/gameover) */
+.overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 16px;
+  z-index: 5;
+  background: rgba(255,255,255,.35);
+  backdrop-filter: blur(10px);
+}
+.panel{
+  width: min(440px, 92%);
+  background: rgba(255,255,255,.60);
+  border: 1px solid rgba(238,199,207,.65);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--shadow2);
+  text-align:center;
+}
+.panel h3{
+  color: var(--ink);
+  font-size: 18px;
+  margin-bottom: 6px;
+  font-weight: 1000;
+}
+.panel p{
+  font-size: 14px;
+  opacity: .95;
+  margin-bottom: 12px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border: 1px solid rgba(238,199,207,.75);
+  cursor:pointer;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(243,213,218,.9);
+  color: var(--ink);
+  font-weight: 1000;
+  box-shadow: 0 12px 18px rgba(160,120,110,.12);
+  transition: transform .15s ease;
+}
+.btn:hover{ transform: translateY(-1px) scale(1.02); }
+.note{
+  margin-top: 10px;
+  font-size: 12px;
+  opacity:.9;
 }
 
-.ring{
-position:fixed;
-width:20px;
-height:20px;
-border:2px solid var(--pink1);
-border-radius:50%;
-pointer-events:none;
-z-index:998;
+/* ========= Smooth Cursor (desktop only) ========= */
+.cursorDot, .cursorRing{
+  position:fixed;
+  left:0; top:0;
+  pointer-events:none;
+  transform: translate(-50%,-50%);
+  z-index: 9999;
+}
+.cursorDot{
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  background: rgba(238,199,207,.95);
+  box-shadow: 0 0 22px rgba(238,199,207,.60);
+}
+.cursorRing{
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  border: 2px solid rgba(238,199,207,.45);
+  box-shadow: 0 0 34px rgba(243,213,218,.35);
+  opacity: .9;
 }
 
-/* MUSIC BUTTON */
-.music{
-position:fixed;
-bottom:15px;
-right:15px;
-background:var(--glass);
-padding:10px;
-border-radius:14px;
-box-shadow:var(--shadow);
-cursor:pointer;
+@media (hover:none){
+  .cursorDot, .cursorRing{ display:none; }
+}
+
+/* ========= Music Button ========= */
+.musicBtn{
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 50;
+  border: 1px solid rgba(238,199,207,.65);
+  cursor:pointer;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.55);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow2);
+  color: var(--ink);
+  font-weight: 1000;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  transition: transform .15s ease;
+}
+.musicBtn:hover{ transform: translateY(-2px); }
+.musicDot{
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  background: rgba(238,199,207,.95);
+  box-shadow: 0 0 16px rgba(238,199,207,.55);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform: scale(1)}
+  50%{transform: scale(1.25)}
 }
 </style>
 </head>
 
 <body>
+  <div class="lace">⊹₊˚‧︵‿₊୨ᰔ୧₊‿︵‧˚₊⊹</div>
 
-<div class="header">⊹₊˚‧︵‿₊୨ᰔ୧₊‿︵‧˚₊⊹</div>
+  <div class="container">
+    <div class="brand">Pawslyy</div>
 
-<div class="card">
-<div class="socials">
-<a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
-<a href="https://twitter.com/pawslyy" target="_blank">Twitter</a>
-<a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-<a href="https://roblox.com/users/profile?username=inwjecting" target="_blank">Roblox</a>
-</div>
-</div>
+    <div class="card">
+      <div class="socials">
+        <a href="https://tiktok.com/@stupidbunie" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://twitter.com/pawslyy" target="_blank" rel="noopener">Twitter</a>
+        <a href="https://t.me/pawslyy" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://www.roblox.com/users/profile?username=inwjecting" target="_blank" rel="noopener">Roblox</a>
+      </div>
+    </div>
 
-<div class="card">
-<div id="game">
-<div id="player">୨୧</div>
-<div class="ground"></div>
-<div class="overlay" id="overlay">
-<button onclick="start()">start</button>
-</div>
-</div>
-<div class="hud">
-score:<span id="score">0</span>
-best:<span id="best">0</span>
-</div>
-</div>
+    <div class="card">
+      <div class="gameTitle">pixel jump game</div>
 
-<div class="dot" id="dot"></div>
-<div class="ring" id="ring"></div>
+      <div class="gameWrap" id="game">
+        <div id="player">୨୧</div>
 
-<div class="music" onclick="toggle()">♫</div>
+        <div class="overlay" id="overlay">
+          <div class="panel">
+            <h3 id="ovTitle">press start ✧</h3>
+            <p id="ovText">tap / click / space to jump. don’t hit the obstacles.</p>
+            <button class="btn" id="startBtn">start</button>
+            <div class="note">high score saves on this device ♡</div>
+          </div>
+        </div>
 
-<audio id="music" autoplay loop>
-<source src="music.mp3">
-</audio>
+        <div class="ground"></div>
+      </div>
+
+      <div class="hud">
+        <div>score: <span id="score">0</span></div>
+        <div><small>best:</small> <span id="best">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- cursor -->
+  <div class="cursorRing" id="cursorRing"></div>
+  <div class="cursorDot" id="cursorDot"></div>
+
+  <!-- music button -->
+  <button class="musicBtn" id="musicBtn" aria-label="Toggle music">
+    <span class="musicDot"></span>
+    <span id="musicLabel">music: on</span>
+  </button>
+
+  <!-- audio -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="music.mp3" type="audio/mpeg" />
+  </audio>
 
 <script>
-music.play().catch(()=>{});
-document.addEventListener("click",()=>music.play(),{once:true});
+/* ========= Music ========= */
+const bgMusic = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+const musicLabel = document.getElementById("musicLabel");
+let musicOn = true;
 
-function toggle(){
-music.paused?music.play():music.pause();
+function tryPlayMusic(){
+  if(!musicOn) return;
+  bgMusic.play().catch(()=>{});
 }
+window.addEventListener("pointerdown", tryPlayMusic, { once:true });
 
-/* CURSOR */
-document.addEventListener("mousemove",e=>{
-dot.style.left=e.clientX+"px";
-dot.style.top=e.clientY+"px";
-ring.style.left=e.clientX-6+"px";
-ring.style.top=e.clientY-6+"px";
+musicBtn.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  musicOn = !musicOn;
+  if(musicOn){
+    musicLabel.textContent = "music: on";
+    tryPlayMusic();
+  } else {
+    musicLabel.textContent = "music: off";
+    bgMusic.pause();
+  }
 });
 
-/* GAME */
-let score=0;
-let best=localStorage.getItem("best")||0;
-bestEl=document.getElementById("best");
-bestEl.textContent=best;
-let running=false;
-let speed=4;
+/* ========= Smooth Cursor (desktop) ========= */
+const dot = document.getElementById("cursorDot");
+const ring = document.getElementById("cursorRing");
+let mx = innerWidth/2, my = innerHeight/2;
+let rx = mx, ry = my;
 
-function jump(){
-if(!running)return;
-player.classList.add("jump");
-setTimeout(()=>player.classList.remove("jump"),450);
+window.addEventListener("mousemove", (e)=>{
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + "px";
+  dot.style.top  = my + "px";
+});
+function cursorRAF(){
+  rx += (mx - rx) * 0.14;
+  ry += (my - ry) * 0.14;
+  ring.style.left = rx + "px";
+  ring.style.top  = ry + "px";
+  requestAnimationFrame(cursorRAF);
+}
+cursorRAF();
+
+/* ========= Game (clean + correct) ========= */
+const game = document.getElementById("game");
+const playerEl = document.getElementById("player");
+const overlay = document.getElementById("overlay");
+const startBtn = document.getElementById("startBtn");
+const ovTitle = document.getElementById("ovTitle");
+const ovText  = document.getElementById("ovText");
+
+const scoreEl = document.getElementById("score");
+const bestEl  = document.getElementById("best");
+
+const OBSTACLES = ["✿","♡","✧","୨୧","⋆"];
+const PLAYER_X = 56; // matches CSS left-ish
+
+let running = false;
+let gameOver = false;
+
+let score = 0;
+let best  = Number(localStorage.getItem("paws_best") || 0);
+bestEl.textContent = best;
+
+/* physics */
+let y = 0;            // player vertical offset (px)
+let vy = 0;           // velocity
+const GRAVITY = 2200; // px/s^2
+const JUMP_V  = 820;  // px/s
+
+/* obstacles list */
+let obstacles = [];
+let spawnIn = 0; // seconds until next spawn
+
+/* speed */
+let speed = 320; // px/s
+const SPEED_MAX = 620;
+
+/* helpers */
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+
+function reset(){
+  // remove obstacles
+  obstacles.forEach(o => o.el.remove());
+  obstacles = [];
+
+  score = 0;
+  scoreEl.textContent = "0";
+  speed = 320;
+  spawnIn = 0.8;
+
+  y = 0;
+  vy = 0;
+  playerEl.style.transform = `translateY(${-y}px)`;
 }
 
-document.addEventListener("keydown",jump);
-document.addEventListener("click",jump);
+function setOverlay(title, text, buttonText){
+  ovTitle.textContent = title;
+  ovText.textContent  = text;
+  startBtn.textContent = buttonText;
+  overlay.style.display = "flex";
+}
+
+function hideOverlay(){
+  overlay.style.display = "none";
+}
 
 function start(){
-overlay.style.display="none";
-running=true;
-spawn();
+  reset();
+  running = true;
+  gameOver = false;
+  hideOverlay();
+  lastT = performance.now();
+  requestAnimationFrame(loop);
 }
 
-function spawn(){
-if(!running)return;
+function endGame(){
+  running = false;
+  gameOver = true;
 
-const obs=document.createElement("div");
-obs.className="obstacle";
-obs.innerHTML="✿";
-game.appendChild(obs);
+  if(score > best){
+    best = score;
+    localStorage.setItem("paws_best", String(best));
+    bestEl.textContent = best;
+  }
 
-let passed=false;
-let x=-40;
-
-const move=setInterval(()=>{
-x+=speed;
-obs.style.right=x+"px";
-
-const p=player.getBoundingClientRect();
-const o=obs.getBoundingClientRect();
-
-if(p.right-10>o.left&&p.bottom-10>o.top&&p.left+10<o.right){
-running=false;
-overlay.style.display="flex";
-score=0;
-scoreEl.textContent=score;
-obs.remove();
-clearInterval(move);
-return;
+  setOverlay(
+    "game over ✧",
+    "tap / click / space to jump. press restart to try again.",
+    "restart"
+  );
 }
 
-if(!passed&&o.right<p.left){
-passed=true;
-score++;
-scoreEl.textContent=score;
-scoreEl.classList.add("pop");
-setTimeout(()=>scoreEl.classList.remove("pop"),200);
-if(score>best){
-best=score;
-localStorage.setItem("best",best);
-bestEl.textContent=best;
-}
+function jump(){
+  if(!running) return;
+  // grounded check
+  if(y > 1) return;
+  tryPlayMusic();
+  vy = JUMP_V;
 }
 
-if(o.right<0){
-obs.remove();
-clearInterval(move);
+/* input */
+document.addEventListener("keydown", (e)=>{
+  if(e.code === "Space" || e.code === "ArrowUp"){
+    e.preventDefault();
+    if(overlay.style.display !== "none") return;
+    jump();
+  }
+});
+
+document.addEventListener("pointerdown", (e)=>{
+  // don't jump when clicking music button
+  if(e.target === musicBtn || musicBtn.contains(e.target)) return;
+
+  // if overlay visible, ignore (start button handles)
+  if(overlay.style.display !== "none") return;
+
+  jump();
+});
+
+startBtn.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  tryPlayMusic();
+  start();
+});
+
+/* spawn obstacle */
+function spawnObstacle(){
+  const el = document.createElement("div");
+  el.className = "obstacle";
+  el.textContent = OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)];
+  game.appendChild(el);
+
+  const gw = game.clientWidth;
+  const startX = gw + 40;
+
+  const obj = {
+    el,
+    x: startX,
+    scored: false,
+    w: 28,
+    h: 28
+  };
+
+  obstacles.push(obj);
 }
 
-},16);
-
-setTimeout(spawn,2000-Math.random()*500);
+/* collision */
+function hitTest(playerRect, obsRect){
+  // slight forgiveness = pro feel
+  const pad = 8;
+  return !(
+    playerRect.right - pad < obsRect.left + pad ||
+    playerRect.left + pad > obsRect.right - pad ||
+    playerRect.bottom - pad < obsRect.top + pad ||
+    playerRect.top + pad > obsRect.bottom - pad
+  );
 }
+
+/* main loop */
+let lastT = performance.now();
+
+function loop(t){
+  if(!running) return;
+  const dt = clamp((t - lastT) / 1000, 0, 0.033);
+  lastT = t;
+
+  /* physics */
+  vy -= GRAVITY * dt;
+  y += vy * dt;
+  if(y < 0){ y = 0; vy = 0; }
+  playerEl.style.transform = `translateY(${-y}px)`;
+
+  /* difficulty ramp */
+  speed = Math.min(SPEED_MAX, speed + (dt * 6.5)); // slowly increases
+
+  /* spawn timer */
+  spawnIn -= dt;
+  if(spawnIn <= 0){
+    spawnObstacle();
+    // random spacing, slightly tighter as speed increases
+    const base = 0.95;
+    const tight = (speed - 320) / 600; // 0..~0.5
+    spawnIn = clamp(base - tight * 0.25 + Math.random()*0.55, 0.55, 1.35);
+  }
+
+  /* move obstacles */
+  for(const o of obstacles){
+    o.x -= speed * dt;
+    o.el.style.transform = `translateX(${-(game.clientWidth + 40 - o.x)}px)`;
+  }
+
+  /* scoring + cleanup + collision */
+  const pRect = playerEl.getBoundingClientRect();
+
+  obstacles = obstacles.filter(o => {
+    const oRect = o.el.getBoundingClientRect();
+
+    // collision
+    if(hitTest(pRect, oRect)){
+      endGame();
+      o.el.remove();
+      return false;
+    }
+
+    // score when obstacle passes player (once)
+    if(!o.scored && oRect.right < pRect.left){
+      o.scored = true;
+      score++;
+      scoreEl.textContent = String(score);
+      scoreEl.classList.add("pop");
+      setTimeout(()=>scoreEl.classList.remove("pop"), 220);
+    }
+
+    // offscreen left
+    if(oRect.right < -50){
+      o.el.remove();
+      return false;
+    }
+
+    return true;
+  });
+
+  requestAnimationFrame(loop);
+}
+
+/* initial overlay */
+setOverlay("press start ✧", "tap / click / space to jump. don’t hit the obstacles.", "start");
 </script>
 </body>
 </html>
