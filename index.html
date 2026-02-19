@@ -446,130 +446,124 @@ function animateCursor(){
 }
 animateCursor();
 
-/* ===== OLD GAME CODE (as before) ===== */
-const game = document.getElementById("game");
-const player = document.getElementById("player");
-const overlay = document.getElementById("overlay");
-const startBtn = document.getElementById("startBtn");
+/* ===== FIXED RUNNER GAME ===== */
 
-const scoreEl = document.getElementById("score");
-const bestEl = document.getElementById("best");
+const OBSTACLES=["✿","♡","✧","୨୧","⋆"];
 
-const symbols = ["✿","♡","✧","୨୧","⋆"];
-let jumping = false;
-let running = false;
+let running=false;
+let score=0;
+let best=Number(localStorage.getItem("paws_best")||0);
+bestEl.textContent=best;
 
-let score = 0;
-let best = Number(localStorage.getItem("pawslyy_best") || 0);
-bestEl.textContent = best;
+let playerY=0;
+let playerVY=0;
+const gravity=2000;
+const jumpForce=750;
 
-let speed = 4.2;
-let spawnTimer = null;
-let obstacleTimers = [];
+let speed=320;
+let obstacles=[];
+let spawnTimer=0;
+
+function start(){
+overlay.style.display="none";
+score=0;
+playerY=0;
+playerVY=0;
+speed=320;
+scoreEl.textContent=score;
+obstacles.forEach(o=>o.el.remove());
+obstacles=[];
+running=true;
+lastTime=performance.now();
+requestAnimationFrame(loop);
+}
 
 function jump(){
-  if(!running) return;
-  if(jumping) return;
-  jumping = true;
-  player.classList.add("jump"); // NOTE: class not defined here (was in other version)
-  setTimeout(()=>{
-    player.classList.remove("jump");
-    jumping = false;
-  }, 480);
+if(!running)return;
+if(playerY>1)return;
+playerVY=jumpForce;
 }
 
-document.addEventListener("keydown", (e)=>{
-  if(e.code === "Space" || e.code === "ArrowUp"){
-    e.preventDefault();
-    jump();
-  }
+document.addEventListener("keydown",e=>{
+if(e.code==="Space")jump();
 });
+document.addEventListener("click",jump);
 
-document.addEventListener("pointerdown", ()=>{
-  if(running) jump();
-});
-
-function resetGame(){
-  score = 0;
-  speed = 4.2;
-  scoreEl.textContent = "0";
-  document.querySelectorAll(".obstacle").forEach(o=>o.remove());
-  obstacleTimers.forEach(t => clearInterval(t));
-  obstacleTimers = [];
-  if(spawnTimer) clearInterval(spawnTimer);
-}
-
-function endGame(){
-  running = false;
-  if(score > best){
-    best = score;
-    localStorage.setItem("pawslyy_best", String(best));
-    bestEl.textContent = best;
-  }
-  overlay.style.display = "flex";
-  startBtn.textContent = "restart";
-}
-
-function startGame(){
-  resetGame();
-  running = true;
-  overlay.style.display = "none";
-
-  spawnTimer = setInterval(()=>{
-    if(!running) return;
-    spawnObstacle();
-  }, 1400 + Math.floor(Math.random()*600));
-}
+startBtn.onclick=start;
 
 function spawnObstacle(){
-  const obs = document.createElement("div");
-  obs.className = "obstacle";
-  obs.textContent = symbols[Math.floor(Math.random()*symbols.length)];
-  game.appendChild(obs);
+const el=document.createElement("div");
+el.className="obstacle";
+el.innerHTML=OBSTACLES[Math.floor(Math.random()*OBSTACLES.length)];
+game.appendChild(el);
 
-  let pos = 0;
-  const move = setInterval(()=>{
-    if(!running){ clearInterval(move); obs.remove(); return; }
-
-    pos += speed;
-    obs.style.right = pos + "px";
-
-    const pRect = player.getBoundingClientRect();
-    const oRect = obs.getBoundingClientRect();
-
-    const hit =
-      pRect.right - 10 > oRect.left &&
-      pRect.left + 10 < oRect.right &&
-      pRect.bottom - 10 > oRect.top &&
-      pRect.top + 10 < oRect.bottom;
-
-    if(hit){
-      clearInterval(move);
-      obs.remove();
-      endGame();
-      return;
-    }
-
-    if(oRect.right < 0){
-      clearInterval(move);
-      obs.remove();
-      score++;
-      scoreEl.textContent = score;
-      scoreEl.classList.add("popScore");
-      setTimeout(()=>scoreEl.classList.remove("popScore"), 220);
-
-      if(score % 10 === 0) speed = Math.min(8.5, speed + 0.25);
-    }
-  }, 16);
-
-  obstacleTimers.push(move);
+obstacles.push({
+el,
+x:game.clientWidth+40,
+passed:false
+});
 }
 
-startBtn.addEventListener("click", (e)=>{
-  e.stopPropagation();
-  tryPlayMusic();
-  startGame();
-});
+let lastTime=performance.now();
+
+function loop(t){
+
+if(!running)return;
+
+const dt=(t-lastTime)/1000;
+lastTime=t;
+
+playerVY-=gravity*dt;
+playerY+=playerVY*dt;
+if(playerY<0){playerY=0;playerVY=0;}
+player.style.transform=`translateY(${-playerY}px)`;
+
+speed+=dt*5;
+
+spawnTimer-=dt;
+if(spawnTimer<=0){
+spawnObstacle();
+spawnTimer=0.8+Math.random()*0.8;
+}
+
+for(let i=obstacles.length-1;i>=0;i--){
+let o=obstacles[i];
+o.x-=speed*dt;
+o.el.style.left=o.x+"px";
+
+/* COLLISION */
+if(o.x<56+28 && o.x+28>56 && playerY<28){
+running=false;
+overlay.style.display="flex";
+score=0;
+scoreEl.textContent=score;
+return;
+}
+
+/* SCORE */
+if(!o.passed && o.x+28<56){
+o.passed=true;
+score++;
+scoreEl.textContent=score;
+scoreEl.classList.add("popScore");
+setTimeout(()=>scoreEl.classList.remove("popScore"),200);
+if(score>best){
+best=score;
+localStorage.setItem("paws_best",best);
+bestEl.textContent=best;
+}
+}
+
+if(o.x<-50){
+o.el.remove();
+obstacles.splice(i,1);
+}
+}
+
+requestAnimationFrame(loop);
+}
+
 </script>
 </body>
 </html>
+
