@@ -1,326 +1,575 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pawslyy</title>
 
 <style>
+/* ===== Design system ===== */
 :root{
---ink:#b98f86;
---ink2:#caa29a;
---pink1:#eec7cf;
---pink2:#f3d5da;
---pink3:#f7e5e9;
---glass:rgba(255,255,255,.55);
---shadow:0 14px 40px rgba(160,120,110,.20);
---r:22px;
---r2:16px;
+  --bg1:#fff6fb;
+  --bg2:#ffeaf5;
+
+  --pink1:#ffc8dd;
+  --pink2:#ffd6ec;
+  --pink3:#ffeaf5;
+
+  --text:#c96f9c;
+  --text2:#d88fb3;
+
+  --glass: rgba(255,255,255,.55);
+  --glass2: rgba(255,255,255,.35);
+
+  --shadow: 0 14px 40px rgba(255,182,214,.25);
+  --shadow2: 0 10px 24px rgba(255,182,214,.18);
+
+  --radius: 22px;
+  --radius2: 16px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-
+html,body{height:100%}
 body{
-font-family:'Segoe UI',sans-serif;
-background:url("bg.jpg") center/cover fixed;
-overflow-x:hidden;
+  font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text2);
+  background: url("bg.jpg") center/cover no-repeat fixed;
+  overflow-x:hidden;
 }
 
+/* overlay tint for readability */
 body::before{
-content:"";
-position:fixed;
-inset:0;
-background:rgba(255,255,255,0.35);
-backdrop-filter:blur(2px);
-z-index:-1;
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,0.35);
+  backdrop-filter:blur(2px);
+  z-index:-1;
 }
 
-.lace{
-text-align:center;
-padding:14px;
-background:var(--glass);
-color:var(--ink2);
-font-size:28px;
-animation:float 4s ease-in-out infinite;
+/* ===== Top decoration ===== */
+.lace-header{
+  text-align:center;
+  padding: 16px 12px;
+  background: rgba(255,234,245,.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,200,221,.45);
+  color: var(--text2);
+  font-size: clamp(20px, 4vw, 36px);
+  letter-spacing: .5px;
+  animation: laceFloat 4s ease-in-out infinite;
+}
+@keyframes laceFloat{
+  0%{transform: translateY(0); text-shadow: 0 0 0 rgba(255,200,221,0)}
+  50%{transform: translateY(6px); text-shadow: 0 10px 30px rgba(255,200,221,.35)}
+  100%{transform: translateY(0); text-shadow: 0 0 0 rgba(255,200,221,0)}
 }
 
-@keyframes float{
-0%,100%{transform:translateY(0)}
-50%{transform:translateY(6px)}
-}
-
+/* ===== Layout ===== */
 .container{
-width:min(720px,92vw);
-margin:auto;
-padding:20px;
-display:flex;
-flex-direction:column;
-gap:16px;
+  width: min(740px, 92vw);
+  margin: 18px auto 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 80px;
+}
+
+.brand{
+  font-size: clamp(22px, 4.6vw, 34px);
+  color: var(--text);
+  font-weight: 800;
+  letter-spacing: .5px;
+  margin: 6px 0 2px;
+  animation: brandIn .8s ease both;
+  text-align:center;
+}
+@keyframes brandIn{
+  from{opacity:0; transform: translateY(10px)}
+  to{opacity:1; transform: translateY(0)}
 }
 
 .card{
-background:var(--glass);
-backdrop-filter:blur(12px);
-padding:20px;
-border-radius:var(--r);
-box-shadow:var(--shadow);
-transition:.2s;
+  background: var(--glass);
+  border: 1px solid rgba(255,200,221,.45);
+  backdrop-filter: blur(14px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px;
+  animation: fadeUp .7s ease both;
+}
+.card.soft{
+  background: var(--glass2);
+  box-shadow: var(--shadow2);
+}
+@keyframes fadeUp{
+  from{opacity:0; transform: translateY(10px)}
+  to{opacity:1; transform: translateY(0)}
 }
 
+/* hover polish */
 .card:hover{
-transform:translateY(-4px);
+  transform: translateY(-2px);
+  transition: transform .18s ease;
 }
 
+/* ===== Socials ===== */
 .socials{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-justify-content:center;
+  display:flex;
+  flex-wrap:wrap;
+  gap: 10px;
+  justify-content:center;
 }
 
 .socials a{
-background:var(--pink2);
-padding:10px 16px;
-border-radius:12px;
-text-decoration:none;
-color:var(--ink);
-font-weight:bold;
+  text-decoration:none;
+  color: var(--text);
+  font-weight: 800;
+  background: rgba(255,214,236,.8);
+  border: 1px solid rgba(255,200,221,.55);
+  padding: 12px 16px;
+  border-radius: 14px;
+  box-shadow: 0 10px 18px rgba(255,182,214,.14);
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-/* GAME */
+.socials a:hover{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 16px 26px rgba(255,182,214,.22);
+}
+
+/* ===== Game ===== */
+.gameTitle{
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: .3px;
+  margin-bottom: 8px;
+  text-align:center;
+}
+
 .gameWrap{
-height:200px;
-background:var(--pink3);
-border-radius:var(--r2);
-position:relative;
-overflow:hidden;
-border:2px solid var(--pink2);
+  border-radius: var(--radius2);
+  border: 2px solid rgba(255,200,221,.7);
+  background: rgba(255,240,248,.9);
+  overflow:hidden;
+  position: relative;
+  height: 210px;
+}
+
+/* pixel grid vibe */
+.gameWrap::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(to right, rgba(255,200,221,.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,200,221,.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity:.35;
+  pointer-events:none;
 }
 
 #player{
-position:absolute;
-left:56px;
-bottom:26px;
-font-size:28px;
+  position:absolute;
+  left: 44px;
+  bottom: 26px;
+  font-size: 30px;
+  filter: drop-shadow(0 8px 14px rgba(255,182,214,.28));
 }
 
 .ground{
-position:absolute;
-bottom:0;
-height:22px;
-width:200%;
-background:var(--pink1);
-animation:move 1s linear infinite;
+  position:absolute;
+  left:0; right:0;
+  bottom:0;
+  height: 22px;
+  background: linear-gradient(90deg, rgba(255,200,221,.8), rgba(255,214,236,.8));
+  border-top: 2px solid rgba(255,200,221,.75);
 }
-
-@keyframes move{
-from{transform:translateX(0)}
-to{transform:translateX(-50%)}
+.ground::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.35) 0 10px,
+      rgba(255,255,255,0) 10px 20px
+    );
+  opacity:.55;
+  animation: groundMove 1.1s linear infinite;
+}
+@keyframes groundMove{
+  from{transform: translateX(0)}
+  to{transform: translateX(-40px)}
 }
 
 .obstacle{
-position:absolute;
-bottom:26px;
-font-size:28px;
+  position:absolute;
+  bottom: 24px;
+  font-size: 28px;
+  right:-30px;
 }
 
-.overlay{
-position:absolute;
-inset:0;
-background:rgba(255,255,255,.6);
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-}
-
+/* HUD */
 .hud{
-display:flex;
-justify-content:space-between;
-margin-top:8px;
-color:var(--ink);
-font-weight:bold;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 10px;
+  margin-top: 10px;
+  color: var(--text2);
+  font-weight: 800;
 }
-
-.pop{
-animation:pop .2s;
+.hud small{font-weight:700; opacity:.9}
+.popScore{
+  animation: pop .25s ease;
 }
-
 @keyframes pop{
-50%{transform:scale(1.2)}
+  0%{transform: scale(1)}
+  50%{transform: scale(1.12)}
+  100%{transform: scale(1)}
 }
 
-.music{
-position:fixed;
-bottom:15px;
-right:15px;
-background:var(--glass);
-padding:10px;
-border-radius:14px;
-box-shadow:var(--shadow);
-cursor:pointer;
+/* start overlay */
+.overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 16px;
+  z-index: 5;
+  background: rgba(255,246,251,.55);
+  backdrop-filter: blur(8px);
+}
+.panel{
+  width: min(420px, 92%);
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(255,200,221,.55);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: var(--shadow2);
+  text-align:center;
+}
+.panel h3{
+  color: var(--text);
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+.panel p{
+  font-size: 14px;
+  opacity: .95;
+  margin-bottom: 12px;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+  border: 0;
+  cursor:pointer;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255,214,236,.9);
+  border: 1px solid rgba(255,200,221,.65);
+  color: var(--text);
+  font-weight: 900;
+  box-shadow: 0 12px 18px rgba(255,182,214,.18);
+  transition: transform .15s ease;
+}
+.btn:hover{transform: translateY(-1px) scale(1.02)}
+.note{
+  font-size: 13px;
+  opacity: .9;
+  margin-top: 8px;
+}
+
+/* ===== Clean cursor ===== */
+.cursorDot{
+  position: fixed;
+  left: 0; top: 0;
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  background: rgba(255,200,221,.9);
+  box-shadow: 0 0 22px rgba(255,200,221,.65);
+  pointer-events:none;
+  transform: translate(-50%,-50%);
+  z-index: 9999;
+}
+.cursorRing{
+  position: fixed;
+  left: 0; top: 0;
+  width: 26px; height: 26px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,200,221,.45);
+  box-shadow: 0 0 30px rgba(255,214,236,.35);
+  pointer-events:none;
+  transform: translate(-50%,-50%);
+  z-index: 9998;
+  opacity: .9;
+}
+
+/* hide fancy cursor on touch screens */
+@media (hover:none){
+  .cursorDot,.cursorRing{display:none}
+}
+
+/* ===== Floating music button ===== */
+.musicBtn{
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 50;
+  border: 0;
+  cursor: pointer;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.6);
+  border: 1px solid rgba(255,200,221,.55);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow2);
+  color: var(--text);
+  font-weight: 900;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  transition: transform .15s ease;
+}
+.musicBtn:hover{transform: translateY(-2px)}
+.musicIcon{
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  background: rgba(255,200,221,.9);
+  box-shadow: 0 0 16px rgba(255,200,221,.55);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform: scale(1)}
+  50%{transform: scale(1.25)}
 }
 </style>
 </head>
 
 <body>
-
-<div class="lace">⊹₊˚‧︵‿₊୨ᰔ୧₊‿︵‧˚₊⊹</div>
+<div class="lace-header">⊹₊˚‧︵‿₊୨ᰔ୧₊‿︵‧˚₊⊹</div>
 
 <div class="container">
+  <div class="brand">Pawslyy</div>
 
-<div class="card">
-<div class="socials">
-<a href="https://tiktok.com/@stupidbunie" target="_blank">TikTok</a>
-<a href="https://twitter.com/pawslyy" target="_blank">Twitter</a>
-<a href="https://t.me/pawslyy" target="_blank">Telegram</a>
-<a href="https://roblox.com/users/profile?username=inwjecting" target="_blank">Roblox</a>
-</div>
+  <div class="card">
+    <div class="socials">
+      <a href="https://tiktok.com/@stupidbunie" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://twitter.com/pawslyy" target="_blank" rel="noopener">Twitter</a>
+      <a href="https://t.me/pawslyy" target="_blank" rel="noopener">Telegram</a>
+      <a href="https://www.roblox.com/users/profile?username=inwjecting" target="_blank" rel="noopener">Roblox</a>
+    </div>
+  </div>
+
+  <div class="card soft">
+    <div class="gameTitle">pixel jump game</div>
+
+    <div class="gameWrap" id="game">
+      <div id="player">୨୧</div>
+
+      <div class="overlay" id="overlay">
+        <div class="panel">
+          <h3 id="ovTitle">press to start ✧</h3>
+          <p id="ovText">tap / click / space to jump. don’t hit the obstacles.</p>
+          <button class="btn" id="startBtn">start game</button>
+          <div class="note">high score saves on this device ♡</div>
+        </div>
+      </div>
+
+      <div class="ground"></div>
+    </div>
+
+    <div class="hud">
+      <div>score: <span id="score">0</span></div>
+      <div><small>best:</small> <span id="best">0</span></div>
+    </div>
+  </div>
 </div>
 
-<div class="card">
-<div class="gameWrap" id="game">
-<div id="player">୨୧</div>
-<div class="overlay" id="overlay">
-<button onclick="start()">start</button>
-</div>
-<div class="ground"></div>
-</div>
-<div class="hud">
-score:<span id="score">0</span>
-best:<span id="best">0</span>
-</div>
-</div>
+<div class="cursorRing" id="cursorRing"></div>
+<div class="cursorDot" id="cursorDot"></div>
 
-</div>
+<button class="musicBtn" id="musicBtn" aria-label="Toggle music">
+  <span class="musicIcon"></span>
+  <span id="musicText">music: on</span>
+</button>
 
-<div class="music" onclick="toggle()">♫</div>
-
-<audio id="music" autoplay loop>
-<source src="music.mp3">
+<audio id="bgMusic" autoplay loop>
+  <source src="music.mp3" type="audio/mpeg" />
 </audio>
 
 <script>
-music.play().catch(()=>{});
-document.addEventListener("click",()=>music.play(),{once:true});
+/* ===== Music ===== */
+const bgMusic = document.getElementById("bgMusic");
+let musicOn = true;
 
-function toggle(){
-music.paused?music.play():music.pause();
+function tryPlayMusic(){
+  if(!musicOn) return;
+  bgMusic.play().catch(()=>{});
 }
+window.addEventListener("pointerdown", tryPlayMusic, { once: true });
 
-/* ===== FIXED RUNNER GAME ===== */
+const musicBtn = document.getElementById("musicBtn");
+const musicText = document.getElementById("musicText");
+musicBtn.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  musicOn = !musicOn;
+  if(musicOn){
+    musicText.textContent = "music: on";
+    tryPlayMusic();
+  } else {
+    musicText.textContent = "music: off";
+    bgMusic.pause();
+  }
+});
 
-let score=0;
-let best=localStorage.getItem("best")||0;
-document.getElementById("best").textContent=best;
+/* ===== Smooth cursor ===== */
+const dot = document.getElementById("cursorDot");
+const ring = document.getElementById("cursorRing");
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+let rx = mx, ry = my;
 
-const player=document.getElementById("player");
-const game=document.getElementById("game");
-let running=false;
-let speed=320;
-let obstacles=[];
-let spawnTimer=0;
+window.addEventListener("mousemove", (e)=>{
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + "px";
+  dot.style.top = my + "px";
+});
 
-let playerY=0;
-let playerVY=0;
-const gravity=2000;
-const jumpForce=750;
-
-function start(){
-overlay.style.display="none";
-score=0;
-playerY=0;
-playerVY=0;
-speed=320;
-scoreEl.textContent=score;
-obstacles.forEach(o=>o.el.remove());
-obstacles=[];
-running=true;
-lastTime=performance.now();
-requestAnimationFrame(loop);
+function animateCursor(){
+  rx += (mx - rx) * 0.14;
+  ry += (my - ry) * 0.14;
+  ring.style.left = rx + "px";
+  ring.style.top = ry + "px";
+  requestAnimationFrame(animateCursor);
 }
+animateCursor();
+
+/* ===== OLD GAME CODE (as before) ===== */
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const overlay = document.getElementById("overlay");
+const startBtn = document.getElementById("startBtn");
+
+const scoreEl = document.getElementById("score");
+const bestEl = document.getElementById("best");
+
+const symbols = ["✿","♡","✧","୨୧","⋆"];
+let jumping = false;
+let running = false;
+
+let score = 0;
+let best = Number(localStorage.getItem("pawslyy_best") || 0);
+bestEl.textContent = best;
+
+let speed = 4.2;
+let spawnTimer = null;
+let obstacleTimers = [];
 
 function jump(){
-if(!running)return;
-if(playerY>1)return;
-playerVY=jumpForce;
+  if(!running) return;
+  if(jumping) return;
+  jumping = true;
+  player.classList.add("jump"); // NOTE: class not defined here (was in other version)
+  setTimeout(()=>{
+    player.classList.remove("jump");
+    jumping = false;
+  }, 480);
 }
 
-document.addEventListener("keydown",e=>{
-if(e.code==="Space")jump();
+document.addEventListener("keydown", (e)=>{
+  if(e.code === "Space" || e.code === "ArrowUp"){
+    e.preventDefault();
+    jump();
+  }
 });
-document.addEventListener("click",jump);
+
+document.addEventListener("pointerdown", ()=>{
+  if(running) jump();
+});
+
+function resetGame(){
+  score = 0;
+  speed = 4.2;
+  scoreEl.textContent = "0";
+  document.querySelectorAll(".obstacle").forEach(o=>o.remove());
+  obstacleTimers.forEach(t => clearInterval(t));
+  obstacleTimers = [];
+  if(spawnTimer) clearInterval(spawnTimer);
+}
+
+function endGame(){
+  running = false;
+  if(score > best){
+    best = score;
+    localStorage.setItem("pawslyy_best", String(best));
+    bestEl.textContent = best;
+  }
+  overlay.style.display = "flex";
+  startBtn.textContent = "restart";
+}
+
+function startGame(){
+  resetGame();
+  running = true;
+  overlay.style.display = "none";
+
+  spawnTimer = setInterval(()=>{
+    if(!running) return;
+    spawnObstacle();
+  }, 1400 + Math.floor(Math.random()*600));
+}
 
 function spawnObstacle(){
-const el=document.createElement("div");
-el.className="obstacle";
-el.innerHTML="✿";
-game.appendChild(el);
+  const obs = document.createElement("div");
+  obs.className = "obstacle";
+  obs.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+  game.appendChild(obs);
 
-obstacles.push({
-el,
-x:game.clientWidth+40,
-passed:false
+  let pos = 0;
+  const move = setInterval(()=>{
+    if(!running){ clearInterval(move); obs.remove(); return; }
+
+    pos += speed;
+    obs.style.right = pos + "px";
+
+    const pRect = player.getBoundingClientRect();
+    const oRect = obs.getBoundingClientRect();
+
+    const hit =
+      pRect.right - 10 > oRect.left &&
+      pRect.left + 10 < oRect.right &&
+      pRect.bottom - 10 > oRect.top &&
+      pRect.top + 10 < oRect.bottom;
+
+    if(hit){
+      clearInterval(move);
+      obs.remove();
+      endGame();
+      return;
+    }
+
+    if(oRect.right < 0){
+      clearInterval(move);
+      obs.remove();
+      score++;
+      scoreEl.textContent = score;
+      scoreEl.classList.add("popScore");
+      setTimeout(()=>scoreEl.classList.remove("popScore"), 220);
+
+      if(score % 10 === 0) speed = Math.min(8.5, speed + 0.25);
+    }
+  }, 16);
+
+  obstacleTimers.push(move);
+}
+
+startBtn.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  tryPlayMusic();
+  startGame();
 });
-}
-
-let lastTime=performance.now();
-
-function loop(t){
-
-if(!running)return;
-
-const dt=(t-lastTime)/1000;
-lastTime=t;
-
-playerVY-=gravity*dt;
-playerY+=playerVY*dt;
-if(playerY<0){playerY=0;playerVY=0;}
-player.style.transform=`translateY(${-playerY}px)`;
-
-speed+=dt*5;
-
-spawnTimer-=dt;
-if(spawnTimer<=0){
-spawnObstacle();
-spawnTimer=0.8+Math.random()*0.8;
-}
-
-for(let i=obstacles.length-1;i>=0;i--){
-let o=obstacles[i];
-o.x-=speed*dt;
-o.el.style.left=o.x+"px";
-
-if(o.x<56+28 && o.x+28>56 && playerY<28){
-running=false;
-overlay.style.display="flex";
-score=0;
-scoreEl.textContent=score;
-return;
-}
-
-if(!o.passed && o.x+28<56){
-o.passed=true;
-score++;
-scoreEl.textContent=score;
-scoreEl.classList.add("pop");
-setTimeout(()=>scoreEl.classList.remove("pop"),200);
-if(score>best){
-best=score;
-localStorage.setItem("best",best);
-bestEl.textContent=best;
-}
-}
-
-if(o.x<-50){
-o.el.remove();
-obstacles.splice(i,1);
-}
-}
-
-requestAnimationFrame(loop);
-}
 </script>
-
 </body>
 </html>
